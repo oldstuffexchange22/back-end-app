@@ -16,6 +16,9 @@ using Old_stuff_exchange.Repository.Implement;
 using Old_stuff_exchange.Repository.Interface;
 using Old_stuff_exchange.Service;
 using old_stuff_exchange_v2.Entities;
+using old_stuff_exchange_v2.Repository.Implement;
+using old_stuff_exchange_v2.Repository.Interface;
+using old_stuff_exchange_v2.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,6 +63,8 @@ namespace old_stuff_exchange_v2
             services.AddTransient<IBuildingRepository<Building>, BuildingRepository>();
             services.AddTransient<BuildingService>();
             services.AddTransient<IJwtHelper, JwtHelper>();
+            services.AddTransient<IApartmentRepository<Apartment>, ApartmentRepository>();
+            services.AddTransient<ApartmentService>();
 
             // remove when finish app
             services.AddTransient<DatabaseService>();
