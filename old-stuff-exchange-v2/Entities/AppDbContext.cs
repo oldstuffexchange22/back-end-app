@@ -25,7 +25,7 @@ namespace old_stuff_exchange_v2.Entities
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            string connectionString = _configuration.GetConnectionString("LocalConnection");
+            string connectionString = _configuration.GetConnectionString("AzureConnection");
             if (!string.IsNullOrEmpty(connectionString)) optionsBuilder.UseSqlServer(connectionString);
         }
 
