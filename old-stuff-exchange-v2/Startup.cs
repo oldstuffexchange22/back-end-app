@@ -88,6 +88,16 @@ namespace old_stuff_exchange_v2
                         ClockSkew = TimeSpan.Zero
                     };
                 });
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000", "http://localhost:3001", "https://old-stuff-exchange.azurewebsites.net", "http://127.0.0.1:5500")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
             services.AddSwaggerGen(c =>
             {
                 c.EnableAnnotations();
@@ -111,6 +121,8 @@ namespace old_stuff_exchange_v2
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseCors();
 
             app.UseEndpoints(endpoints =>
             {
