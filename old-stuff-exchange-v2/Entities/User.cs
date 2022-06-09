@@ -16,7 +16,9 @@ namespace old_stuff_exchange_v2.Entities
         public string FullName { get; set; }
         public string Status { get; set; }
         [MaxLength(12)]
+        [Phone]
         public string Phone { get; set; }
+        public string Gender { get; set; }
         [Required]
         [EmailAddress]
         public string Email { get; set; }

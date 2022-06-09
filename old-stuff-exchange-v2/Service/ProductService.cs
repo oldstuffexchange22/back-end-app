@@ -21,10 +21,7 @@ namespace Old_stuff_exchange.Service
                 Name = model.Name,
                 Description = model.Description,
                 Price = model.Price,
-                RequiredDeposit = model.RequiredDeposit,
                 PostId = model.PostId,
-                Status = ProductStatus.NOT_SOLD_YET,
-                StatusDeposit = DepositStatus.NO_DEPOSIT
             };
             if(model.CategoryId != Guid.Empty) product.CategoryId = model.CategoryId;
             return await _repo.Create(product);
@@ -38,7 +35,6 @@ namespace Old_stuff_exchange.Service
                 Price = model.Price,
                 CategoryId = model.CategoryId,
                 Description = model.Description,
-                RequiredDeposit = model.RequiredDeposit
             };
             return await _repo.Update(product);
         }

@@ -10,11 +10,10 @@ namespace old_stuff_exchange_v2.Entities
         [Key]
         public Guid Id { get; set; }
         public string Description { get; set; }
-        // Finish or not
         public string Status { get; set; }
-        public string Category { get; set; }
+        public string Type { get; set; }
         public decimal Amount { get; set; }
-        public decimal Remaining { get; set; }
+        public decimal Balance { get; set; }
         public DateTime CreatedAt { get; set; }
 
 
@@ -26,6 +25,10 @@ namespace old_stuff_exchange_v2.Entities
         public Guid? PostId { get; set; }
         [ForeignKey("PostId")]
         public Post Post { get; set; }
+
+        public Guid? DepositId { get; set; }
+        [ForeignKey("DepositId")]
+        public Deposit Deposit { get; set; }
         #endregion
     }
 }

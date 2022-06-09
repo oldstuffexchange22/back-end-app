@@ -11,7 +11,9 @@ using System.Threading.Tasks;
 
 namespace Old_stuff_exchange.Controllers
 {
-    public class CategoryController : BaseApiController
+    [Route("api/categories")]
+    [ApiController]
+    public class CategoryController : ControllerBase
     {
         private readonly CategoryService _service;
         public CategoryController(CategoryService service)
@@ -41,14 +43,12 @@ namespace Old_stuff_exchange.Controllers
             }
         }
 
-        [Route("list")]
-        [HttpGet]
+        [HttpGet("list")]
         [SwaggerOperation(Summary = "Get list categories")]
-        public async Task<IActionResult> GetList(string filter, int page = 1, int pageSize = 10) {
-            // filter by name
+        public async Task<IActionResult> GetList(string name, int page = 1, int pageSize = 10) {
             try
             {
-                List<Category> categories = await _service.GetList(filter, page, pageSize);
+                List<Category> categories = await _service.GetList(name, page, pageSize);
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -64,12 +64,11 @@ namespace Old_stuff_exchange.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut()]
         [SwaggerOperation(Summary = "Update category")]
-        public async Task<IActionResult> Update(Guid id, UpdateCaregoryModel category) {
+        public async Task<IActionResult> Update(UpdateCaregoryModel category) {
             try
             {
-                if (id != category.Id) return BadRequest();
                 Category result = await _service.Update(category);
                 if (result == null) return BadRequest();
                 return Ok(new ApiResponse {

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,6 +23,9 @@ namespace old_stuff_exchange_v2.Entities
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Building> Buildings { get; set; }
+        public DbSet<Deposit> Deposits { get; set; } 
+        public DbSet<Wallet> Wallets { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
@@ -67,42 +71,61 @@ namespace old_stuff_exchange_v2.Entities
                     .HasForeignKey(p => p.WalletId).OnDelete(DeleteBehavior.Restrict);
             });*/
 
-            modelBuilder.Entity<Transaction>(entity =>
+            /*modelBuilder.Entity<Transaction>(entity =>
             {
                 entity.HasOne<Post>(t => t.Post).WithMany()
                     .HasForeignKey(t => t.PostId).OnDelete(DeleteBehavior.Restrict);
                 entity.HasOne<Wallet>(t => t.Wallet).WithMany()
                     .HasForeignKey(t => t.WalletId).OnDelete(DeleteBehavior.Restrict);
-            });
+            });*/
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("getdate()");
+                entity.Property(e => e.CreatedAt).HasDefaultValue(DateTime.Now);
             });
 
             modelBuilder.Entity<Post>(entity =>
             {
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("getdate()");
+                entity.Property(e => e.CreatedAt).HasDefaultValue(DateTime.Now);
                 entity.Property(e => e.LastUpdatedAt).HasDefaultValueSql("getdate()");
+                entity.Property(e => e.Price).HasColumnType("decimal(10,0)");
             });
 
             modelBuilder.Entity<Transaction>(entity =>
             {
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("getdate()");
-                entity.Property(e => e.Amount).HasColumnType("decimal(10,2)");
-                entity.Property(e => e.Remaining).HasColumnType("decimal(10,2)");
+                entity.Property(e => e.CreatedAt).HasDefaultValue(DateTime.Now);
+                entity.Property(e => e.Amount).HasColumnType("decimal(10,0)");
+                entity.Property(e => e.Balance).HasColumnType("decimal(10,0)");
             });
 
             modelBuilder.Entity<Wallet>(entity =>
             {
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("getdate()");
-                entity.Property(e => e.Balance).HasColumnType("decimal(10,2)");
+                entity.Property(e => e.CreatedAt).HasDefaultValue(DateTime.Now);
+                entity.Property(e => e.Balance).HasColumnType("decimal(10,0)");
             });
 
             modelBuilder.Entity<Product>(entity =>
             {
-                entity.Property(e => e.Price).HasColumnType("decimal(10,2)");
-                entity.Property(e => e.RequiredDeposit).HasColumnType("decimal(10,2)");
+                entity.Property(e => e.Price).HasColumnType("decimal(10,0)");
+            });
+
+            modelBuilder.Entity<Deposit>(entity =>
+            {
+                entity.Property(e => e.CreatedAt).HasDefaultValue(DateTime.Now);
+                entity.Property(e => e.Amount).HasColumnType("decimal(10,0)");
+                entity.Property(e => e.CoinExchange).HasColumnType("decimal(10,0)");
+                entity.Property(e => e.RemainingCoinInWallet).HasColumnType("decimal(10,0)");
+            });
+
+            modelBuilder.Entity<Wallet>(entity =>
+            {
+                entity.Property(e => e.CreatedAt).HasDefaultValue(DateTime.Now);
+                entity.Property(e => e.LastUpdatedAt).HasDefaultValue(DateTime.Now);
+            });
+
+            modelBuilder.Entity<Transaction>(entity =>
+            {
+                entity.Property(e => e.CreatedAt).HasDefaultValue(DateTime.Now);
             });
         }
     }
