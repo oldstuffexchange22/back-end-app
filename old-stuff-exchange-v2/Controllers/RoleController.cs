@@ -47,16 +47,12 @@ namespace Old_stuff_exchange.Controllers
                 });
             }
         }
-        [HttpPut("{id}")]
+        [HttpPut()]
         [SwaggerOperation(Summary = "Update role")]
-        public async Task<IActionResult> Update(Guid id, UpdateRoleModel updateRoleModel)
+        public async Task<IActionResult> Update(UpdateRoleModel updateRoleModel)
         {
             try
             {
-                if (id != updateRoleModel.Id)
-                {
-                    return BadRequest();
-                }
                 Role updateRole = new Role
                 {
                     Id = updateRoleModel.Id,

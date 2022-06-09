@@ -40,9 +40,9 @@ namespace Old_stuff_exchange.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut()]
         [SwaggerOperation(Summary = "Update product")]
-        public async Task<IActionResult> Update(Guid id, UpdateProductModel model)
+        public async Task<IActionResult> Update(UpdateProductModel model)
         {
             try
             {

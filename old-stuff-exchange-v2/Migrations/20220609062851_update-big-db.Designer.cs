@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using old_stuff_exchange_v2.Entities;
 
 namespace old_stuff_exchange_v2.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220609062851_update-big-db")]
+    partial class updatebigdb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,7 +115,7 @@ namespace old_stuff_exchange_v2.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 9, 14, 34, 45, 29, DateTimeKind.Local).AddTicks(8167));
+                        .HasDefaultValue(new DateTime(2022, 6, 9, 13, 28, 51, 298, DateTimeKind.Local).AddTicks(5104));
 
                     b.Property<string>("Descripion")
                         .HasColumnType("nvarchar(max)");
@@ -146,7 +148,7 @@ namespace old_stuff_exchange_v2.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 9, 14, 34, 45, 27, DateTimeKind.Local).AddTicks(7681));
+                        .HasDefaultValue(new DateTime(2022, 6, 9, 13, 28, 51, 296, DateTimeKind.Local).AddTicks(4537));
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -251,7 +253,7 @@ namespace old_stuff_exchange_v2.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 9, 14, 34, 45, 30, DateTimeKind.Local).AddTicks(3010));
+                        .HasDefaultValue(new DateTime(2022, 6, 9, 13, 28, 51, 297, DateTimeKind.Local).AddTicks(4625));
 
                     b.Property<Guid?>("DepositId")
                         .HasColumnType("uniqueidentifier");
@@ -294,7 +296,7 @@ namespace old_stuff_exchange_v2.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 9, 14, 34, 45, 24, DateTimeKind.Local).AddTicks(851));
+                        .HasDefaultValue(new DateTime(2022, 6, 9, 13, 28, 51, 292, DateTimeKind.Local).AddTicks(6942));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -346,7 +348,7 @@ namespace old_stuff_exchange_v2.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 9, 14, 34, 45, 30, DateTimeKind.Local).AddTicks(1113));
+                        .HasDefaultValue(new DateTime(2022, 6, 9, 13, 28, 51, 298, DateTimeKind.Local).AddTicks(8279));
 
                     b.Property<string>("Currency")
                         .HasColumnType("nvarchar(max)");
@@ -357,7 +359,7 @@ namespace old_stuff_exchange_v2.Migrations
                     b.Property<DateTime>("LastUpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 9, 14, 34, 45, 30, DateTimeKind.Local).AddTicks(1442));
+                        .HasDefaultValue(new DateTime(2022, 6, 9, 13, 28, 51, 298, DateTimeKind.Local).AddTicks(8678));
 
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
@@ -441,12 +443,14 @@ namespace old_stuff_exchange_v2.Migrations
                         .HasForeignKey("DepositId");
 
                     b.HasOne("old_stuff_exchange_v2.Entities.Post", "Post")
-                        .WithMany("Transactions")
-                        .HasForeignKey("PostId");
+                        .WithMany()
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("old_stuff_exchange_v2.Entities.Wallet", "Wallet")
-                        .WithMany("Transactions")
-                        .HasForeignKey("WalletId");
+                        .WithMany()
+                        .HasForeignKey("WalletId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Deposit");
 
@@ -499,8 +503,6 @@ namespace old_stuff_exchange_v2.Migrations
             modelBuilder.Entity("old_stuff_exchange_v2.Entities.Post", b =>
                 {
                     b.Navigation("Products");
-
-                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("old_stuff_exchange_v2.Entities.Role", b =>
@@ -513,11 +515,6 @@ namespace old_stuff_exchange_v2.Migrations
                     b.Navigation("Posts");
 
                     b.Navigation("Wallets");
-                });
-
-            modelBuilder.Entity("old_stuff_exchange_v2.Entities.Wallet", b =>
-                {
-                    b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618
         }

@@ -65,13 +65,12 @@ namespace old_stuff_exchange_v2.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        [SwaggerOperation(Summary = "Create new apartment")]
-        public async Task<IActionResult> Update(Guid id,UpdateApartmentModel model)
+        [HttpPut()]
+        [SwaggerOperation(Summary = "Update apartment")]
+        public async Task<IActionResult> Update(UpdateApartmentModel model)
         {
             try
             {
-                if (id != model.Id) return BadRequest();
                 Apartment apartment = await _service.Update(model);
                 if (apartment == null) return BadRequest();
                 return Ok(new ApiResponse
@@ -91,7 +90,7 @@ namespace old_stuff_exchange_v2.Controllers
         }
 
         [HttpDelete("{id}")]
-        [SwaggerOperation(Summary = "Create new apartment")]
+        [SwaggerOperation(Summary = "Delete apartment")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -114,7 +113,7 @@ namespace old_stuff_exchange_v2.Controllers
         }
 
         [HttpGet("list")]
-        [SwaggerOperation(Summary = "Create new apartment")]
+        [SwaggerOperation(Summary = "Getlist apartment")]
         public async Task<IActionResult> GetAll()
         {
             try

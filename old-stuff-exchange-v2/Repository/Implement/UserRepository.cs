@@ -27,7 +27,7 @@ namespace Old_stuff_exchange.Repository.Implement
             {
                 Role role = _context.Roles.FirstOrDefault(r => r.Name == RoleNames.ADMIN);
                 if (role != null) user.Role = role;
-                await _context.Users.AddAsync(user);
+                await _context.Users.AddAsync(user); 
                 await _context.SaveChangesAsync();
                 return user;
             }
