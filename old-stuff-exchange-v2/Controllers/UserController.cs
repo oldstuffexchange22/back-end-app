@@ -59,8 +59,7 @@ namespace Old_stuff_exchange.Controllers
             }
         }
 
-        [Route("Login")]
-        [HttpPost]
+        [HttpPost("login")]
         public async Task<ActionResult> Login(LoginModel loginModel)
         {
             try
@@ -111,16 +110,12 @@ namespace Old_stuff_exchange.Controllers
                 });
             }
         }
-        [HttpPut("{id}")]
+        [HttpPut()]
         [SwaggerOperation(Summary = "Update user")]
-        public async Task<ActionResult> Update(Guid id, UpdateUserModel updateUser)
+        public async Task<ActionResult> Update(UpdateUserModel updateUser)
         {
             try
             {
-                if (id != updateUser.Id)
-                {
-                    return BadRequest();
-                }
                 User user = new User
                 {
                     Id = updateUser.Id,

@@ -16,8 +16,7 @@ namespace Old_stuff_exchange.Controllers
         public BuildingController(BuildingService service) {
             _service = service;
         }
-        [Route("list")]
-        [HttpGet]
+        [HttpGet("list")]
         [SwaggerOperation(Summary = "Get list of building")]
         public IActionResult GetList(Guid? apartmentId, int page = 1, int pageSize = 10 )
         {
@@ -89,12 +88,11 @@ namespace Old_stuff_exchange.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut()]
         [SwaggerOperation(Summary = "Update building")]
-        public async Task<IActionResult> Update(Guid id, UpdateBuildingModel buildingModel) {
+        public async Task<IActionResult> Update(UpdateBuildingModel buildingModel) {
             try
             {
-                if (id != buildingModel.Id) return BadRequest();
                 Building building = new Building
                 {
                     Id = buildingModel.Id,

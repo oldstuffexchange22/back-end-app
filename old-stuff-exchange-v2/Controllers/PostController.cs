@@ -40,13 +40,12 @@ namespace Old_stuff_exchange.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut()]
         [SwaggerOperation(Summary = "Update post")]
-        public async Task<IActionResult> Update(Guid id, UpdatePostModel model)
+        public async Task<IActionResult> Update(UpdatePostModel model)
         {
             try
             {
-                if(id != model.Id) return BadRequest();
                 var post = await _service.Update(model);
                 if (post == null) return BadRequest();
                 return Ok(new ApiResponse
