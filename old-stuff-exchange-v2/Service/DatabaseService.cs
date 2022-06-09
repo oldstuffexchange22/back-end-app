@@ -236,11 +236,13 @@ namespace Old_stuff_exchange.Service
                 .RuleFor(w => w.Balance, faker => faker.Random.Int(500, 1000))
                 .RuleFor(w => w.Desription, faker => faker.Lorem.Sentence(6));
             List<Wallet> wallets = new List<Wallet>();
+            wallets.Add(systemWallet);
+            wallets.Add(chairityWallet);
             for (int i = 0; i < users.Count; i++)
             {
                 if (users[i].Role != roleAdmin) {
                     Wallet walletDefault = FakerWalletDefault.Generate();
-                    Wallet walletPromotion = FakerWalletDefault.Generate();
+                    Wallet walletPromotion = FakerWalletPromotion.Generate();
                     walletDefault.UserId = users[i].Id;
                     walletPromotion.UserId = users[i].Id;
                     List<Wallet> walletUserDefine = new List<Wallet>();
@@ -288,7 +290,8 @@ namespace Old_stuff_exchange.Service
                 .RuleFor(p => p.Price, faker => faker.Random.Int(200, 500))
                 .RuleFor(p => p.Status, faker => faker.PickRandom(PostStatus.ListPostSatus()))
                 .RuleFor(p => p.Author, faker => faker.PickRandom(users.Take(20)))
-                .RuleFor(p => p.UserBought, faker => faker.PickRandom(listUserId));
+                .RuleFor(p => p.UserBought, faker => faker.PickRandom(listUserId))
+                .RuleFor(p => p.CreatedAt, faker => faker.Date.Between(new DateTime(2020,1,1), DateTime.Now));
             List<Post> posts = FakerPost.Generate(400);
             _context.Posts.AddRange(posts);
 
@@ -346,6 +349,12 @@ namespace Old_stuff_exchange.Service
             List<Transaction> transactions = new List<Transaction>();
             List<Transaction> transactionPost = FakerTransactionPost.Generate(800);
             List<Transaction> transactionDepost = FakerTransactionDeposit.Generate(200);
+            for (int i = 0; i < transactionPost.Count; i++)
+            {
+                Post post = transactionPost[i].Post;
+                Faker faker = new Faker();
+                transactionPost[i].CreatedAt = faker.Date.Between(post.CreatedAt, DateTime.Now);
+            }
             transactions.AddRange(transactionPost);
             transactions.AddRange(transactionDepost);
             _context.AddRange(transactions);
