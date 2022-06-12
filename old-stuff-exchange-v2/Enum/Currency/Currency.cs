@@ -3,5 +3,6 @@
     public class Currency
     {
         public const string XU = "XU";
+        public const string XU2 = "XU2";
     }
 }
