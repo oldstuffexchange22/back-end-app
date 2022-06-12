@@ -81,26 +81,25 @@ namespace old_stuff_exchange_v2.Entities
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.Property(e => e.CreatedAt).HasDefaultValue(DateTime.Now);
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("getdate()");
             });
 
             modelBuilder.Entity<Post>(entity =>
             {
-                entity.Property(e => e.CreatedAt).HasDefaultValue(DateTime.Now);
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("getdate()");
                 entity.Property(e => e.LastUpdatedAt).HasDefaultValueSql("getdate()");
                 entity.Property(e => e.Price).HasColumnType("decimal(10,0)");
             });
 
             modelBuilder.Entity<Transaction>(entity =>
             {
-                entity.Property(e => e.CreatedAt).HasDefaultValue(DateTime.Now);
-                entity.Property(e => e.Amount).HasColumnType("decimal(10,0)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("getdate()");
                 entity.Property(e => e.Balance).HasColumnType("decimal(10,0)");
             });
 
             modelBuilder.Entity<Wallet>(entity =>
             {
-                entity.Property(e => e.CreatedAt).HasDefaultValue(DateTime.Now);
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("getdate()");
                 entity.Property(e => e.Balance).HasColumnType("decimal(10,0)");
             });
 
@@ -111,21 +110,20 @@ namespace old_stuff_exchange_v2.Entities
 
             modelBuilder.Entity<Deposit>(entity =>
             {
-                entity.Property(e => e.CreatedAt).HasDefaultValue(DateTime.Now);
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("getdate()");
                 entity.Property(e => e.Amount).HasColumnType("decimal(10,0)");
-                entity.Property(e => e.CoinExchange).HasColumnType("decimal(10,0)");
-                entity.Property(e => e.RemainingCoinInWallet).HasColumnType("decimal(10,0)");
             });
 
             modelBuilder.Entity<Wallet>(entity =>
             {
-                entity.Property(e => e.CreatedAt).HasDefaultValue(DateTime.Now);
-                entity.Property(e => e.LastUpdatedAt).HasDefaultValue(DateTime.Now);
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("getdate()");
+                entity.Property(e => e.LastUpdatedAt).HasDefaultValueSql("getdate()");
             });
 
             modelBuilder.Entity<Transaction>(entity =>
             {
-                entity.Property(e => e.CreatedAt).HasDefaultValue(DateTime.Now);
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("getdate()");
+                entity.Property(e => e.CoinExchange).HasColumnType("decimal(10,0)");
             });
         }
     }

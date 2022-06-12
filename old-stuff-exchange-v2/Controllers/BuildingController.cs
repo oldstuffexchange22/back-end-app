@@ -16,6 +16,31 @@ namespace Old_stuff_exchange.Controllers
         public BuildingController(BuildingService service) {
             _service = service;
         }
+
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get building with ID")]
+        public async Task<IActionResult> GetBuildingById(Guid id)
+        {
+            try
+            {
+                Building building = await _service.GetById(id);
+                if (building == null) return BadRequest();
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Data = building
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    code = StatusCode(StatusCodes.Status500InternalServerError),
+                    exception = ex
+                });
+            }
+        }
+
         [HttpGet("list")]
         [SwaggerOperation(Summary = "Get list of building")]
         public IActionResult GetList(Guid? apartmentId, int page = 1, int pageSize = 10 )
@@ -31,28 +56,6 @@ namespace Old_stuff_exchange.Controllers
             }
             catch (Exception ex) { 
                 return BadRequest(new { 
-                    code = StatusCode(StatusCodes.Status500InternalServerError),
-                    exception = ex
-                });
-            }
-        }
-
-        [HttpGet("{id}")]
-        [SwaggerOperation(Summary ="Get building with ID")]
-        public async Task<IActionResult> GetBuildingById(Guid id) {
-            try
-            {
-                Building building = await _service.GetById(id);
-                if (building == null) return BadRequest();
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Data = building
-                });
-            }
-            catch (Exception ex) {
-                return BadRequest(new
-                {
                     code = StatusCode(StatusCodes.Status500InternalServerError),
                     exception = ex
                 });

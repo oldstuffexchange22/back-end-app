@@ -9,8 +9,8 @@ using Old_stuff_exchange.Model.User;
 using FirebaseAdmin.Auth;
 using Old_stuff_exchange.Model;
 using old_stuff_exchange_v2.Entities;
-using old_stuff_exchange_v2.Enum;
 using System.Collections.Generic;
+using old_stuff_exchange_v2.Enum.User;
 
 namespace Old_stuff_exchange.Controllers
 {
@@ -22,8 +22,53 @@ namespace Old_stuff_exchange.Controllers
             _userService = service;
         }
 
-        [Route("register")]
-        [HttpPost]
+        [HttpGet("{email}")]
+        [SwaggerOperation(Summary = "Get information user by email, by roleId and pagination")]
+        public async Task<ActionResult> GetByEmail(string email)
+        {
+            try
+            {
+                User user = await _userService.GetByEmail(email);
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Data = user
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    code = StatusCode(StatusCodes.Status500InternalServerError),
+                    exception = ex
+                });
+            }
+        }
+
+        [HttpGet("list")]
+        [SwaggerOperation(Summary = "Get information user by email, by roleId and pagination")]
+        public async Task<ActionResult> GetList(string email, Guid? roleId, int pageNumber = 1, int pageSize = 10)
+        {
+            try
+            {
+                List<ResponseUserModel> users = await _userService.GetList(email, roleId, pageNumber, pageSize);
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Data = users
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    code = StatusCode(StatusCodes.Status500InternalServerError),
+                    exception = ex
+                });
+            }
+        }
+
+        [HttpPost("register")]
         [SwaggerOperation(Summary = "Register new user with role ADMIN")]
         public async Task<IActionResult> Register(RegisterUserModel newUser)
         {
@@ -68,10 +113,10 @@ namespace Old_stuff_exchange.Controllers
                 string uid = decodedToken.Uid;
                 UserRecord user = await FirebaseAuth.DefaultInstance.GetUserAsync(uid);
 
-                var response = _userService.Login(user.Email);
-                if (response == null)
+                string response = _userService.Login(user.Email);
+                if (response == null || response == UserStatus.INACTIVE)
                 {
-                    return BadRequest(new { message = "Token is invalid" });
+                    return BadRequest(new { message = "Token is invalid or account is blocked" });
                 }
                 return Ok(new ApiResponse
                 {
@@ -87,22 +132,24 @@ namespace Old_stuff_exchange.Controllers
                 });
             }
         }
-        [HttpDelete("{id}")]
-        [SwaggerOperation(Summary = "Delete user by Id")]
-        public async Task<ActionResult> Delete(Guid id)
+
+        [HttpPost("update-address")]
+        [SwaggerOperation(Summary = "Update address user")]
+        public async Task<ActionResult> Update(Guid userId, Guid buildingId)
         {
             try
             {
-                bool check = await _userService.Delete(id);
-                if (!check)
+                User user = await _userService.UpdateUserAddress(userId, buildingId);
+                if (user == null) return BadRequest();
+                return Ok(new ApiResponse
                 {
-                    return NotFound();
-                }
-                return Ok(new ApiResponse { 
-                    Success = check,
+                    Success = true,
+                    Message = "Update user success",
+                    Data = user
                 });
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return BadRequest(new
                 {
                     code = StatusCode(StatusCodes.Status500InternalServerError),
@@ -110,6 +157,7 @@ namespace Old_stuff_exchange.Controllers
                 });
             }
         }
+
         [HttpPut()]
         [SwaggerOperation(Summary = "Update user")]
         public async Task<ActionResult> Update(UpdateUserModel updateUser)
@@ -146,19 +194,25 @@ namespace Old_stuff_exchange.Controllers
                 });
             }
         }
-        [HttpGet("list")]
-        [SwaggerOperation(Summary = "Get information user by email, by roleId and pagination")]
-        public async Task<ActionResult> GetList(string email, Guid? roleId, int pageNumber = 1, int pageSize = 10)
+
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete user by Id")]
+        public async Task<ActionResult> Delete(Guid id)
         {
             try
             {
-                List<ResponseUserModel> users = await _userService.GetList(email, roleId, pageNumber, pageSize);
-                return Ok(new ApiResponse { 
-                    Success = true,
-                    Data = users
+                bool check = await _userService.Delete(id);
+                if (!check)
+                {
+                    return NotFound();
+                }
+                return Ok(new ApiResponse
+                {
+                    Success = check,
                 });
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return BadRequest(new
                 {
                     code = StatusCode(StatusCodes.Status500InternalServerError),

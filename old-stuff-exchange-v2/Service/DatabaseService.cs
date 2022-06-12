@@ -1,6 +1,11 @@
 ﻿using Bogus;
 using old_stuff_exchange_v2.Entities;
-using old_stuff_exchange_v2.Enum;
+using old_stuff_exchange_v2.Enum.Currency;
+using old_stuff_exchange_v2.Enum.Post;
+using old_stuff_exchange_v2.Enum.Role;
+using old_stuff_exchange_v2.Enum.Transaction;
+using old_stuff_exchange_v2.Enum.User;
+using old_stuff_exchange_v2.Enum.Wallet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,141 +19,6 @@ namespace Old_stuff_exchange.Service
         public DatabaseService(AppDbContext context)
         {
             _context = context;
-        }
-
-        public void GererateData() {
-            int count = _context.Apartments.Count();
-            if (count <= 0) {
-                Apartment apartment = new Apartment
-                {
-                    Name = "Man Thien"
-                };
-                _context.Apartments.Add(apartment);
-                _context.SaveChanges();
-                List<Building> buildings = new List<Building>();
-                for (int i = 0; i < 10; i++)
-                {
-                    Building building = new Building
-                    {
-                        Name = "C" + (i + 1),
-                        ApartmentId = apartment.Id,
-                        NumberFloor = 5,
-                        NumberRoom = 50
-                    };
-                    buildings.Add(building);
-                }
-                _context.Buildings.AddRange(buildings);
-                _context.SaveChanges();
-
-
-                Role role = new Role
-                {
-                    Name = RoleNames.ADMIN,
-                };
-                Role role2 = new Role
-                {
-                    Name = RoleNames.RESIDENT,
-                };
-                _context.Roles.Add(role);
-                _context.Roles.Add(role2);
-                _context.SaveChanges();
-
-                Role residentRole = _context.Roles.FirstOrDefault(role => role.Name == RoleNames.RESIDENT);
-                Role adminRole = _context.Roles.FirstOrDefault(role => role.Name == RoleNames.RESIDENT);
-                User newUser = new User
-                {
-                    UserName = "nvtan.a5@gmail.com",
-                    Email = "nvtan.a5@gmail.com",
-                    Status = UserStatus.ACTIVE,
-                    Role = residentRole,
-                    FullName = "nvtan.a5@gmail.com",
-                    BuildingId = buildings[0].Id
-                };
-                User newUser1 = new User
-                {
-                    UserName = "nvtan.a6@gmail.com",
-                    Email = "nvtan.a6@gmail.com",
-                    Status = UserStatus.ACTIVE,
-                    Role = residentRole,
-                    FullName = "nvtan.a6@gmail.com",
-                    BuildingId = buildings[0].Id
-                };
-                User newUser2 = new User
-                {
-                    UserName = "nvtan.a7@gmail.com",
-                    Email = "nvtan.a7@gmail.com",
-                    Status = UserStatus.ACTIVE,
-                    Role = adminRole,
-                    FullName = "nvtan.a7@gmail.com",
-                    BuildingId = buildings[0].Id
-                };
-                User newUser3 = new User
-                {
-                    UserName = "nvtan.a8@gmail.com",
-                    Email = "nvtan.a8@gmail.com",
-                    Status = UserStatus.ACTIVE,
-                    Role = adminRole,
-                    FullName = "nvtan.a8@gmail.com",
-                    BuildingId = buildings[0].Id
-                };
-                List<User> users = new List<User>();
-                users.Add(newUser1);
-                users.Add(newUser);
-                users.Add(newUser2);
-                users.Add(newUser3);
-                _context.Users.AddRange(users);
-                _context.SaveChanges();
-            }
-
-            Category category = new Category
-            {
-                Name = "Electronic"
-            };
-            Category category1 = new Category
-            {
-                Name = "Chicken"
-            };
-            List<Category> categories = new List<Category>();
-            categories.Add(category1);
-            categories.Add(category);
-            _context.Categories.AddRange(categories);
-            _context.SaveChanges();
-            Category childC = new Category
-            {
-                Name = "Laptop",
-                ParentId = category.Id
-            };
-            Category childC1 = new Category
-            {
-                Name = "Screen",
-                ParentId = category.Id
-            };
-            Category childC2 = new Category
-            {
-                Name = "Keyboard",
-                ParentId = category.Id
-            };
-            List<Category> child1 = new List<Category>();
-            child1.Add(childC);
-            child1.Add(childC1);
-            child1.Add(childC2);
-            _context.Categories.AddRange(child1);
-            _context.SaveChanges();
-            Category childCC1 = new Category
-            {
-                Name = "Acer",
-                ParentId = childC.Id
-            };
-            Category childCC2 = new Category
-            {
-                Name = "Asus",
-                ParentId = childC.Id
-            };
-            List <Category> childCC3 = new List<Category>();
-            childCC3.Add(childCC1);
-            childCC3.Add(childCC2);
-            _context.AddRange(childCC3);
-            _context.SaveChanges();
         }
 
         public void GenerateDataWithBogus() {
@@ -200,7 +70,8 @@ namespace Old_stuff_exchange.Service
                 .RuleFor(u => u.Role, roleResident)
                 .RuleFor(u => u.FullName, faker => faker.Person.FullName)
                 .RuleFor(u => u.Gender, faker => faker.PickRandom(UserGender.GetGenders()))
-                .RuleFor(u => u.Building, faker => faker.PickRandom(buildings));
+                .RuleFor(u => u.Building, faker => faker.PickRandom(buildings))
+                .RuleFor(u => u.Phone, faker => faker.Person.Phone);
             _context.Add(userAdmin);
             List<User> users = FakerUser.Generate(40);
             users.Add(userAdmin);
@@ -320,13 +191,8 @@ namespace Old_stuff_exchange.Service
                 .RuleFor(d => d.WalletElectricName, faker => faker.PickRandom(WalletElectricName.GetWalletNames()))
                 .RuleFor(d => d.Descripion, faker => faker.Lorem.Sentence(6))
                 .RuleFor(d => d.Amount, faker => faker.Random.Int(500, 3000) * 1000)
-                .RuleFor(d => d.RemainingCoinInWallet, faker => faker.Random.Int(200, 10000))
                 .RuleFor(d => d.User, faker => faker.PickRandom(users.Where(u => u.Role != roleAdmin)));
             List<Deposit> deposits = FakerDeposit.Generate(500);
-            for (int i = 0; i < deposits.Count; i++)
-            {
-                deposits[i].CoinExchange = deposits[i].Amount / 1000;
-            }
             _context.AddRange(deposits);
 
             // Generate transaction
@@ -334,21 +200,22 @@ namespace Old_stuff_exchange.Service
                 .RuleFor(t => t.Description, faker => faker.Lorem.Sentence(6))
                 .RuleFor(t => t.Status, TransactionStatus.SUCCESS)
                 .RuleFor(t => t.Type, faker => faker.PickRandom(TransactionType.GetTransactionPost()))
-                .RuleFor(t => t.Amount, faker => faker.Random.Int(100, 200))
                 .RuleFor(t => t.Balance, faker => faker.Random.Int(1000, 2000))
                 .RuleFor(t => t.Wallet, faker => faker.PickRandom(wallets))
-                .RuleFor(t => t.Post, faker => faker.PickRandom(posts));
+                .RuleFor(t => t.Post, faker => faker.PickRandom(posts))
+                .RuleFor(t => t.CoinExchange, faker => faker.Random.Int(50, 200));
             Faker<Transaction> FakerTransactionDeposit = new Faker<Transaction>()
                 .RuleFor(t => t.Description, faker => faker.Lorem.Sentence(6))
                 .RuleFor(t => t.Status, TransactionStatus.SUCCESS)
                 .RuleFor(t => t.Type, TransactionType.RECHARGE)
-                .RuleFor(t => t.Amount, faker => faker.Random.Int(100, 200))
                 .RuleFor(t => t.Balance, faker => faker.Random.Int(1000, 2000))
                 .RuleFor(t => t.Wallet, faker => faker.PickRandom(wallets))
-                .RuleFor(t => t.Deposit, faker => faker.PickRandom(deposits));
+                .RuleFor(t => t.Deposit, faker => faker.PickRandom(deposits))
+                .RuleFor(t => t.CoinExchange, faker => faker.Random.Int(50, 200));
+
             List<Transaction> transactions = new List<Transaction>();
-            List<Transaction> transactionPost = FakerTransactionPost.Generate(800);
-            List<Transaction> transactionDepost = FakerTransactionDeposit.Generate(200);
+            List<Transaction> transactionPost = FakerTransactionPost.Generate(150);
+            List<Transaction> transactionDeposit = FakerTransactionDeposit.Generate(50);
             for (int i = 0; i < transactionPost.Count; i++)
             {
                 Post post = transactionPost[i].Post;
@@ -356,7 +223,7 @@ namespace Old_stuff_exchange.Service
                 transactionPost[i].CreatedAt = faker.Date.Between(post.CreatedAt, DateTime.Now);
             }
             transactions.AddRange(transactionPost);
-            transactions.AddRange(transactionDepost);
+            transactions.AddRange(transactionDeposit);
             _context.AddRange(transactions);
             _context.SaveChanges();
         }

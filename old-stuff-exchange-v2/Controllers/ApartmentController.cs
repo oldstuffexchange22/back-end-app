@@ -41,6 +41,29 @@ namespace old_stuff_exchange_v2.Controllers
             }
         }
 
+        [HttpGet("list")]
+        [SwaggerOperation(Summary = "Getlist apartment")]
+        public async Task<IActionResult> GetAll()
+        {
+            try
+            {
+                List<Apartment> apartments = await _service.GetList();
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Data = apartments
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    code = StatusCode(StatusCodes.Status500InternalServerError),
+                    exception = ex
+                });
+            }
+        }
+
         [HttpPost()]
         [SwaggerOperation(Summary = "Create new apartment")]
         public async Task<IActionResult> Create(CreateApartmentModel model)
@@ -112,27 +135,6 @@ namespace old_stuff_exchange_v2.Controllers
             }
         }
 
-        [HttpGet("list")]
-        [SwaggerOperation(Summary = "Getlist apartment")]
-        public async Task<IActionResult> GetAll()
-        {
-            try
-            {
-                List<Apartment> apartments = await _service.GetList();
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Data = apartments
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    code = StatusCode(StatusCodes.Status500InternalServerError),
-                    exception = ex
-                });
-            }
-        }
+        
     }
 }

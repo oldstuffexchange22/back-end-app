@@ -20,6 +20,32 @@ namespace Old_stuff_exchange.Controllers
             _service = service;
         }
 
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get role by Id")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            Role role = await _service.GetById(id);
+            if (role == null)
+            {
+                return NotFound();
+            }
+            return Ok(new ApiResponse
+            {
+                Data = role
+            });
+        }
+        [HttpGet("list")]
+        [SwaggerOperation(Summary = "Get list role")]
+        public async Task<IActionResult> GetList()
+        {
+            List<Role> listRoles = await _service.GetList();
+
+            return Ok(new ApiResponse
+            {
+                Data = listRoles
+            });
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Create new role")]
         public async Task<IActionResult> Create(CreateRoleModel newRole)
@@ -78,30 +104,7 @@ namespace Old_stuff_exchange.Controllers
                 });
             }
         }
-        [HttpGet("{id}")]
-        [SwaggerOperation(Summary = "Get role by Id")]
-        public async Task<IActionResult> GetById(Guid id)
-        {
-            Role role = await _service.GetById(id);
-            if (role == null)
-            {
-                return NotFound();
-            }
-            return Ok(new ApiResponse { 
-                Data = role
-            });
-        }
-        [HttpGet("list")]
-        [SwaggerOperation(Summary = "Get list role")]
-        public async Task<IActionResult> GetList()
-        {
-            List<Role> listRoles = await _service.GetList();
-
-            return Ok(new ApiResponse
-            {
-                Data = listRoles
-            }) ;
-        }
+        
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete role by Id")]
         public async Task<ActionResult> Delete(Guid id)

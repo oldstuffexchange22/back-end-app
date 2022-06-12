@@ -15,5 +15,12 @@ namespace Old_stuff_exchange.Controllers
         public IActionResult GetData() {
             return Ok("Get data success");
         }
+
+        [HttpGet("demo")]
+        public IActionResult GetDataDemo()
+        {
+            return BadRequest(new{ Error = StatusCodes.Status300MultipleChoices});
+        }
+
     }
 }
