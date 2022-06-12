@@ -3,6 +3,6 @@
     public class Currency
     {
         public const string XU = "XU";
-        public const string XU3 = "XU3";
+        public const string VND = "VND";
     }
 }
