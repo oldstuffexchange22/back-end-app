@@ -3,7 +3,6 @@
     public class Currency
     {
         public const string XU = "XU";
-        public const string VND = "VND";
-        public const string VND2 = "VND 2";
+        public const string VND = "VND conflict";
     }
 }
