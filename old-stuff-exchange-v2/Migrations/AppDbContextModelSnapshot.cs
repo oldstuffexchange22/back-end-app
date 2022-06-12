@@ -107,19 +107,13 @@ namespace old_stuff_exchange_v2.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(10,0)");
 
-                    b.Property<decimal>("CoinExchange")
-                        .HasColumnType("decimal(10,0)");
-
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 9, 14, 34, 45, 29, DateTimeKind.Local).AddTicks(8167));
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Descripion")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("RemainingCoinInWallet")
-                        .HasColumnType("decimal(10,0)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -146,13 +140,16 @@ namespace old_stuff_exchange_v2.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 9, 14, 34, 45, 27, DateTimeKind.Local).AddTicks(7681));
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("Expired")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastUpdatedAt")
                         .ValueGeneratedOnAdd()
@@ -242,16 +239,16 @@ namespace old_stuff_exchange_v2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Amount")
+                    b.Property<decimal>("Balance")
                         .HasColumnType("decimal(10,0)");
 
-                    b.Property<decimal>("Balance")
+                    b.Property<decimal>("CoinExchange")
                         .HasColumnType("decimal(10,0)");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 9, 14, 34, 45, 30, DateTimeKind.Local).AddTicks(3010));
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<Guid?>("DepositId")
                         .HasColumnType("uniqueidentifier");
@@ -294,7 +291,7 @@ namespace old_stuff_exchange_v2.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 9, 14, 34, 45, 24, DateTimeKind.Local).AddTicks(851));
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -313,8 +310,7 @@ namespace old_stuff_exchange_v2.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
@@ -346,7 +342,7 @@ namespace old_stuff_exchange_v2.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 9, 14, 34, 45, 30, DateTimeKind.Local).AddTicks(1113));
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Currency")
                         .HasColumnType("nvarchar(max)");
@@ -357,7 +353,7 @@ namespace old_stuff_exchange_v2.Migrations
                     b.Property<DateTime>("LastUpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 9, 14, 34, 45, 30, DateTimeKind.Local).AddTicks(1442));
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
@@ -398,7 +394,7 @@ namespace old_stuff_exchange_v2.Migrations
             modelBuilder.Entity("old_stuff_exchange_v2.Entities.Deposit", b =>
                 {
                     b.HasOne("old_stuff_exchange_v2.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Deposits")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -510,6 +506,8 @@ namespace old_stuff_exchange_v2.Migrations
 
             modelBuilder.Entity("old_stuff_exchange_v2.Entities.User", b =>
                 {
+                    b.Navigation("Deposits");
+
                     b.Navigation("Posts");
 
                     b.Navigation("Wallets");
