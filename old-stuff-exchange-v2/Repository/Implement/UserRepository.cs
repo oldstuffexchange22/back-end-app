@@ -3,7 +3,8 @@ using Old_stuff_exchange.Helper;
 using Old_stuff_exchange.Model;
 using Old_stuff_exchange.Repository.Interface;
 using old_stuff_exchange_v2.Entities;
-using old_stuff_exchange_v2.Enum;
+using old_stuff_exchange_v2.Enum.Role;
+using old_stuff_exchange_v2.Enum.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,31 +34,29 @@ namespace Old_stuff_exchange.Repository.Implement
             }
             return null;
         }
-        public User GetByEmail(string email)
+        public async Task<User> GetByEmail(string email)
         {
-            User user = _context.Users.FirstOrDefault(u => u.Email == email && u.Status.Equals("active"));
+            User user = _context.Users.FirstOrDefault(u => u.Email == email);
             if (user == null)
             {
                 return null;
             }
-            return user;
+            return await Task.FromResult(user);
         }
 
         public string Login(string email)
         {
+            if(string.IsNullOrEmpty(email)) return null;
             User user = _context.Users.Include(user => user.Role).Include(user => user.Building)
-                .FirstOrDefault(u => u.Email == email && u.Status.Equals(UserStatus.ACTIVE));
-            if (string.IsNullOrEmpty(email))
-            {
-                return null;
-            }
+                .FirstOrDefault(u => u.Email == email);
             if (user == null) {
+                if (user.Status == UserStatus.INACTIVE) return UserStatus.INACTIVE;
                 Role residentRole = _context.Roles.FirstOrDefault(role => role.Name == RoleNames.RESIDENT);
                 User newUser = new User
                 {
                     UserName = email,
                     Email = email,
-                    Status = UserStatus.ACTIVE,
+                    Status = UserStatus.INACTIVE,
                     Role = residentRole,
                     FullName = email,
                 };
@@ -101,6 +100,23 @@ namespace Old_stuff_exchange.Repository.Implement
             var result = PaginatedList<User>.Create(allUser, pageNumber, pageSize);
             #endregion
             return await Task.FromResult(result.ToList());
+        }
+
+        public async Task<User> UpdateUserAddress(Guid UserId, Guid BuildingId)
+        {
+            Building building =await _context.Buildings.FindAsync(BuildingId);
+            User user = await _context.Users.FindAsync(UserId);
+            if (building == null || user == null) return null;
+            user.Building = building;
+            user.Status = UserStatus.ACTIVE;
+            _context.Users.Update(user);
+             await _context.SaveChangesAsync();
+            return user;
+        }
+
+        public async Task<User> GetById(Guid id)
+        {
+            return await Task.FromResult(_context.Users.Find(id));
         }
     }
 }

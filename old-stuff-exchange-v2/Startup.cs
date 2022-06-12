@@ -65,6 +65,14 @@ namespace old_stuff_exchange_v2
             services.AddTransient<IJwtHelper, JwtHelper>();
             services.AddTransient<IApartmentRepository<Apartment>, ApartmentRepository>();
             services.AddTransient<ApartmentService>();
+            services.AddTransient<ITransactionRepository<Transaction>, TransactionRepository>();
+            services.AddTransient<TransactionService>();
+            services.AddTransient<IWalletRepository<Wallet>, WalletRepository>();
+            services.AddTransient<WalletService>();
+            services.AddTransient<IDepositRepository<Deposit>, DepositRepository>();
+            services.AddTransient<DepositService>();
+            
+            
 
             // remove when finish app
             services.AddTransient<DatabaseService>();

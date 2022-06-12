@@ -12,7 +12,7 @@ namespace old_stuff_exchange_v2.Entities
         public string Description { get; set; }
         public string Status { get; set; }
         public string Type { get; set; }
-        public decimal Amount { get; set; }
+        public decimal CoinExchange { get; set; }
         public decimal Balance { get; set; }
         public DateTime CreatedAt { get; set; }
 

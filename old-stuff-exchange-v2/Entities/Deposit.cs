@@ -13,8 +13,6 @@ namespace old_stuff_exchange_v2.Entities
         public string WalletElectricName { get; set; }
         public string Descripion { get; set; }
         public decimal Amount { get; set; }
-        public decimal CoinExchange { get; set; }
-        public decimal RemainingCoinInWallet { get; set; }
         public DateTime CreatedAt { get; set; }
 
         #region Relationship

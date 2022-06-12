@@ -15,7 +15,6 @@ namespace old_stuff_exchange_v2.Entities
         public string Password { get; set; }
         public string FullName { get; set; }
         public string Status { get; set; }
-        [MaxLength(12)]
         [Phone]
         public string Phone { get; set; }
         public string Gender { get; set; }
@@ -36,10 +35,12 @@ namespace old_stuff_exchange_v2.Entities
 
         public ICollection<Post> Posts { get; set; }
         public ICollection<Wallet> Wallets { get; set; }
+        public ICollection<Deposit> Deposits { get; set; }
         #endregion
         public User() {
             Wallets = new List<Wallet>();
             Posts = new List<Post>();
+            Deposits = new List<Deposit>();
         }
     }
 }

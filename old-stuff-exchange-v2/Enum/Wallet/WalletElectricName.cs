@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace old_stuff_exchange_v2.Enum
+namespace old_stuff_exchange_v2.Enum.Wallet
 {
     public class WalletElectricName
     {
@@ -9,7 +9,8 @@ namespace old_stuff_exchange_v2.Enum
         public const string ZALOPAY = "ZALOPAY";
         public const string VIETTELPAY = "VIETTELPAY";
 
-        public static List<string> GetWalletNames() { 
+        public static List<string> GetWalletNames()
+        {
             List<string> names = new List<string>();
             names.Add(MOMO);
             names.Add(MOCA);

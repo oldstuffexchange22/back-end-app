@@ -22,9 +22,12 @@ namespace Old_stuff_exchange.Service
         {
             return _repo.Login(email);
         }
-        public User GetByEmail(string email)
+        public async Task<User> GetById(Guid id) { 
+            return await _repo.GetById(id);
+        }
+        public async Task<User> GetByEmail(string email)
         {
-            return _repo.GetByEmail(email);
+            return await _repo.GetByEmail(email);
         }
         public async Task<List<ResponseUserModel>> GetList(string email,Guid? roleId, int pageNumber, int pageSize)
         {
@@ -51,6 +54,10 @@ namespace Old_stuff_exchange.Service
         public async Task<bool> Update(User newUser)
         {
             return await _repo.Update(newUser);
+        }
+
+        public async Task<User> UpdateUserAddress(Guid UserId, Guid BuildingId) { 
+            return await _repo.UpdateUserAddress(UserId, BuildingId);
         }
     }
 }

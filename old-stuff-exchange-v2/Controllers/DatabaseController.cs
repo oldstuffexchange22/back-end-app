@@ -22,7 +22,7 @@ namespace Old_stuff_exchange.Controllers
                 return Ok();
             }
             catch (Exception ex) { 
-                return Ok(ex.Message);
+                return Ok(ex);
             }
         }
 
