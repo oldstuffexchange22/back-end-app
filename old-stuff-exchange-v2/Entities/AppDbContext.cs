@@ -12,6 +12,7 @@ namespace old_stuff_exchange_v2.Entities
     {
         private readonly IConfiguration _configuration;
         public AppDbContext(DbContextOptions options, IConfiguration configuration) : base(options) {
+
             _configuration = configuration;
         }
 
