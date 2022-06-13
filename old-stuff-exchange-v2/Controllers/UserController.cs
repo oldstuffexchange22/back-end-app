@@ -224,7 +224,9 @@ namespace Old_stuff_exchange.Controllers
         [Route("login-get-token")]
         [HttpGet]
         public IActionResult GetToken(string email) {
-            return Ok(_userService.Login(email));
+            return Ok(new ApiResponse { 
+                Data = _userService.Login(email)
+            });
         }
     }
 }
