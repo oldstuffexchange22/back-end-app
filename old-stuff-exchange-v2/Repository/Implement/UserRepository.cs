@@ -50,7 +50,7 @@ namespace Old_stuff_exchange.Repository.Implement
             User user = _context.Users.Include(user => user.Role).Include(user => user.Building)
                 .FirstOrDefault(u => u.Email == email);
             if (user == null) {
-                if (user.Status == UserStatus.INACTIVE) return UserStatus.INACTIVE;
+                // if (user.Status == UserStatus.INACTIVE) return UserStatus.INACTIVE;
                 Role residentRole = _context.Roles.FirstOrDefault(role => role.Name == RoleNames.RESIDENT);
                 User newUser = new User
                 {

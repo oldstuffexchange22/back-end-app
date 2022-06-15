@@ -1,6 +1,7 @@
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -73,8 +74,12 @@ namespace old_stuff_exchange_v2
             services.AddTransient<WalletService>();
             services.AddTransient<IDepositRepository<Deposit>, DepositRepository>();
             services.AddTransient<DepositService>();
-            
-            
+            services.AddSingleton<IAuthorizationHandler, UserAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, DepositAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, PostAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, ProductAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, TransactionAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, WalletAuthorizationHandler>();
 
             // remove when finish app
             services.AddTransient<DatabaseService>();
@@ -134,17 +139,40 @@ namespace old_stuff_exchange_v2
             {
                 c.EnableAnnotations();
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "old_stuff_exchange_v2", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
             });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-          
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "old_stuff_exchange_v2 v1"));
-            
+
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "old_stuff_exchange_v2 v1"));
+
 
             app.UseHttpsRedirection();
 

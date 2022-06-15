@@ -43,18 +43,5 @@ namespace Old_stuff_exchange.Controllers
             }
         }
 
-        /*[HttpGet("generate-data/cateogories")]
-        public IActionResult GererateCategories()
-        {
-            try
-            {
-                _databaseService.GenerateCategory();
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return Ok(ex.Message);
-            }
-        }*/
     }
 }

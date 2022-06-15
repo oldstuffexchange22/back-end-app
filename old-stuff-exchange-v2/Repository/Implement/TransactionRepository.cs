@@ -43,8 +43,8 @@ namespace old_stuff_exchange_v2.Repository.Implement
 
         public async Task<Transaction> GetById(Guid Id)
         {
-            Transaction transaction = await _context.Transactions.FindAsync(Id);
-            return transaction;
+            Transaction transaction = _context.Transactions.Include(t => t.Wallet).SingleOrDefault(t => t.Id == Id);
+            return await Task.FromResult(transaction);
         }
 
         public async Task<List<Transaction>> GetByUserId(Guid UserId, int page, int pageSize)

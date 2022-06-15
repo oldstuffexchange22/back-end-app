@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Old_stuff_exchange.Model;
 using Old_stuff_exchange.Model.Category;
 using Old_stuff_exchange.Service;
 using old_stuff_exchange_v2.Entities;
+using old_stuff_exchange_v2.Enum.Authorize;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,7 @@ namespace Old_stuff_exchange.Controllers
 {
     [Route("api/categories")]
     [ApiController]
+    [Authorize(Policy = PolicyName.ADMIN)]
     public class CategoryController : ControllerBase
     {
         private readonly CategoryService _service;

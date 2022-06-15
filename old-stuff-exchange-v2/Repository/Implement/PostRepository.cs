@@ -118,7 +118,7 @@ namespace Old_stuff_exchange.Repository.Implement
 
         public async Task<Post> GetPostById(Guid id)
         {
-            Post post = _context.Posts.SingleOrDefault(p => p.Id == id);
+            Post post = _context.Posts.AsNoTracking().SingleOrDefault(p => p.Id == id);
             return await Task.FromResult(post);
         }
 
