@@ -80,8 +80,8 @@ namespace old_stuff_exchange_v2
             services.AddSingleton<IAuthorizationHandler, ProductAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, TransactionAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, WalletAuthorizationHandler>();
-            services.AddSingleton<IAuthorizationHandler, AdminRequirement>();
-            services.AddSingleton<IAuthorizationHandler, ResidentRequirement>();
+            /*services.AddSingleton<IAuthorizationHandler, AdminRequirement>();
+            services.AddSingleton<IAuthorizationHandler, ResidentRequirement>();*/
 
             // remove when finish app
             services.AddTransient<DatabaseService>();
@@ -115,8 +115,9 @@ namespace old_stuff_exchange_v2
                         .AllowCredentials();
                 });
             });
+            services.AddAuthorization();
 
-            services.AddAuthorization(options =>
+            /*services.AddAuthorization(options =>
             {
                 options.AddPolicy(PolicyName.ADMIN,
                     policy =>
@@ -135,7 +136,7 @@ namespace old_stuff_exchange_v2
                         policy.RequireAuthenticatedUser();
                         policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
                     });
-            });
+            });*/
 
             services.AddSwaggerGen(c =>
             {
