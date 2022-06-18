@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Old_stuff_exchange.Service;
-using old_stuff_exchange_v2.Enum.Authorize;
 using System;
 using System.Threading.Tasks;
 

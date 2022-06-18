@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'old-stuff-exchange'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_54DCAF5C0F91439BA0BB66ACA3ACCB3D }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A1107EF655BB4B81A99B613F983B2980 }}
           package: .
