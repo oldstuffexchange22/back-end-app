@@ -82,7 +82,7 @@ namespace Old_stuff_exchange.Controllers
 
         [HttpGet()]
         [SwaggerOperation(Summary = "Get information user by email, by roleId and pagination")]
-        [Authorize(Policy =PolicyName.ADMIN)]
+        [Authorize(Policy = PolicyName.ADMIN)]
         public async Task<ActionResult> GetList(string email, Guid? roleId, int pageNumber = 1, int pageSize = 10)
         {
             try

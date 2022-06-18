@@ -16,7 +16,9 @@ using Old_stuff_exchange.Helper;
 using Old_stuff_exchange.Repository.Implement;
 using Old_stuff_exchange.Repository.Interface;
 using Old_stuff_exchange.Service;
+using old_stuff_exchange_v2.Authorize;
 using old_stuff_exchange_v2.Entities;
+using old_stuff_exchange_v2.Enum.Authorize;
 using old_stuff_exchange_v2.Repository.Implement;
 using old_stuff_exchange_v2.Repository.Interface;
 using old_stuff_exchange_v2.Service;
@@ -113,9 +115,9 @@ namespace old_stuff_exchange_v2
                         .AllowCredentials();
                 });
             });
-            services.AddAuthorization();
+        
 
-            /*services.AddAuthorization(options =>
+            services.AddAuthorization(options =>
             {
                 options.AddPolicy(PolicyName.ADMIN,
                     policy =>
@@ -134,7 +136,7 @@ namespace old_stuff_exchange_v2
                         policy.RequireAuthenticatedUser();
                         policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
                     });
-            });*/
+            });
 
             services.AddSwaggerGen(c =>
             {
