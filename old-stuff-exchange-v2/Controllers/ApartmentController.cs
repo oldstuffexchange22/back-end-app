@@ -9,6 +9,7 @@ using System;
 using old_stuff_exchange_v2.Entities;
 using Old_stuff_exchange.Model;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace old_stuff_exchange_v2.Controllers
 {
