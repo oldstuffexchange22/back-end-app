@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Old_stuff_exchange.Controllers
 {
-
+    [Authorize(Policy = PolicyName.ADMIN)]
     public class RoleController : BaseApiController
     {
         private readonly RoleService _service;

@@ -15,7 +15,7 @@ namespace Old_stuff_exchange.Controllers
 {
     [Route("api/v1.0/categories")]
     [ApiController]
-
+    [Authorize(Policy = PolicyName.ADMIN)]
     public class CategoryController : ControllerBase
     {
         private readonly CategoryService _service;
