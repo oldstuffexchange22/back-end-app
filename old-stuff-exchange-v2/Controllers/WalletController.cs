@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 
 namespace old_stuff_exchange_v2.Controllers
 {
-    [Authorize(Policy = PolicyName.ADMIN)]
     public class WalletController : BaseApiController
     {
         private readonly WalletService _walletService;
