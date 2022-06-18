@@ -78,8 +78,8 @@ namespace old_stuff_exchange_v2
             services.AddSingleton<IAuthorizationHandler, ProductAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, TransactionAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, WalletAuthorizationHandler>();
-            services.AddSingleton<IAuthorizationHandler, AdminRequirement>();
-            services.AddSingleton<IAuthorizationHandler, ResidentRequirement>();
+            /*services.AddSingleton<IAuthorizationHandler, AdminRequirement>();
+            services.AddSingleton<IAuthorizationHandler, ResidentRequirement>();*/
 
             // remove when finish app
             services.AddTransient<DatabaseService>();
@@ -113,6 +113,29 @@ namespace old_stuff_exchange_v2
                         .AllowCredentials();
                 });
             });
+            services.AddAuthorization();
+
+            /*services.AddAuthorization(options =>
+            {
+                options.AddPolicy(PolicyName.ADMIN,
+                    policy =>
+                    {
+                        policy.AddRequirements(new AdminRequirement());
+                        policy.RequireAuthenticatedUser(); // Adds DenyAnonymousAuthorizationRequirement
+                                                           // By adding the CookieAuthenticationDefaults.AuthenticationScheme, if an authenticated
+                                                           // user is not in the appropriate role, they will be redirected to a "forbidden" page.
+                        policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+                    });
+
+                options.AddPolicy(PolicyName.RESIDENT,
+                    policy =>
+                    {
+                        policy.AddRequirements(new ResidentRequirement());
+                        policy.RequireAuthenticatedUser();
+                        policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+                    });
+            });*/
+
             services.AddSwaggerGen(c =>
             {
                 c.EnableAnnotations();
