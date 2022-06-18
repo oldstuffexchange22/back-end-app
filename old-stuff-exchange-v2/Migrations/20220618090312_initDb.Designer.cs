@@ -10,8 +10,8 @@ using old_stuff_exchange_v2.Entities;
 namespace old_stuff_exchange_v2.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220614175135_update-cascade")]
-    partial class updatecascade
+    [Migration("20220618090312_initDb")]
+    partial class initDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -388,7 +388,8 @@ namespace old_stuff_exchange_v2.Migrations
                 {
                     b.HasOne("old_stuff_exchange_v2.Entities.Category", "Parent")
                         .WithMany("CategoriesChildren")
-                        .HasForeignKey("ParentId");
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Parent");
                 });
@@ -419,7 +420,8 @@ namespace old_stuff_exchange_v2.Migrations
                 {
                     b.HasOne("old_stuff_exchange_v2.Entities.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("old_stuff_exchange_v2.Entities.Post", "Post")
                         .WithMany("Products")
@@ -436,15 +438,18 @@ namespace old_stuff_exchange_v2.Migrations
                 {
                     b.HasOne("old_stuff_exchange_v2.Entities.Deposit", "Deposit")
                         .WithMany("Transactions")
-                        .HasForeignKey("DepositId");
+                        .HasForeignKey("DepositId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("old_stuff_exchange_v2.Entities.Post", "Post")
                         .WithMany("Transactions")
-                        .HasForeignKey("PostId");
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("old_stuff_exchange_v2.Entities.Wallet", "Wallet")
                         .WithMany("Transactions")
-                        .HasForeignKey("WalletId");
+                        .HasForeignKey("WalletId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Deposit");
 
@@ -457,7 +462,8 @@ namespace old_stuff_exchange_v2.Migrations
                 {
                     b.HasOne("old_stuff_exchange_v2.Entities.Building", "Building")
                         .WithMany("Users")
-                        .HasForeignKey("BuildingId");
+                        .HasForeignKey("BuildingId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("old_stuff_exchange_v2.Entities.Role", "Role")
                         .WithMany("Users")
@@ -474,7 +480,8 @@ namespace old_stuff_exchange_v2.Migrations
                 {
                     b.HasOne("old_stuff_exchange_v2.Entities.User", "User")
                         .WithMany("Wallets")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("User");
                 });

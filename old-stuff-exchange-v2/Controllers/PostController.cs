@@ -7,6 +7,7 @@ using Old_stuff_exchange.Service;
 using old_stuff_exchange_v2.Authorize;
 using old_stuff_exchange_v2.Entities;
 using old_stuff_exchange_v2.Enum.Authorize;
+using old_stuff_exchange_v2.Enum.Post;
 using old_stuff_exchange_v2.Model;
 using old_stuff_exchange_v2.Model.Post;
 using Swashbuckle.AspNetCore.Annotations;
@@ -49,7 +50,7 @@ namespace Old_stuff_exchange.Controllers
             }
         }
 
-        [HttpGet("list")]
+        [HttpGet()]
         [SwaggerOperation(Summary = "Get list post")]
         public async Task<IActionResult> GetList(Guid? apartmentId, Guid? categoryId, string filterWith, string filterValue, string sortBy, string sortType, int page = 1, int pageSize = 10)
         {
@@ -82,7 +83,7 @@ namespace Old_stuff_exchange.Controllers
         }
 
 
-        [HttpGet("user-posts/{userId}")]
+        [HttpGet("user/{userId}")]
         [SwaggerOperation(Summary = "Get list post by user id")]
         public async Task<IActionResult> GetListByUserId(Guid userId, string status, int page = 1, int pageSize = 10)
         {
@@ -132,7 +133,7 @@ namespace Old_stuff_exchange.Controllers
             }
         }
 
-        [HttpPut("exchange/buy")]
+        /*[HttpPut("exchange/buy")]
         [SwaggerOperation(Summary = "Buy post")]
         public async Task<IActionResult> BuyPost(BuyPostModel model)
         {
@@ -257,7 +258,7 @@ namespace Old_stuff_exchange.Controllers
                 });
             }
         }
-
+*/
 
         [HttpPut()]
         [SwaggerOperation(Summary = "Update post")]
@@ -292,7 +293,7 @@ namespace Old_stuff_exchange.Controllers
             }
         }
 
-        [HttpPut("accept-post")]
+        /*[HttpPut("accept-post")]
         [SwaggerOperation(Summary = "Accept post by id")]
         [Authorize(Policy = PolicyName.ADMIN)]
         public async Task<IActionResult> AcceptPost(IdPostModel model)
@@ -345,6 +346,68 @@ namespace Old_stuff_exchange.Controllers
                     Success = true,
                     Data = post
                 });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    code = StatusCode(StatusCodes.Status500InternalServerError),
+                    exception = ex
+                });
+            }
+        }
+*/
+        [HttpPut("status")]
+        [SwaggerOperation(Summary = "Action to change status post")]
+        public async Task<IActionResult> ChangeStatus(PostStatusModel model)
+        {
+            try
+            {
+                Post postAuthorize = await _postService.GetById(model.PostId);
+                if (postAuthorize == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    bool verifyAuth = (await _authorizeService.AuthorizeAsync(User, postAuthorize, Operations.Update)).Succeeded;
+                    if (verifyAuth == false) return StatusCode(StatusCodes.Status403Forbidden);
+                }
+                string statusUpdate = model.Status.ToUpper();
+                switch (statusUpdate)
+                {
+                    case PostStatus.ACTIVE:
+                        if (!statusUpdate.Equals(PostStatus.WAITING)) return BadRequest("Post is not waiting to active");
+                        await _postService.AccepPost(model.PostId);
+                        break;
+                    case PostStatus.INACTIVE:
+                        if (!statusUpdate.Equals(PostStatus.WAITING)) return BadRequest("Post is not waiting to inactive");
+                        await _postService.NotAccepPost(model.PostId);
+                        break;
+                    case PostStatus.DELIVERY:
+                        if (!statusUpdate.Equals(PostStatus.ACTIVE)) return BadRequest("Post is not active to buy");
+                        await _postService.BuyPost(model.UserId, model.PostId, model.WalletType);
+                        break;
+                    case PostStatus.DELIVERED:
+                        if (!statusUpdate.Equals(PostStatus.DELIVERY)) return BadRequest("Post is not delivery to change delivered");
+                        await _postService.DeliveredPost(model.PostId);
+                        break;
+                    case PostStatus.ACCOMPLISHED:
+                        if (!statusUpdate.Equals(PostStatus.DELIVERED)) return BadRequest("Post is not delivered to accomplished");
+                        await _postService.AccomplishedPost(model.PostId);
+                        break;
+                    case PostStatus.FAILURE:
+                        if (!statusUpdate.Equals(PostStatus.DELIVERED)) return BadRequest("Post is not delivered to failure");
+                        await _postService.FailurePost(model.PostId);
+                        break;
+                    default: return StatusCode(StatusCodes.Status400BadRequest);
+                }
+
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Data = await _postService.GetById(model.PostId)
+                }); ;
             }
             catch (Exception ex)
             {

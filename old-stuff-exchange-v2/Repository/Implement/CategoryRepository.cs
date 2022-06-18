@@ -27,7 +27,10 @@ namespace Old_stuff_exchange.Repository.Implement
 
         public async Task<bool> Delete(Guid id)
         {
-            Category category = _context.Categories.FirstOrDefault(cat => cat.Id == id);
+            Category category = _context.Categories.Include(c => c.CategoriesChildren)
+                                        .ThenInclude(c => c.CategoriesChildren)
+                                        .ThenInclude(c => c.CategoriesChildren)
+                                        .ThenInclude(c => c.CategoriesChildren).FirstOrDefault(cat => cat.Id == id);
             if (category == null) return false;
             _context.Remove(category);
             int result = await _context.SaveChangesAsync();
@@ -36,7 +39,10 @@ namespace Old_stuff_exchange.Repository.Implement
 
         public async Task<Category> GetById(Guid id)
         {
-            Category category = _context.Categories.FirstOrDefault(cat => cat.Id == id);
+            Category category = _context.Categories.Include(c => c.CategoriesChildren)
+                            .Include(c => c.CategoriesChildren)
+                            .Include(c => c.CategoriesChildren)
+                            .Include(c => c.CategoriesChildren).FirstOrDefault(cat => cat.Id == id);
             if (category == null) return null;
             return await Task.FromResult(category);
         }

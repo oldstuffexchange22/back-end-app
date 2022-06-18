@@ -52,7 +52,7 @@ namespace old_stuff_exchange_v2.Controllers
             }
         }
 
-        [HttpGet("user-deposits/{userId}")]
+        [HttpGet("user/{userId}")]
         [SwaggerOperation(Summary = "Get deposit by user id")]
         public async Task<IActionResult> GetByUserId(Guid userId, int page = 1, int pageSize = 10)
         {

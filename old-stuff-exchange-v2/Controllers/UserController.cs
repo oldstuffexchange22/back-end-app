@@ -80,7 +80,7 @@ namespace Old_stuff_exchange.Controllers
             }
         }
 
-        [HttpGet("list")]
+        [HttpGet()]
         [SwaggerOperation(Summary = "Get information user by email, by roleId and pagination")]
         [Authorize(Policy =PolicyName.ADMIN)]
         public async Task<ActionResult> GetList(string email, Guid? roleId, int pageNumber = 1, int pageSize = 10)
@@ -117,7 +117,8 @@ namespace Old_stuff_exchange.Controllers
                     UserName = newUser.UserName,
                     Password = newUser.Password,
                     Phone = newUser.Phone,
-                    Status = UserStatus.ACTIVE
+                    Status = UserStatus.ACTIVE,
+                    Gender = newUser.Gender,
                 };
                 var tempUser = await _userService.Create(user);
                 if (tempUser == null)
@@ -140,34 +141,7 @@ namespace Old_stuff_exchange.Controllers
             }
         }
 
-        [HttpPost("login")]
-        public async Task<ActionResult> Login(LoginModel loginModel)
-        {
-            try
-            {
-                FirebaseToken decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(loginModel.Token);
-                string uid = decodedToken.Uid;
-                UserRecord user = await FirebaseAuth.DefaultInstance.GetUserAsync(uid);
-
-                string response = _userService.Login(user.Email);
-                if (response == null || response == UserStatus.INACTIVE)
-                {
-                    return BadRequest(new { message = "Token is invalid or account is blocked" });
-                }
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Data = new { token = response }
-                });
-            }
-            catch (Exception ex) {
-                return BadRequest(new
-                {
-                    code = StatusCode(StatusCodes.Status500InternalServerError),
-                    exception = ex
-                });
-            }
-        }
+        
 
         [HttpPost("update-address")]
         [SwaggerOperation(Summary = "Update address user")]
@@ -218,7 +192,8 @@ namespace Old_stuff_exchange.Controllers
                     ImagesUrl = updateUser.Image,
                     RoleId = updateUser.RoleId,
                     Status = updateUser.Status,
-                    Phone = updateUser.Phone
+                    Phone = updateUser.Phone,
+                    Gender = updateUser.Gender
                 };
                 // authorize
                 bool verifyAuth = (await _authorizationService.AuthorizeAsync(User, user, Operations.Update)).Succeeded;

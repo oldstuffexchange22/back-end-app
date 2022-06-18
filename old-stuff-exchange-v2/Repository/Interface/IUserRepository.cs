@@ -9,6 +9,7 @@ namespace Old_stuff_exchange.Repository.Interface
     {
         Task<User> Create(User user);
         string Login(string email);
+        Task<User> Login(string userName, string password);
         Task<User> GetById(Guid id);
         Task<User> GetByEmail(string email);
         Task<List<User>> GetList(string email,Guid? roleId, int pageNumber, int pageSize);

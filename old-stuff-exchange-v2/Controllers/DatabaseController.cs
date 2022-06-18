@@ -10,7 +10,6 @@ namespace Old_stuff_exchange.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = PolicyName.ADMIN)]
     public class DatabaseController : ControllerBase
     {
         DatabaseService _databaseService;

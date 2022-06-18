@@ -41,7 +41,8 @@ namespace old_stuff_exchange_v2.Authorize
         { Operations.Read, x => x.Contains(UserPermissionType.Owner) ||
                                     x.Contains(UserPermissionType.Admin)},
         { Operations.Update, x => x.Contains(UserPermissionType.Admin) ||
-                                x.Contains(UserPermissionType.Owner) },
+                                x.Contains(UserPermissionType.Owner) ||
+                                x.Contains(UserPermissionType.Buyer)},
 
         { Operations.Delete, x => x.Contains(UserPermissionType.Admin) ||
                                 x.Contains(UserPermissionType.Owner) },

@@ -81,7 +81,7 @@ namespace old_stuff_exchange_v2.Controllers
             }
         }
 
-        [HttpGet("user-wallets/{userId}")]
+        [HttpGet("user/{userId}")]
         [SwaggerOperation(Summary = "Find wallets of user")]
         public async Task<ActionResult> GetByType(Guid userId)
         {

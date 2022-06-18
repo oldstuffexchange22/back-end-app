@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Old_stuff_exchange.Controllers
 {
-    [Route("api/categories")]
+    [Route("api/v1.0/categories")]
     [ApiController]
     [Authorize(Policy = PolicyName.ADMIN)]
     public class CategoryController : ControllerBase
@@ -46,7 +46,7 @@ namespace Old_stuff_exchange.Controllers
             }
         }
 
-        [HttpGet("list")]
+        [HttpGet()]
         [SwaggerOperation(Summary = "Get list categories")]
         public async Task<IActionResult> GetList(string name, int page = 1, int pageSize = 10) {
             try

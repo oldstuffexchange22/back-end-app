@@ -44,7 +44,7 @@ namespace Old_stuff_exchange.Controllers
             }
         }
 
-        [HttpGet("list")]
+        [HttpGet()]
         [SwaggerOperation(Summary = "Get list of building")]
         public IActionResult GetList(Guid? apartmentId, int page = 1, int pageSize = 10 )
         {

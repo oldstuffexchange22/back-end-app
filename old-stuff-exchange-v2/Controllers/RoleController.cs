@@ -36,7 +36,7 @@ namespace Old_stuff_exchange.Controllers
                 Data = role
             });
         }
-        [HttpGet("list")]
+        [HttpGet()]
         [SwaggerOperation(Summary = "Get list role")]
         public async Task<IActionResult> GetList()
         {

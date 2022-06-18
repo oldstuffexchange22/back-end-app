@@ -118,5 +118,11 @@ namespace Old_stuff_exchange.Repository.Implement
         {
             return await Task.FromResult(_context.Users.Find(id));
         }
+
+        public async Task<User> Login(string userName, string password)
+        {
+            User user = _context.Users.Include(u => u.Role).Where(u => u.UserName.ToLower().Equals(userName.ToLower()) && u.Password == password).SingleOrDefault();
+            return await Task.FromResult(user);
+        }
     }
 }
