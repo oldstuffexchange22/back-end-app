@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Old_stuff_exchange.Controllers
 {
-    [Authorize(Policy = PolicyName.ADMIN)]
+    
     public class BuildingController : BaseApiController
     {
         private readonly BuildingService _service;

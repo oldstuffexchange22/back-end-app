@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace old_stuff_exchange_v2.Controllers
 {
-    [Authorize(Policy = PolicyName.ADMIN)]
+
     public class ApartmentController : BaseApiController
     {
         private readonly ApartmentService _service;
