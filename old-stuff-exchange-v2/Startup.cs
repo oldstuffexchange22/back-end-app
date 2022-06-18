@@ -16,9 +16,7 @@ using Old_stuff_exchange.Helper;
 using Old_stuff_exchange.Repository.Implement;
 using Old_stuff_exchange.Repository.Interface;
 using Old_stuff_exchange.Service;
-using old_stuff_exchange_v2.Authorize;
 using old_stuff_exchange_v2.Entities;
-using old_stuff_exchange_v2.Enum.Authorize;
 using old_stuff_exchange_v2.Repository.Implement;
 using old_stuff_exchange_v2.Repository.Interface;
 using old_stuff_exchange_v2.Service;
@@ -109,34 +107,12 @@ namespace old_stuff_exchange_v2
             {
                 options.AddDefaultPolicy(builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000", "http://localhost:3001", "https://old-stuff-exchange.azurewebsites.net", "http://127.0.0.1:5500")
+                    builder.WithOrigins("http://localhost:3000", "http://localhost:3001", "https://old-stuff-exchange.azurewebsites.net","https://old-stuff-exchange2.vercel.app" ,"http://127.0.0.1:5500")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
                 });
             });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(PolicyName.ADMIN,
-                    policy =>
-                    {
-                        policy.AddRequirements(new AdminRequirement());
-                        policy.RequireAuthenticatedUser(); // Adds DenyAnonymousAuthorizationRequirement
-                                                           // By adding the CookieAuthenticationDefaults.AuthenticationScheme, if an authenticated
-                                                           // user is not in the appropriate role, they will be redirected to a "forbidden" page.
-                        policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
-                    });
-
-                options.AddPolicy(PolicyName.RESIDENT,
-                    policy =>
-                    {
-                        policy.AddRequirements(new ResidentRequirement());
-                        policy.RequireAuthenticatedUser();
-                        policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
-                    });
-            });
-
             services.AddSwaggerGen(c =>
             {
                 c.EnableAnnotations();

@@ -9,12 +9,9 @@ using System;
 using old_stuff_exchange_v2.Entities;
 using Old_stuff_exchange.Model;
 using System.Collections.Generic;
-using old_stuff_exchange_v2.Enum.Authorize;
-using Microsoft.AspNetCore.Authorization;
 
 namespace old_stuff_exchange_v2.Controllers
 {
-
     public class ApartmentController : BaseApiController
     {
         private readonly ApartmentService _service;
