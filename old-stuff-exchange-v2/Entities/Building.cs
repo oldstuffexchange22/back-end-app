@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,6 +21,10 @@ namespace old_stuff_exchange_v2.Entities
         public Guid ApartmentId { get; set; }
         [ForeignKey("ApartmentId")]
         public Apartment Apartment { get; set; }
+        public ICollection<User> Users { get; set; }
         #endregion
+        public Building() {
+            Users = new List<User>();
+        }
     }
 }

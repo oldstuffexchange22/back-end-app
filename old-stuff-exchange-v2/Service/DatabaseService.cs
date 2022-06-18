@@ -61,7 +61,15 @@ namespace Old_stuff_exchange.Service
                 Status = UserStatus.ACTIVE,
                 Role = roleAdmin,
                 FullName = "nvtan.a5@gmail.com",
-                BuildingId = buildings[0].Id
+            };
+            User userAdmin2 = new User
+            {
+                UserName = "admin",
+                Email = "ADMIN@gmail.com",
+                Status = UserStatus.ACTIVE,
+                Role = roleAdmin,
+                FullName = "admin",
+                Password = "admin"
             };
             Faker<User> FakerUser = new Faker<User>()
                 .RuleFor(u => u.UserName, faker => faker.Person.UserName)
@@ -73,6 +81,7 @@ namespace Old_stuff_exchange.Service
                 .RuleFor(u => u.Building, faker => faker.PickRandom(buildings))
                 .RuleFor(u => u.Phone, faker => faker.Person.Phone);
             _context.Add(userAdmin);
+            _context.Add(userAdmin2);
             List<User> users = FakerUser.Generate(40);
             users.Add(userAdmin);
             _context.AddRange(users);

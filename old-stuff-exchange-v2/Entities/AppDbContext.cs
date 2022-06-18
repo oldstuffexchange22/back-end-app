@@ -16,16 +16,16 @@ namespace old_stuff_exchange_v2.Entities
         }
 
         #region
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Category> Categories { get; set; }
         public DbSet<Apartment> Apartments { get; set; }
+        public DbSet<Building> Buildings { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Post> Posts { get; set; }
-        public DbSet<Building> Buildings { get; set; }
-        public DbSet<Deposit> Deposits { get; set; } 
         public DbSet<Wallet> Wallets { get; set; }
+        public DbSet<Deposit> Deposits { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Product> Products { get; set; }
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
@@ -34,20 +34,11 @@ namespace old_stuff_exchange_v2.Entities
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
-            /*foreach (IMutableProperty property in modelBuilder.Model.GetEntityTypes()
-                .SelectMany(t => t.GetProperties())
-                .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
+            base.OnModelCreating(modelBuilder);
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
-                property.SetPrecision(10);
-                property.SetScale(2);
+                relationship.DeleteBehavior = DeleteBehavior.Cascade;
             }
-
-            foreach (IMutableProperty property in modelBuilder.Model.GetEntityTypes()
-                .SelectMany(t => t.GetProperties()
-                .Where(p => p.Name == "CreatedAt"))) {
-                property.SetDefaultValueSql("getdate()");
-            } */
-
             modelBuilder.Entity<Role>(entity =>
             {
                 entity.HasIndex(e => e.Name).IsUnique();
@@ -57,27 +48,6 @@ namespace old_stuff_exchange_v2.Entities
             {
                 entity.HasIndex(e => e.Name).IsUnique();
             });
-
-
-           /* modelBuilder.Entity<Wallet>(entity =>
-            {
-                entity.HasMany<Transaction>(w => w.Transactions).WithOne()
-                    .HasForeignKey(w => w.WalletId).OnDelete(DeleteBehavior.Restrict);
-            });
-
-            modelBuilder.Entity<Post>(entity =>
-            {
-                entity.HasMany<Transaction>(p => p.Transactions).WithOne()
-                    .HasForeignKey(p => p.WalletId).OnDelete(DeleteBehavior.Restrict);
-            });*/
-
-            /*modelBuilder.Entity<Transaction>(entity =>
-            {
-                entity.HasOne<Post>(t => t.Post).WithMany()
-                    .HasForeignKey(t => t.PostId).OnDelete(DeleteBehavior.Restrict);
-                entity.HasOne<Wallet>(t => t.Wallet).WithMany()
-                    .HasForeignKey(t => t.WalletId).OnDelete(DeleteBehavior.Restrict);
-            });*/
 
             modelBuilder.Entity<User>(entity =>
             {

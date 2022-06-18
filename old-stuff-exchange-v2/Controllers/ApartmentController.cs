@@ -15,9 +15,11 @@ namespace old_stuff_exchange_v2.Controllers
     public class ApartmentController : BaseApiController
     {
         private readonly ApartmentService _service;
-        public ApartmentController(ApartmentService service)
+        private readonly IAuthorizationService _authorizationService;
+        public ApartmentController(ApartmentService service, IAuthorizationService authorizationService)
         {
             _service = service;
+            _authorizationService = authorizationService;
         }
 
         [HttpGet("{id}")]
@@ -41,7 +43,7 @@ namespace old_stuff_exchange_v2.Controllers
             }
         }
 
-        [HttpGet("list")]
+        [HttpGet()]
         [SwaggerOperation(Summary = "Getlist apartment")]
         public async Task<IActionResult> GetAll()
         {

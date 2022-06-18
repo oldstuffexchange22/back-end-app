@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Old_stuff_exchange.Controllers;
 using Old_stuff_exchange.Model;
 using old_stuff_exchange_v2.Entities;
+using old_stuff_exchange_v2.Enum.Authorize;
 using old_stuff_exchange_v2.Model.Wallet;
 using old_stuff_exchange_v2.Service;
 using Swashbuckle.AspNetCore.Annotations;
@@ -12,22 +14,33 @@ using System.Threading.Tasks;
 
 namespace old_stuff_exchange_v2.Controllers
 {
+    [Authorize(Policy = PolicyName.ADMIN)]
     public class WalletController : BaseApiController
     {
-        private readonly WalletService _service;
-        public WalletController(WalletService service)
+        private readonly WalletService _walletService;
+        private readonly IAuthorizationService _authorizationService;
+        public WalletController(WalletService service, IAuthorizationService authorizationService)
         {
-            _service = service;
+            _walletService = service;
+            _authorizationService = authorizationService;
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Find by id")]
+        [AllowAnonymous]
         public async Task<ActionResult> GetById(Guid id)
         {
             try
             {
-                Wallet wallet = await _service.FindById(id);
-                if (wallet == null) return BadRequest();
+                Wallet wallet = await _walletService.FindById(id);
+                if (wallet == null)
+                {
+                    return NotFound();
+                }
+                else {
+                    bool verifyAuth = (await _authorizationService.AuthorizeAsync(User, wallet, Operations.Read)).Succeeded;
+                    if (verifyAuth == false) return StatusCode(StatusCodes.Status403Forbidden);
+                }
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -50,7 +63,7 @@ namespace old_stuff_exchange_v2.Controllers
         {
             try
             {
-                Wallet wallet = await _service.FindByType(type);
+                Wallet wallet = await _walletService.FindByType(type);
                 if (wallet == null) return BadRequest();
                 return Ok(new ApiResponse
                 {
@@ -68,14 +81,21 @@ namespace old_stuff_exchange_v2.Controllers
             }
         }
 
-        [HttpGet("user-wallets/{userId}")]
+        [HttpGet("user/{userId}")]
         [SwaggerOperation(Summary = "Find wallets of user")]
         public async Task<ActionResult> GetByType(Guid userId)
         {
             try
             {
-                List<Wallet> wallets = await _service.FindByUserId(userId);
-                if (wallets == null) return BadRequest();
+                List<Wallet> wallets = await _walletService.FindByUserId(userId);
+                if (wallets == null || wallets.Count == 0) {
+                    return NotFound();
+                }
+                else
+                {
+                    bool verifyAuth = (await _authorizationService.AuthorizeAsync(User, wallets[0], Operations.Read)).Succeeded;
+                    if (verifyAuth == false) return StatusCode(StatusCodes.Status403Forbidden);
+                }
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -98,7 +118,7 @@ namespace old_stuff_exchange_v2.Controllers
         {
             try
             {
-                Wallet wallets = await _service.Create(model);
+                Wallet wallets = await _walletService.Create(model);
                 if (wallets == null) return BadRequest();
                 return Ok(new ApiResponse
                 {
@@ -122,7 +142,7 @@ namespace old_stuff_exchange_v2.Controllers
         {
             try
             {
-                Wallet wallets = await _service.Update(model);
+                Wallet wallets = await _walletService.Update(model);
                 if (wallets == null) return BadRequest();
                 return Ok(new ApiResponse
                 {
@@ -146,7 +166,7 @@ namespace old_stuff_exchange_v2.Controllers
         {
             try
             {
-                bool result = await _service.Delete(id);
+                bool result = await _walletService.Delete(id);
                 if (!result) return BadRequest();
                 return Ok(new ApiResponse
                 {

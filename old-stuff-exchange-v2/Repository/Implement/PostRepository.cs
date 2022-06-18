@@ -59,6 +59,12 @@ namespace Old_stuff_exchange.Repository.Implement
         {
             var allPost = _context.Posts.Include(p => p.Author).ThenInclude(u => u.Building)
                                         .Include(p => p.Products).AsQueryable();
+            var category = _context.Categories.Include(c => c.CategoriesChildren)
+                                                .ThenInclude(c => c.CategoriesChildren)
+                                                .ThenInclude(c => c.CategoriesChildren)
+                                                .ThenInclude(c => c.CategoriesChildren).Where(c => c.Id == categoryId).SingleOrDefault();
+            listCategoriesId.Clear();
+            GetListCatChildId(category);
             #region Filtering
             if (apartmentId != null)
             {
@@ -66,7 +72,9 @@ namespace Old_stuff_exchange.Repository.Implement
             }
             if (categoryId != null)
             {
-                allPost = allPost.Where(post => post.Products.Any(pro => pro.CategoryId == categoryId));
+                listCategoriesId.Add(categoryId);
+                // allPost = allPost.Where(post => post.Products.Any(pro => pro.CategoryId == categoryId));
+                allPost = allPost.Where(post => post.Products.Any(pro => listCategoriesId.Contains(pro.CategoryId)));
             }
             #endregion
             #region Sorting
@@ -101,6 +109,19 @@ namespace Old_stuff_exchange.Repository.Implement
 
         }
 
+
+        private List<Guid?> listCategoriesId = new List<Guid?>();
+        private void GetListCatChildId(Category category) {
+            for (int i = 0; i < category.CategoriesChildren.Count; i++)
+            {
+                Guid id = category.CategoriesChildren.ToList()[i].Id;
+                listCategoriesId.Add(id);
+                if (category.CategoriesChildren.ToList()[i].CategoriesChildren.Count > 0) {
+                    GetListCatChildId(category.CategoriesChildren.ToList()[i]);
+                }
+            }
+        }
+
         public async Task<List<Post>> GetListByUserId(Guid userId, string status, int page, int pageSize)
         {
             User user = await _context.Users.FindAsync(userId);
@@ -118,7 +139,7 @@ namespace Old_stuff_exchange.Repository.Implement
 
         public async Task<Post> GetPostById(Guid id)
         {
-            Post post = _context.Posts.SingleOrDefault(p => p.Id == id);
+            Post post = _context.Posts.Include(p => p.Products).AsNoTracking().SingleOrDefault(p => p.Id == id);
             return await Task.FromResult(post);
         }
 

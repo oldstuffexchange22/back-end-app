@@ -50,7 +50,7 @@ namespace Old_stuff_exchange.Repository.Implement
             User user = _context.Users.Include(user => user.Role).Include(user => user.Building)
                 .FirstOrDefault(u => u.Email == email);
             if (user == null) {
-                if (user.Status == UserStatus.INACTIVE) return UserStatus.INACTIVE;
+                // if (user.Status == UserStatus.INACTIVE) return UserStatus.INACTIVE;
                 Role residentRole = _context.Roles.FirstOrDefault(role => role.Name == RoleNames.RESIDENT);
                 User newUser = new User
                 {
@@ -117,6 +117,12 @@ namespace Old_stuff_exchange.Repository.Implement
         public async Task<User> GetById(Guid id)
         {
             return await Task.FromResult(_context.Users.Find(id));
+        }
+
+        public async Task<User> Login(string userName, string password)
+        {
+            User user = _context.Users.Include(u => u.Role).Where(u => u.UserName.ToLower().Equals(userName.ToLower()) && u.Password == password).SingleOrDefault();
+            return await Task.FromResult(user);
         }
     }
 }

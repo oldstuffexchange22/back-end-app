@@ -11,24 +11,32 @@ using Old_stuff_exchange.Model;
 using old_stuff_exchange_v2.Entities;
 using System.Collections.Generic;
 using old_stuff_exchange_v2.Enum.User;
+using Microsoft.AspNetCore.Authorization;
+using old_stuff_exchange_v2.Enum.Authorize;
 
 namespace Old_stuff_exchange.Controllers
 {
     public class UserController : BaseApiController
     {
         private readonly UserService _userService;
-        public UserController(UserService service)
+        private readonly IAuthorizationService _authorizationService;
+        public UserController(UserService service, IAuthorizationService authorizationService)
         {
             _userService = service;
+            _authorizationService = authorizationService;
         }
 
-        [HttpGet("{email}")]
-        [SwaggerOperation(Summary = "Get information user by email, by roleId and pagination")]
-        public async Task<ActionResult> GetByEmail(string email)
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get information user by id")]
+        public async Task<ActionResult> GetById(Guid id)
         {
             try
             {
-                User user = await _userService.GetByEmail(email);
+                User user = await _userService.GetById(id);
+                if (!(await _authorizationService.AuthorizeAsync(User, user, Operations.Read)).Succeeded)
+                {
+                    return StatusCode(StatusCodes.Status403Forbidden);
+                }
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -45,8 +53,36 @@ namespace Old_stuff_exchange.Controllers
             }
         }
 
-        [HttpGet("list")]
+        [HttpGet("email/{email}")]
+        [SwaggerOperation(Summary = "Get information user by email")]
+        public async Task<ActionResult> GetByEmail(string email)
+        {
+            try
+            {
+                User user = await _userService.GetByEmail(email);
+                if (!(await _authorizationService.AuthorizeAsync(User, user, Operations.Read)).Succeeded)
+                {
+                    return StatusCode(StatusCodes.Status403Forbidden);
+                }
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Data = user
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    code = StatusCode(StatusCodes.Status500InternalServerError),
+                    exception = ex
+                });
+            }
+        }
+
+        [HttpGet()]
         [SwaggerOperation(Summary = "Get information user by email, by roleId and pagination")]
+        [Authorize(Policy =PolicyName.ADMIN)]
         public async Task<ActionResult> GetList(string email, Guid? roleId, int pageNumber = 1, int pageSize = 10)
         {
             try
@@ -81,7 +117,8 @@ namespace Old_stuff_exchange.Controllers
                     UserName = newUser.UserName,
                     Password = newUser.Password,
                     Phone = newUser.Phone,
-                    Status = UserStatus.ACTIVE
+                    Status = UserStatus.ACTIVE,
+                    Gender = newUser.Gender,
                 };
                 var tempUser = await _userService.Create(user);
                 if (tempUser == null)
@@ -104,34 +141,7 @@ namespace Old_stuff_exchange.Controllers
             }
         }
 
-        [HttpPost("login")]
-        public async Task<ActionResult> Login(LoginModel loginModel)
-        {
-            try
-            {
-                FirebaseToken decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(loginModel.Token);
-                string uid = decodedToken.Uid;
-                UserRecord user = await FirebaseAuth.DefaultInstance.GetUserAsync(uid);
-
-                string response = _userService.Login(user.Email);
-                if (response == null || response == UserStatus.INACTIVE)
-                {
-                    return BadRequest(new { message = "Token is invalid or account is blocked" });
-                }
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Data = new { token = response }
-                });
-            }
-            catch (Exception ex) {
-                return BadRequest(new
-                {
-                    code = StatusCode(StatusCodes.Status500InternalServerError),
-                    exception = ex
-                });
-            }
-        }
+        
 
         [HttpPost("update-address")]
         [SwaggerOperation(Summary = "Update address user")]
@@ -139,6 +149,15 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
+                User userAuthorize = await _userService.GetById(userId);
+                if (userAuthorize == null)
+                {
+                    return BadRequest();
+                }
+                else {
+                    bool verifyAuth = (await _authorizationService.AuthorizeAsync(User, userAuthorize, Operations.Update)).Succeeded;
+                    if (verifyAuth == false) return StatusCode(StatusCodes.Status403Forbidden);
+                }
                 User user = await _userService.UpdateUserAddress(userId, buildingId);
                 if (user == null) return BadRequest();
                 return Ok(new ApiResponse
@@ -173,8 +192,13 @@ namespace Old_stuff_exchange.Controllers
                     ImagesUrl = updateUser.Image,
                     RoleId = updateUser.RoleId,
                     Status = updateUser.Status,
-                    Phone = updateUser.Phone
+                    Phone = updateUser.Phone,
+                    Gender = updateUser.Gender
                 };
+                // authorize
+                bool verifyAuth = (await _authorizationService.AuthorizeAsync(User, user, Operations.Update)).Succeeded;
+                if (verifyAuth == false) return StatusCode(StatusCodes.Status403Forbidden);
+
                 bool check = await _userService.Update(user);
                 if (!check)
                 {
@@ -201,6 +225,17 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
+                User userAuthorize = await _userService.GetById(id);
+                if (userAuthorize == null)
+                {
+                    return BadRequest();
+                }
+                else
+                {
+                    bool verifyAuth = (await _authorizationService.AuthorizeAsync(User, userAuthorize, Operations.Update)).Succeeded;
+                    if (verifyAuth == false) return StatusCode(StatusCodes.Status403Forbidden);
+                }
+
                 bool check = await _userService.Delete(id);
                 if (!check)
                 {

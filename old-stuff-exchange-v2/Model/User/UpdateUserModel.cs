@@ -12,5 +12,6 @@ namespace Old_stuff_exchange.Model.User
         public string Status { get; set; }
         public Guid RoleId { get; set; }
         public string Phone { get; set; }
+        public string Gender { get; set; }
     }
 }

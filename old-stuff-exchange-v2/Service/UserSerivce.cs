@@ -59,5 +59,9 @@ namespace Old_stuff_exchange.Service
         public async Task<User> UpdateUserAddress(Guid UserId, Guid BuildingId) { 
             return await _repo.UpdateUserAddress(UserId, BuildingId);
         }
+
+        public async Task<User> Login(string userName, string password) { 
+            return await _repo.Login(userName, password);
+        }
     }
 }

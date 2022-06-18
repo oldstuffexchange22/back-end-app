@@ -5,6 +5,7 @@ using Old_stuff_exchange.Model;
 using Old_stuff_exchange.Model.Role;
 using Old_stuff_exchange.Service;
 using old_stuff_exchange_v2.Entities;
+using old_stuff_exchange_v2.Enum.Authorize;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace Old_stuff_exchange.Controllers
 {
+    [Authorize(Policy = PolicyName.ADMIN)]
     public class RoleController : BaseApiController
     {
         private readonly RoleService _service;
@@ -34,7 +36,7 @@ namespace Old_stuff_exchange.Controllers
                 Data = role
             });
         }
-        [HttpGet("list")]
+        [HttpGet()]
         [SwaggerOperation(Summary = "Get list role")]
         public async Task<IActionResult> GetList()
         {

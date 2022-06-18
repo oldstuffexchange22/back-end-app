@@ -8,7 +8,7 @@ namespace old_stuff_exchange_v2.Enum.Post
         public const string WAITING = "WAITING";
         public const string INACTIVE = "INACTIVE";
         public const string DELIVERY = "DELIVERY";
-        public const string DELIVERED = "DILIVERED";
+        public const string DELIVERED = "DELIVERED";
         public const string ACCOMPLISHED = "ACCOMPLISHED";
         public const string FAILURE = "FAILURE";
 
