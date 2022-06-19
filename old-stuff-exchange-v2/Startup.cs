@@ -109,7 +109,7 @@ namespace old_stuff_exchange_v2
             {
                 options.AddDefaultPolicy(builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000","https://localhost:3000", "http://localhost:3001","https://localhost:3001","https://old-stuff-exchange2.vercel.app", "https://old-stuff-exchange.azurewebsites.net","https://old-stuff-exchange2.vercel.app" ,"http://127.0.0.1:5500")
+                    builder.WithOrigins("http://localhost:3000", "http://localhost:3001","https://old-stuff-exchange2.vercel.app", "https://old-stuff-exchange.azurewebsites.net","https://old-stuff-exchange2.vercel.app" ,"http://127.0.0.1:5500")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
