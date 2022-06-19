@@ -47,6 +47,7 @@ namespace old_stuff_exchange_v2.Controllers
         }
 
         [HttpGet()]
+        [AllowAnonymous]
         [SwaggerOperation(Summary = "Getlist apartment")]
         public async Task<IActionResult> GetAll()
         {
