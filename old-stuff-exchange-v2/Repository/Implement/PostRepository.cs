@@ -63,8 +63,10 @@ namespace Old_stuff_exchange.Repository.Implement
                                                 .ThenInclude(c => c.CategoriesChildren)
                                                 .ThenInclude(c => c.CategoriesChildren)
                                                 .ThenInclude(c => c.CategoriesChildren).Where(c => c.Id == categoryId).SingleOrDefault();
-            listCategoriesId.Clear();
-            GetListCatChildId(category);
+            if (category != null) {
+                listCategoriesId.Clear();
+                GetListCatChildId(category);
+            } 
             #region Filtering
             if (apartmentId != null)
             {
@@ -117,7 +119,7 @@ namespace Old_stuff_exchange.Repository.Implement
                 Guid id = category.CategoriesChildren.ToList()[i].Id;
                 listCategoriesId.Add(id);
                 if (category.CategoriesChildren.ToList()[i].CategoriesChildren.Count > 0) {
-                    GetListCatChildId(category.CategoriesChildren.ToList()[i]);
+                    if (category.CategoriesChildren.ToList()[i] != null) GetListCatChildId(category.CategoriesChildren.ToList()[i]);
                 }
             }
         }
