@@ -43,7 +43,7 @@ namespace Old_stuff_exchange.Service
                 Image = user.ImagesUrl,
                 CreatedAt = user.CreatedAt,
                 RoleName = user?.Role.Name,
-                BuildingName = user?.Building.Name
+                BuildingName = user?.Building?.Name
             });
             return result;
         }
