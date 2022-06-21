@@ -39,7 +39,7 @@ namespace Old_stuff_exchange.Repository.Implement
 
         public List<Building> GetList(Guid? apartmentId ,string name,int page, int pageSize)
         {
-            var allBuilding = _context.Buildings.AsQueryable();
+            var allBuilding = _context.Buildings.Include(b => b.Apartment).AsQueryable();
             #region Filtering
             if (apartmentId != null)
                 allBuilding = allBuilding.Where(building => building.ApartmentId == apartmentId);
