@@ -26,8 +26,8 @@ namespace Old_stuff_exchange.Service
             return _repo.Delete(id);
         }
 
-        public List<Building> GetList(Guid? apartmentId, int page, int pageSize) {
-            return _repo.GetList(apartmentId, page, pageSize);
+        public List<Building> GetList(Guid? apartmentId,string name, int page, int pageSize) {
+            return _repo.GetList(apartmentId,name, page, pageSize);
         }
 
         public async Task<Building> GetById(Guid Id) {

@@ -47,7 +47,7 @@ namespace Old_stuff_exchange.Controllers
         [HttpGet()]
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Get list of building")]
-        public IActionResult GetList(Guid? apartmentId, int page = 1, int pageSize = 10 )
+        public IActionResult GetList(Guid? apartmentId,string name, int page = 1, int pageSize = 10 )
         {
             try
             {
@@ -55,7 +55,7 @@ namespace Old_stuff_exchange.Controllers
                 {
                     Success = true,
                     Message = "Get list building",
-                    Data = _service.GetList(apartmentId, page, pageSize)
+                    Data = _service.GetList(apartmentId,name, page, pageSize)
                 });
             }
             catch (Exception ex) { 

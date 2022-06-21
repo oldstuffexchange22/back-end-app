@@ -37,12 +37,14 @@ namespace Old_stuff_exchange.Repository.Implement
             return building;    
         }
 
-        public List<Building> GetList(Guid? apartmentId ,int page, int pageSize)
+        public List<Building> GetList(Guid? apartmentId ,string name,int page, int pageSize)
         {
             var allBuilding = _context.Buildings.AsQueryable();
             #region Filtering
             if (apartmentId != null)
                 allBuilding = allBuilding.Where(building => building.ApartmentId == apartmentId);
+            if (!string.IsNullOrEmpty(name))
+                allBuilding = allBuilding.Where(building => building.Name.ToLower().Contains(name.ToLower()));
             #endregion
             #region Paging
             var result = PaginatedList<Building>.Create(allBuilding, page, pageSize);
