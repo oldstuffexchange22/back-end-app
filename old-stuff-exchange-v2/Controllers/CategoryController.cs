@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Old_stuff_exchange.Model;
 using Old_stuff_exchange.Model.Category;
 using Old_stuff_exchange.Service;
+using old_stuff_exchange_v2.Attributes;
 using old_stuff_exchange_v2.Entities;
 using old_stuff_exchange_v2.Enum.Authorize;
+using old_stuff_exchange_v2.Service;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
@@ -18,19 +20,22 @@ namespace Old_stuff_exchange.Controllers
     [Authorize(Policy = PolicyName.ADMIN)]
     public class CategoryController : ControllerBase
     {
-        private readonly CategoryService _service;
-        public CategoryController(CategoryService service)
+        private readonly CategoryService _categoryService;
+        private readonly CacheService _cacheService;
+        public CategoryController(CategoryService service, CacheService cacheService)
         {
-            _service = service;
+            _categoryService = service;
+            _cacheService = cacheService;
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get category with id")]
+        [Cache(100)]
         public async Task<IActionResult> GetById(Guid id)
         {
             try
             {
-                Category category = await _service.GetById(id);
+                Category category = await _categoryService.GetById(id);
                 if (category == null) return NotFound();
                 return Ok(new ApiResponse {
                     Success = true,
@@ -48,10 +53,11 @@ namespace Old_stuff_exchange.Controllers
 
         [HttpGet()]
         [SwaggerOperation(Summary = "Get list categories")]
+        [Cache(100)]
         public async Task<IActionResult> GetList(string name, int page = 1, int pageSize = 10) {
             try
             {
-                List<Category> categories = await _service.GetList(name, page, pageSize);
+                List<Category> categories = await _categoryService.GetList(name, page, pageSize);
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -72,8 +78,9 @@ namespace Old_stuff_exchange.Controllers
         public async Task<IActionResult> Update(UpdateCaregoryModel category) {
             try
             {
-                Category result = await _service.Update(category);
-                if (result == null) return BadRequest();
+                Category result = await _categoryService.Update(category);
+                if (result == null) return BadRequest();;
+                await _cacheService.RemoveCacheResponseAsync("categories");
                 return Ok(new ApiResponse {
                     Success = true,
                     Data = result
@@ -95,8 +102,10 @@ namespace Old_stuff_exchange.Controllers
             try
             {
                 if (string.IsNullOrEmpty(model.Name)) return BadRequest();
-                Category result = await _service.Create(model);
+                Category result = await _categoryService.Create(model);
                 if (result == null) return BadRequest();
+                string controllerName = ControllerContext.ActionDescriptor.ControllerName;
+                await _cacheService.RemoveCacheResponseAsync("categories");
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -119,7 +128,10 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
-                bool result = await _service.Delete(id);
+                bool result = await _categoryService.Delete(id);
+                if(!result) return BadRequest();
+                string controllerName = ControllerContext.ActionDescriptor.ControllerName;
+                await _cacheService.RemoveCacheResponseAsync("categories");
                 return Ok(new ApiResponse
                 {
                     Success = result

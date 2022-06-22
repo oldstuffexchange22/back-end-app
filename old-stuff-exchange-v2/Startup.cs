@@ -17,11 +17,13 @@ using Old_stuff_exchange.Repository.Implement;
 using Old_stuff_exchange.Repository.Interface;
 using Old_stuff_exchange.Service;
 using old_stuff_exchange_v2.Authorize;
+using old_stuff_exchange_v2.Configs;
 using old_stuff_exchange_v2.Entities;
 using old_stuff_exchange_v2.Enum.Authorize;
 using old_stuff_exchange_v2.Repository.Implement;
 using old_stuff_exchange_v2.Repository.Interface;
 using old_stuff_exchange_v2.Service;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,6 +84,19 @@ namespace old_stuff_exchange_v2
             services.AddSingleton<IAuthorizationHandler, WalletAuthorizationHandler>();
             /*services.AddSingleton<IAuthorizationHandler, AdminRequirement>();
             services.AddSingleton<IAuthorizationHandler, ResidentRequirement>();*/
+
+            // redis cache
+            var redisConfiguration = new RedisConfiguration();
+            Configuration.GetSection("RedisConfiguration").Bind(redisConfiguration);
+
+            services.AddSingleton(redisConfiguration);
+
+            if (redisConfiguration.Enabled)
+            {
+                services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(redisConfiguration.ConnectionString));
+                services.AddStackExchangeRedisCache(option => option.Configuration = redisConfiguration.ConnectionString);
+                services.AddSingleton<CacheService>();
+            }
 
             // remove when finish app
             services.AddTransient<DatabaseService>();

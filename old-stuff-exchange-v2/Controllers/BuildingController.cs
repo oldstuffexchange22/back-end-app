@@ -20,9 +20,9 @@ namespace Old_stuff_exchange.Controllers
     public class BuildingController : BaseApiController
     {
         private readonly BuildingService _buildingService;
-        private readonly ResponseCacheService _cacheService;
+        private readonly CacheService _cacheService;
         
-        public BuildingController(BuildingService service, ResponseCacheService responseCacheService) {
+        public BuildingController(BuildingService service, CacheService responseCacheService) {
             _buildingService = service;
             _cacheService = responseCacheService;
         }
@@ -55,7 +55,8 @@ namespace Old_stuff_exchange.Controllers
         [HttpGet()]
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Get list of building")]
-        public IActionResult GetList(Guid? apartmentId,string name, int page = 1, int pageSize = 10 )
+        [Cache(100)]
+        public async Task<IActionResult> GetList(Guid? apartmentId,string name, int page = 1, int pageSize = 10 )
         {
             try
             {

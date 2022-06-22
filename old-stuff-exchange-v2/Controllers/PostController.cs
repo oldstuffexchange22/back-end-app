@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Old_stuff_exchange.Model;
 using Old_stuff_exchange.Model.Post;
 using Old_stuff_exchange.Service;
+using old_stuff_exchange_v2.Attributes;
 using old_stuff_exchange_v2.Authorize;
 using old_stuff_exchange_v2.Entities;
 using old_stuff_exchange_v2.Enum.Authorize;
 using old_stuff_exchange_v2.Enum.Post;
 using old_stuff_exchange_v2.Model;
 using old_stuff_exchange_v2.Model.Post;
+using old_stuff_exchange_v2.Service;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
@@ -21,13 +23,16 @@ namespace Old_stuff_exchange.Controllers
     {
         private readonly PostService _postService;
         private readonly IAuthorizationService _authorizeService;
-        public PostController(PostService service, IAuthorizationService authorizationService) { 
+        private readonly CacheService _cacheService;
+        public PostController(PostService service, IAuthorizationService authorizationService, CacheService cacheService) { 
             _postService = service;
             _authorizeService = authorizationService;
+            _cacheService = cacheService;
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get post by id")]
+        [Cache(100)]
         public async Task<IActionResult> GetById(Guid id)
         {
             try
@@ -52,6 +57,7 @@ namespace Old_stuff_exchange.Controllers
 
         [HttpGet()]
         [SwaggerOperation(Summary = "Get list post")]
+        [Cache(100)]
         public async Task<IActionResult> GetList(Guid? apartmentId, Guid? categoryId, string filterWith, string filterValue, string sortBy, string sortType, int page = 1, int pageSize = 10)
         {
             try
@@ -85,6 +91,7 @@ namespace Old_stuff_exchange.Controllers
 
         [HttpGet("user/{userId}")]
         [SwaggerOperation(Summary = "Get list post by user id")]
+        [Cache(100)]
         public async Task<IActionResult> GetListByUserId(Guid userId, string status, int page = 1, int pageSize = 10)
         {
             try
@@ -118,6 +125,8 @@ namespace Old_stuff_exchange.Controllers
             {
                 Post post = await _postService.Create(model);
                 if (post == null) return BadRequest();
+                string controllerName = ControllerContext.ActionDescriptor.ControllerName;
+                await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -278,6 +287,8 @@ namespace Old_stuff_exchange.Controllers
                 }
                 var post = await _postService.Update(model);
                 if (post == null) return BadRequest();
+                string controllerName = ControllerContext.ActionDescriptor.ControllerName;
+                await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -402,7 +413,8 @@ namespace Old_stuff_exchange.Controllers
                         break;
                     default: return StatusCode(StatusCodes.Status400BadRequest);
                 }
-
+                string controllerName = ControllerContext.ActionDescriptor.ControllerName;
+                await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -436,6 +448,9 @@ namespace Old_stuff_exchange.Controllers
                     if (verifyAuth == false) return StatusCode(StatusCodes.Status403Forbidden);
                 }
                 bool result = await _postService.Delete(id);
+                if (!result) return BadRequest();
+                string controllerName = ControllerContext.ActionDescriptor.ControllerName;
+                await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = result,

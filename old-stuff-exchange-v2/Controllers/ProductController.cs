@@ -3,19 +3,45 @@ using Microsoft.AspNetCore.Mvc;
 using Old_stuff_exchange.Model;
 using Old_stuff_exchange.Model.Product;
 using Old_stuff_exchange.Service;
+using old_stuff_exchange_v2.Attributes;
 using old_stuff_exchange_v2.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Old_stuff_exchange.Controllers
 {
     public class ProductController : BaseApiController
     {
-        private readonly ProductService _service;
+        private readonly ProductService _productService;
         public ProductController(ProductService service)
         {
-            _service = service;
+            _productService = service;
+        }
+
+        [HttpGet("post/{postId}")]
+        [SwaggerOperation(Summary = "Get list by post id")]
+        public async Task<IActionResult> Create(Guid postId)
+        {
+            try
+            {
+                List<Product> products = await _productService.GetListByPostId(postId);
+                if (products == null) return BadRequest();
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Data = products
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    code = StatusCode(StatusCodes.Status500InternalServerError),
+                    exception = ex
+                });
+            }
         }
 
         [HttpPost]
@@ -24,7 +50,7 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
-                Product product = await _service.Create(model);
+                Product product = await _productService.Create(model);
                 if (product == null) return BadRequest();
                 return Ok(new ApiResponse {
                     Success = true,
@@ -46,7 +72,7 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
-                Product product = await _service.Update(model);
+                Product product = await _productService.Update(model);
                 if (product == null) return BadRequest();
                 return Ok(new ApiResponse
                 {
@@ -68,7 +94,7 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
-                bool result = await _service.Delete(id);
+                bool result = await _productService.Delete(id);
                 return Ok(new ApiResponse { 
                     Success = result
                 });

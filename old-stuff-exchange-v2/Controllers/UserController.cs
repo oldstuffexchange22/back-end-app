@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using old_stuff_exchange_v2.Enum.User;
 using Microsoft.AspNetCore.Authorization;
 using old_stuff_exchange_v2.Enum.Authorize;
+using old_stuff_exchange_v2.Service;
+using old_stuff_exchange_v2.Attributes;
 
 namespace Old_stuff_exchange.Controllers
 {
@@ -20,14 +22,17 @@ namespace Old_stuff_exchange.Controllers
     {
         private readonly UserService _userService;
         private readonly IAuthorizationService _authorizationService;
-        public UserController(UserService service, IAuthorizationService authorizationService)
+        private readonly CacheService _cacheService;
+        public UserController(UserService service, IAuthorizationService authorizationService, CacheService cacheService)
         {
             _userService = service;
             _authorizationService = authorizationService;
+            _cacheService = cacheService;
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get information user by id")]
+        [Cache(100)]
         public async Task<ActionResult> GetById(Guid id)
         {
             try
@@ -83,6 +88,7 @@ namespace Old_stuff_exchange.Controllers
         [HttpGet()]
         [SwaggerOperation(Summary = "Get information user by email, by roleId and pagination")]
         [Authorize(Policy = PolicyName.ADMIN)]
+        [Cache(100)]
         public async Task<ActionResult> GetList(string email, Guid? roleId, int pageNumber = 1, int pageSize = 10)
         {
             try
@@ -125,6 +131,8 @@ namespace Old_stuff_exchange.Controllers
                 {
                     return BadRequest(new { message = "Email has exist" });
                 }
+                string controllerName = ControllerContext.ActionDescriptor.ControllerName;
+                await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new
                 {
                     Success = true,
@@ -160,6 +168,8 @@ namespace Old_stuff_exchange.Controllers
                 }
                 User user = await _userService.UpdateUserAddress(userId, buildingId);
                 if (user == null) return BadRequest();
+                string controllerName = ControllerContext.ActionDescriptor.ControllerName;
+                await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -204,6 +214,8 @@ namespace Old_stuff_exchange.Controllers
                 {
                     return BadRequest();
                 }
+                string controllerName = ControllerContext.ActionDescriptor.ControllerName;
+                await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse { 
                     Success = true,
                     Message = "Update user success",
@@ -241,6 +253,8 @@ namespace Old_stuff_exchange.Controllers
                 {
                     return NotFound();
                 }
+                string controllerName = ControllerContext.ActionDescriptor.ControllerName;
+                await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = check,
