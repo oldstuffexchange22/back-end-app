@@ -189,7 +189,7 @@ namespace Old_stuff_exchange.Controllers
                     FullName = updateUser.Name,
                     Email = updateUser.Email,
                     BuildingId = updateUser.BuildingId,
-                    ImagesUrl = updateUser.Image,
+                    ImagesUrl = updateUser.ImageUrl,
                     RoleId = updateUser.RoleId,
                     Status = updateUser.Status,
                     Phone = updateUser.Phone,

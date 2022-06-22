@@ -8,8 +8,8 @@ namespace Old_stuff_exchange.Service
 {
     public class RoleService
     {
-        private readonly IRoleRepository<Role> _repo;
-        public RoleService(IRoleRepository<Role> repo)
+        private readonly IRoleRepository _repo;
+        public RoleService(IRoleRepository repo)
         {
             _repo = repo;
         }
