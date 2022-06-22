@@ -17,18 +17,17 @@ using Old_stuff_exchange.Repository.Implement;
 using Old_stuff_exchange.Repository.Interface;
 using Old_stuff_exchange.Service;
 using old_stuff_exchange_v2.Authorize;
-using old_stuff_exchange_v2.Configs;
 using old_stuff_exchange_v2.Entities;
 using old_stuff_exchange_v2.Enum.Authorize;
 using old_stuff_exchange_v2.Repository.Implement;
 using old_stuff_exchange_v2.Repository.Interface;
 using old_stuff_exchange_v2.Service;
-using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 namespace old_stuff_exchange_v2
 {
     public class Startup
@@ -56,7 +55,7 @@ namespace old_stuff_exchange_v2
             #region Dependency injection
             services.AddTransient<IUserRepository<User>, UserRepository>();
             services.AddTransient<UserService>();
-            services.AddTransient<IRoleRepository, RoleRepository>();
+            services.AddTransient<IRoleRepository<Role>, RoleRepository>();
             services.AddTransient<RoleService>();
             services.AddTransient<IProductRepository<Product>, ProductRepository>();
             services.AddTransient<ProductService>();
@@ -84,19 +83,6 @@ namespace old_stuff_exchange_v2
             /*services.AddSingleton<IAuthorizationHandler, AdminRequirement>();
             services.AddSingleton<IAuthorizationHandler, ResidentRequirement>();*/
 
-            // redis cache
-            var redisConfiguration = new RedisConfiguration();
-            Configuration.GetSection("RedisConfiguration").Bind(redisConfiguration);
-
-            services.AddSingleton(redisConfiguration);
-
-            if (redisConfiguration.Enabled)
-            {
-                services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(redisConfiguration.ConnectionString));  
-                services.AddStackExchangeRedisCache(option => option.Configuration = redisConfiguration.ConnectionString);
-                services.AddSingleton<ResponseCacheService>();
-            }
-
             // remove when finish app
             services.AddTransient<DatabaseService>();
             #endregion
@@ -123,7 +109,7 @@ namespace old_stuff_exchange_v2
             {
                 options.AddDefaultPolicy(builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000", "http://localhost:3001", "https://old-stuff-exchange2.vercel.app", "https://old-stuff-exchange.azurewebsites.net","https://old-stuff-exchange2.vercel.app" ,"http://127.0.0.1:5500")
+                    builder.WithOrigins("http://localhost:3000", "http://localhost:3001","https://old-stuff-exchange2.vercel.app", "https://old-stuff-exchange.azurewebsites.net","https://old-stuff-exchange2.vercel.app" ,"http://127.0.0.1:5500")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
