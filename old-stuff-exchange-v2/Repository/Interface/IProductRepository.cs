@@ -10,6 +10,5 @@ namespace Old_stuff_exchange.Repository.Interface
         Task<Product> Create(Product product);
         Task<Product> Update(Product product);
         Task<bool> Delete(Guid id);
-        Task<List<Product>> GetListByPostId(Guid postId);
     }
 }
