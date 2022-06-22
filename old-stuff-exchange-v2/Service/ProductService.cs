@@ -3,6 +3,7 @@ using Old_stuff_exchange.Repository.Interface;
 using old_stuff_exchange_v2.Entities;
 using old_stuff_exchange_v2.Enum;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Old_stuff_exchange.Service
@@ -41,6 +42,10 @@ namespace Old_stuff_exchange.Service
 
         public async Task<bool> Delete(Guid id) { 
             return await _repo.Delete(id);
+        }
+
+        public async Task<List<Product>> GetListByPostId(Guid postId) { 
+            return await _repo.GetListByPostId(postId);
         }
     }
 }

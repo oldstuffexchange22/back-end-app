@@ -1,6 +1,8 @@
 ﻿using Old_stuff_exchange.Repository.Implement;
 using Old_stuff_exchange.Repository.Interface;
 using old_stuff_exchange_v2.Entities;
+using old_stuff_exchange_v2.Entities.Extentions;
+using old_stuff_exchange_v2.Model.Building;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -26,8 +28,10 @@ namespace Old_stuff_exchange.Service
             return _repo.Delete(id);
         }
 
-        public List<Building> GetList(Guid? apartmentId,string name, int page, int pageSize) {
-            return _repo.GetList(apartmentId,name, page, pageSize);
+        public async Task<List<ResponseBuildingModel>> GetList(Guid? apartmentId,string name, int page, int pageSize) {
+            List<Building> buildings = await _repo.GetList(apartmentId, name, page, pageSize);
+            List<ResponseBuildingModel> response = buildings.ConvertAll<ResponseBuildingModel>(building => building.ToResponseModel());
+            return response;
         }
 
         public async Task<Building> GetById(Guid Id) {
