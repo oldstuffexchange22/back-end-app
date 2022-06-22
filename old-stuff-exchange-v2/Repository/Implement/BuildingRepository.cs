@@ -37,7 +37,7 @@ namespace Old_stuff_exchange.Repository.Implement
             return building;    
         }
 
-        public List<Building> GetList(Guid? apartmentId ,string name,int page, int pageSize)
+        public async Task<List<Building>> GetList(Guid? apartmentId ,string name,int page, int pageSize)
         {
             var allBuilding = _context.Buildings.Include(b => b.Apartment).AsQueryable();
             #region Filtering
@@ -49,7 +49,7 @@ namespace Old_stuff_exchange.Repository.Implement
             #region Paging
             var result = PaginatedList<Building>.Create(allBuilding, page, pageSize);
             #endregion
-            return result.ToList();
+            return await Task.FromResult(result.ToList());
         }
 
         public async Task<Building> Update(Building building)

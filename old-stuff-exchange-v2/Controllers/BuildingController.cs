@@ -7,9 +7,11 @@ using Old_stuff_exchange.Service;
 using old_stuff_exchange_v2.Attributes;
 using old_stuff_exchange_v2.Entities;
 using old_stuff_exchange_v2.Enum.Authorize;
+using old_stuff_exchange_v2.Model.Building;
 using old_stuff_exchange_v2.Service;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Old_stuff_exchange.Controllers
@@ -54,15 +56,17 @@ namespace Old_stuff_exchange.Controllers
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Get list of building")]
         [Cache(100)]
-        public IActionResult GetList(Guid? apartmentId,string name, int page = 1, int pageSize = 10 )
+        public async Task<IActionResult> GetList(Guid? apartmentId = null,string name = null, int page = 1, int pageSize = 10 )
         {
             try
             {
+                List<ResponseBuildingModel> buildings = await _buildingService.GetList(apartmentId, name, page, pageSize);
+                if (buildings.Count == 0) return BadRequest();
                 return Ok(new ApiResponse
                 {
                     Success = true,
                     Message = "Get list building",
-                    Data = _buildingService.GetList(apartmentId,name, page, pageSize)
+                    Data = buildings
                 });
             }
             catch (Exception ex) { 

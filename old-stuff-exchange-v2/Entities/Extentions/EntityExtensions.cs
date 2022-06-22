@@ -1,4 +1,5 @@
 ﻿using Old_stuff_exchange.Model.User;
+using old_stuff_exchange_v2.Model.Apartment;
 using old_stuff_exchange_v2.Model.Building;
 using old_stuff_exchange_v2.Model.Role;
 
@@ -37,7 +38,16 @@ namespace old_stuff_exchange_v2.Entities.Extentions
             model.NumberFloor = building.NumberFloor;
             model.NumberRoom = building.NumberRoom;
             model.Description = building.Description;
-            model.Apartment = building.Apartment;
+            model.Apartment = building.Apartment?.ToResponseModel();
+            return model;
+        }
+        public static ResponseApartmentModel ToResponseModel(this Apartment apartment) { 
+            ResponseApartmentModel model = new ResponseApartmentModel();
+            model.Id = apartment.Id;
+            model.Address = apartment.Address;
+            model.Description = apartment.Description;
+            model.Name = apartment.Name;
+            model.ImageUrl = apartment.ImageUrl;
             return model;
         }
     }

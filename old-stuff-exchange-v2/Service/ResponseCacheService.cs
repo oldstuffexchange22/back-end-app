@@ -54,15 +54,22 @@ namespace old_stuff_exchange_v2.Service
 
         public async Task SetCacheRepsonseAsync(string cacheKey, object response, TimeSpan timeOut)
         {
-            if (response == null) return;
-            var serializerResponse = JsonConvert.SerializeObject(response, new JsonSerializerSettings()
+            try
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            });
-            await _distributedCache.SetStringAsync(cacheKey, serializerResponse, new DistributedCacheEntryOptions
-            {
-                AbsoluteExpirationRelativeToNow = timeOut
-            }) ;
+                if (response == null) return;
+                var serializerResponse = JsonConvert.SerializeObject(response, new JsonSerializerSettings()
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore,
+                });
+                await _distributedCache.SetStringAsync(cacheKey, serializerResponse, new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = timeOut
+                });
+            }
+            catch (Exception ex) { 
+                Console.WriteLine(ex.ToString());
+            }
         }
 
 
