@@ -4,10 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Old_stuff_exchange.Model;
 using Old_stuff_exchange.Model.Building;
 using Old_stuff_exchange.Service;
-using old_stuff_exchange_v2.Attributes;
 using old_stuff_exchange_v2.Entities;
 using old_stuff_exchange_v2.Enum.Authorize;
-using old_stuff_exchange_v2.Service;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading.Tasks;
@@ -17,22 +15,18 @@ namespace Old_stuff_exchange.Controllers
     [Authorize(Policy = PolicyName.ADMIN)]
     public class BuildingController : BaseApiController
     {
-        private readonly BuildingService _buildingService;
-        private readonly ResponseCacheService _cacheService;
-        
-        public BuildingController(BuildingService service, ResponseCacheService responseCacheService) {
-            _buildingService = service;
-            _cacheService = responseCacheService;
+        private readonly BuildingService _service;
+        public BuildingController(BuildingService service) {
+            _service = service;
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get building with ID")]
-        [Cache(100)]
         public async Task<IActionResult> GetBuildingById(Guid id)
         {
             try
             {
-                Building building = await _buildingService.GetById(id);
+                Building building = await _service.GetById(id);
                 if (building == null) return BadRequest();
                 return Ok(new ApiResponse
                 {
@@ -53,7 +47,6 @@ namespace Old_stuff_exchange.Controllers
         [HttpGet()]
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Get list of building")]
-        [Cache(100)]
         public IActionResult GetList(Guid? apartmentId,string name, int page = 1, int pageSize = 10 )
         {
             try
@@ -62,7 +55,7 @@ namespace Old_stuff_exchange.Controllers
                 {
                     Success = true,
                     Message = "Get list building",
-                    Data = _buildingService.GetList(apartmentId,name, page, pageSize)
+                    Data = _service.GetList(apartmentId,name, page, pageSize)
                 });
             }
             catch (Exception ex) { 
@@ -86,9 +79,7 @@ namespace Old_stuff_exchange.Controllers
                     ApartmentId = newBuilding.ApartmentId,
                     Description = newBuilding.Description,
                 };
-                await _buildingService.Create(building);
-                var controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                await _cacheService.RemoveCacheResponseAsync(controllerName);
+                await _service.Create(building);
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -118,10 +109,8 @@ namespace Old_stuff_exchange.Controllers
                     Description = buildingModel.Description,
                     ApartmentId = buildingModel.ApartmentId,
                 };
-                Building result = await _buildingService.Update(building);
+                Building result = await _service.Update(building);
                 if (result == null) return BadRequest();
-                var controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -144,10 +133,8 @@ namespace Old_stuff_exchange.Controllers
             {
                 if (id == Guid.Empty) return BadRequest();
 
-                var result = await _buildingService.Delete(id);
+                var result = await _service.Delete(id);
                 if (result == false) return BadRequest();
-                var controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = true,

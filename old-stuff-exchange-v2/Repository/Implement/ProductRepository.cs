@@ -2,7 +2,6 @@
 using Old_stuff_exchange.Repository.Interface;
 using old_stuff_exchange_v2.Entities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -28,12 +27,6 @@ namespace Old_stuff_exchange.Repository.Implement
             _context.Products.Remove(product);
             var result = await _context.SaveChangesAsync();
             return result > 0;
-        }
-
-        public async Task<List<Product>> GetListByPostId(Guid postId)
-        {
-            List<Product> products = _context.Products.Where(p => p.PostId == postId).ToList();
-            return await Task.FromResult(products);
         }
 
         public async Task<Product> Update(Product product)
