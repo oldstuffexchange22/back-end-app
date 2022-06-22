@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Old_stuff_exchange.Controllers;
 using Old_stuff_exchange.Model;
+using old_stuff_exchange_v2.Attributes;
 using old_stuff_exchange_v2.Entities;
 using old_stuff_exchange_v2.Enum.Authorize;
 using old_stuff_exchange_v2.Model.Deposit;
@@ -18,15 +19,18 @@ namespace old_stuff_exchange_v2.Controllers
     {
         private readonly DepositService _depositService;
         private readonly IAuthorizationService _authorizationService;
+        private readonly ResponseCacheService _responseCacheService;
 
-        public DepositController(DepositService depositService, IAuthorizationService authorizationService)
+        public DepositController(DepositService depositService, IAuthorizationService authorizationService, ResponseCacheService responseCacheService)
         {
             _depositService = depositService;
             _authorizationService = authorizationService;
+            _responseCacheService = responseCacheService;
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get deposit by Id")]
+        [Cache(100)]
         public async Task<IActionResult> GetById(Guid id)
         {
             try
@@ -85,6 +89,8 @@ namespace old_stuff_exchange_v2.Controllers
             {
                 Deposit deposit =await _depositService.Create(model);
                 if (deposit == null) return BadRequest();
+                var controllerName = ControllerContext.ActionDescriptor.ControllerName;
+                await _responseCacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = true,

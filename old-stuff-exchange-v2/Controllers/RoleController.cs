@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Old_stuff_exchange.Model;
 using Old_stuff_exchange.Model.Role;
 using Old_stuff_exchange.Service;
+using old_stuff_exchange_v2.Attributes;
 using old_stuff_exchange_v2.Entities;
 using old_stuff_exchange_v2.Enum.Authorize;
+using old_stuff_exchange_v2.Service;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
@@ -16,17 +18,20 @@ namespace Old_stuff_exchange.Controllers
     [Authorize(Policy = PolicyName.ADMIN)]
     public class RoleController : BaseApiController
     {
-        private readonly RoleService _service;
-        public RoleController(RoleService service)
+        private readonly RoleService _roleService;
+        private readonly ResponseCacheService _cacheService;
+        public RoleController(RoleService service, ResponseCacheService cacheService)
         {
-            _service = service;
+            _roleService = service;
+            _cacheService = cacheService;
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get role by Id")]
+        [Cache(100)]
         public async Task<IActionResult> GetById(Guid id)
         {
-            Role role = await _service.GetById(id);
+            Role role = await _roleService.GetById(id);
             if (role == null)
             {
                 return NotFound();
@@ -38,9 +43,10 @@ namespace Old_stuff_exchange.Controllers
         }
         [HttpGet()]
         [SwaggerOperation(Summary = "Get list role")]
+        [Cache(100)]
         public async Task<IActionResult> GetList()
         {
-            List<Role> listRoles = await _service.GetList();
+            List<Role> listRoles = await _roleService.GetList();
 
             return Ok(new ApiResponse
             {
@@ -59,7 +65,9 @@ namespace Old_stuff_exchange.Controllers
                     Name = newRole.Name,
                     Description = newRole.Description
                 };
-                await _service.Create(role);
+                await _roleService.Create(role);
+                var controllerName = ControllerContext.ActionDescriptor.ControllerName;
+                await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -86,11 +94,13 @@ namespace Old_stuff_exchange.Controllers
                     Id = updateRoleModel.Id,
                     Name = updateRoleModel.Name
                 };
-                bool check = await _service.Update(updateRole);
+                bool check = await _roleService.Update(updateRole);
                 if (!check)
                 {
                     return NotFound();
                 }
+                var controllerName = ControllerContext.ActionDescriptor.ControllerName;
+                await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -113,11 +123,13 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
-                bool check = await _service.Delete(id);
+                bool check = await _roleService.Delete(id);
                 if (!check)
                 {
                     return NotFound();
                 }
+                var controllerName = ControllerContext.ActionDescriptor.ControllerName;
+                await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return NoContent();
             }
             catch (Exception ex) {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Old_stuff_exchange.Repository.Interface
 {
-    public interface IRoleRepository<T>
+    public interface IRoleRepository
     {
         Task<Role> Create(Role role);
         Task<bool> Update(Role newRole);
