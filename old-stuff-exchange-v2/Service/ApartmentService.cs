@@ -1,4 +1,5 @@
 ﻿using old_stuff_exchange_v2.Entities;
+using old_stuff_exchange_v2.Entities.Extentions;
 using old_stuff_exchange_v2.Model.Apartment;
 using old_stuff_exchange_v2.Repository.Interface;
 using System;
@@ -39,8 +40,9 @@ namespace old_stuff_exchange_v2.Service
             return await _repo.Delete(id);
         }
 
-        public async Task<List<Apartment>> GetList() {
-            return await _repo.GetList();
+        public async Task<List<ResponseApartmentModel>> GetList() {
+            List<ResponseApartmentModel> response = (await _repo.GetList()).ConvertAll(apartment => apartment.ToResponseModel());
+            return response;
         }
 
         public async Task<Apartment> GetById(Guid id) {

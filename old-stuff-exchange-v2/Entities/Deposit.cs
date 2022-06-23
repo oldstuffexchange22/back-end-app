@@ -18,7 +18,7 @@ namespace old_stuff_exchange_v2.Entities
         #region Relationship
         public Guid UserId { get; set; }
         [ForeignKey("UserId")]
-        public User User { get; set; }
+        public UserResponseModel User { get; set; }
 
         public ICollection<Transaction> Transactions { get; set; }
         #endregion

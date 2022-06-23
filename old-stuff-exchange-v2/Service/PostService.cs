@@ -16,11 +16,11 @@ namespace Old_stuff_exchange.Service
     public class PostService
     {
         private readonly IPostRepository<Post> _postRepository;
-        private readonly IUserRepository<User> _userRepository;
+        private readonly IUserRepository<UserResponseModel> _userRepository;
         private readonly ITransactionRepository<Transaction> _transationRepository;
         private readonly IWalletRepository<Wallet> _walletRepository;
 
-        public PostService(IPostRepository<Post> postRepo, IUserRepository<User> userRepo, 
+        public PostService(IPostRepository<Post> postRepo, IUserRepository<UserResponseModel> userRepo, 
             ITransactionRepository<Transaction> transactionRepository, IWalletRepository<Wallet> walletRepository)
         {
             _postRepository = postRepo;
@@ -81,7 +81,7 @@ namespace Old_stuff_exchange.Service
         }
 
         public async Task<bool> BuyPost(Guid userId, Guid postId, string walletType) {
-            User user = await _userRepository.GetById(userId);
+            UserResponseModel user = await _userRepository.GetById(userId);
             Post post = await _postRepository.GetPostById(postId);
             List<Wallet> walletsUser = await _walletRepository.FindByUserId(userId);
             Wallet userWallet = walletsUser.First(w => w.Type.ToUpper().Contains(walletType.ToUpper()));
@@ -143,7 +143,7 @@ namespace Old_stuff_exchange.Service
         public async Task<Post> AccomplishedPost(Guid postId)
         {
             Post post = await _postRepository.GetPostById(postId);
-            User userMakePost = await _userRepository.GetById(post.AuthorId);
+            UserResponseModel userMakePost = await _userRepository.GetById(post.AuthorId);
 
             Wallet userWallet = await _walletRepository.FindByUserIdWithType(userMakePost.Id, WalletType.DEFAULT);
             Wallet systemWallet = await _walletRepository.FindByType(WalletType.SYSTEM);
@@ -196,7 +196,7 @@ namespace Old_stuff_exchange.Service
         public async Task<Post> FailurePost(Guid postId)
         {
             Post post = await _postRepository.GetPostById(postId);
-            User userBought = await _userRepository.GetById((Guid)post.UserBought);
+            UserResponseModel userBought = await _userRepository.GetById((Guid)post.UserBought);
 
             Wallet userWallet = await _walletRepository.FindByUserIdWithType(userBought.Id, WalletType.DEFAULT);
             Wallet systemWallet = await _walletRepository.FindByType(WalletType.SYSTEM);

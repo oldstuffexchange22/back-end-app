@@ -37,7 +37,7 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
-                User user = await _userService.GetById(id);
+                UserResponseModel user = await _userService.GetById(id);
                 if (!(await _authorizationService.AuthorizeAsync(User, user, Operations.Read)).Succeeded)
                 {
                     return StatusCode(StatusCodes.Status403Forbidden);
@@ -64,7 +64,7 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
-                User user = await _userService.GetByEmail(email);
+                UserResponseModel user = await _userService.GetByEmail(email);
                 if (!(await _authorizationService.AuthorizeAsync(User, user, Operations.Read)).Succeeded)
                 {
                     return StatusCode(StatusCodes.Status403Forbidden);
@@ -116,7 +116,7 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
-                User user = new User
+                UserResponseModel user = new UserResponseModel
                 {
                     FullName = newUser.FullName,
                     Email = newUser.Email,
@@ -157,7 +157,7 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
-                User userAuthorize = await _userService.GetById(userId);
+                UserResponseModel userAuthorize = await _userService.GetById(userId);
                 if (userAuthorize == null)
                 {
                     return BadRequest();
@@ -166,7 +166,7 @@ namespace Old_stuff_exchange.Controllers
                     bool verifyAuth = (await _authorizationService.AuthorizeAsync(User, userAuthorize, Operations.Update)).Succeeded;
                     if (verifyAuth == false) return StatusCode(StatusCodes.Status403Forbidden);
                 }
-                User user = await _userService.UpdateUserAddress(userId, buildingId);
+                UserResponseModel user = await _userService.UpdateUserAddress(userId, buildingId);
                 if (user == null) return BadRequest();
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
                 await _cacheService.RemoveCacheResponseAsync(controllerName);
@@ -193,7 +193,7 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
-                User user = new User
+                UserResponseModel user = new UserResponseModel
                 {
                     Id = updateUser.Id,
                     FullName = updateUser.Name,
@@ -237,7 +237,7 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
-                User userAuthorize = await _userService.GetById(id);
+                UserResponseModel userAuthorize = await _userService.GetById(id);
                 if (userAuthorize == null)
                 {
                     return BadRequest();

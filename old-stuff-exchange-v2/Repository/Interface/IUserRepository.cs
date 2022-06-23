@@ -7,14 +7,14 @@ namespace Old_stuff_exchange.Repository.Interface
 {
     public interface IUserRepository<T>
     {
-        Task<User> Create(User user);
+        Task<UserResponseModel> Create(UserResponseModel user);
         string Login(string email);
-        Task<User> Login(string userName, string password);
-        Task<User> GetById(Guid id);
-        Task<User> GetByEmail(string email);
-        Task<List<User>> GetList(string email,Guid? roleId, int pageNumber, int pageSize);
+        Task<UserResponseModel> Login(string userName, string password);
+        Task<UserResponseModel> GetById(Guid id);
+        Task<UserResponseModel> GetByEmail(string email);
+        Task<List<UserResponseModel>> GetList(string email,Guid? roleId, int pageNumber, int pageSize);
         Task<bool> Delete(Guid id);
-        Task<bool> Update(User newUser);
-        Task<User> UpdateUserAddress(Guid UserId, Guid BuildingId);
+        Task<bool> Update(UserResponseModel newUser);
+        Task<UserResponseModel> UpdateUserAddress(Guid UserId, Guid BuildingId);
     }
 }

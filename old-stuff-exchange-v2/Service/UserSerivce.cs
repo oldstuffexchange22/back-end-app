@@ -10,12 +10,12 @@ namespace Old_stuff_exchange.Service
 {
     public class UserService
     {
-        private readonly IUserRepository<User> _repo;
-        public UserService(IUserRepository<User> repo)
+        private readonly IUserRepository<UserResponseModel> _repo;
+        public UserService(IUserRepository<UserResponseModel> repo)
         {
             _repo = repo;
         }
-        public async Task<User> Create(User user)
+        public async Task<UserResponseModel> Create(UserResponseModel user)
         {
             return await _repo.Create(user);
         }
@@ -23,16 +23,16 @@ namespace Old_stuff_exchange.Service
         {
             return _repo.Login(email);
         }
-        public async Task<User> GetById(Guid id) { 
+        public async Task<UserResponseModel> GetById(Guid id) { 
             return await _repo.GetById(id);
         }
-        public async Task<User> GetByEmail(string email)
+        public async Task<UserResponseModel> GetByEmail(string email)
         {
             return await _repo.GetByEmail(email);
         }
         public async Task<List<ResponseUserModel>> GetList(string email,Guid? roleId, int pageNumber, int pageSize)
         {
-            List<User> users = await _repo.GetList(email, roleId, pageNumber, pageSize);
+            List<UserResponseModel> users = await _repo.GetList(email, roleId, pageNumber, pageSize);
             List<ResponseUserModel> result = users.ConvertAll<ResponseUserModel>(user => user.ToResponseModel());
             return result;
         }
@@ -40,16 +40,16 @@ namespace Old_stuff_exchange.Service
         {
             return await _repo.Delete(id);
         }
-        public async Task<bool> Update(User newUser)
+        public async Task<bool> Update(UserResponseModel newUser)
         {
             return await _repo.Update(newUser);
         }
 
-        public async Task<User> UpdateUserAddress(Guid UserId, Guid BuildingId) { 
+        public async Task<UserResponseModel> UpdateUserAddress(Guid UserId, Guid BuildingId) { 
             return await _repo.UpdateUserAddress(UserId, BuildingId);
         }
 
-        public async Task<User> Login(string userName, string password) { 
+        public async Task<UserResponseModel> Login(string userName, string password) { 
             return await _repo.Login(userName, password);
         }
     }

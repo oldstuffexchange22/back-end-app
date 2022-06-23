@@ -54,7 +54,7 @@ namespace Old_stuff_exchange.Service
             _context.AddRange(roles);
 
             // Generate user
-            User userAdmin = new User
+            UserResponseModel userAdmin = new UserResponseModel
             {
                 UserName = "nvtan.a5@gmail.com",
                 Email = "nvtan.a5@gmail.com",
@@ -62,7 +62,7 @@ namespace Old_stuff_exchange.Service
                 Role = roleAdmin,
                 FullName = "nvtan.a5@gmail.com",
             };
-            User userAdmin2 = new User
+            UserResponseModel userAdmin2 = new UserResponseModel
             {
                 UserName = "admin",
                 Email = "ADMIN@gmail.com",
@@ -71,7 +71,7 @@ namespace Old_stuff_exchange.Service
                 FullName = "admin",
                 Password = "admin"
             };
-            Faker<User> FakerUser = new Faker<User>()
+            Faker<UserResponseModel> FakerUser = new Faker<UserResponseModel>()
                 .RuleFor(u => u.UserName, faker => faker.Person.UserName)
                 .RuleFor(u => u.Email, faker => faker.Person.Email)
                 .RuleFor(u => u.Status, UserStatus.ACTIVE)
@@ -82,7 +82,7 @@ namespace Old_stuff_exchange.Service
                 .RuleFor(u => u.Phone, faker => faker.Person.Phone);
             _context.Add(userAdmin);
             _context.Add(userAdmin2);
-            List<User> users = FakerUser.Generate(40);
+            List<UserResponseModel> users = FakerUser.Generate(40);
             users.Add(userAdmin);
             _context.AddRange(users);
 
