@@ -58,7 +58,8 @@ namespace old_stuff_exchange_v2.Controllers
         {
             try
             {
-                List<Apartment> apartments = await _service.GetList();
+                List<ResponseApartmentModel> apartments = await _service.GetList();
+                if (apartments.Count == 0) return BadRequest("Can't find any apartment");
                 return Ok(new ApiResponse
                 {
                     Success = true,

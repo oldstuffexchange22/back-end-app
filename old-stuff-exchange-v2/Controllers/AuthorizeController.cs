@@ -30,7 +30,7 @@ namespace old_stuff_exchange_v2.Controllers
         public async Task<IActionResult> Login(LoginModel model) {
             try
             {
-                User user = await _userService.Login(model.UserName, model.Password);
+                UserResponseModel user = await _userService.Login(model.UserName, model.Password);
                 if(user == null) return NotFound();
                 if(user.Status == UserStatus.INACTIVE) return BadRequest("User is inactive");
                 return Ok(new ApiResponse

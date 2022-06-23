@@ -21,10 +21,10 @@ namespace old_stuff_exchange_v2.Entities
         public Guid ApartmentId { get; set; }
         [ForeignKey("ApartmentId")]
         public Apartment Apartment { get; set; }
-        public ICollection<User> Users { get; set; }
+        public ICollection<UserResponseModel> Users { get; set; }
         #endregion
         public Building() {
-            Users = new List<User>();
+            Users = new List<UserResponseModel>();
         }
     }
 }
