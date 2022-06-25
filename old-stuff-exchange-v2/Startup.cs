@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -84,6 +86,8 @@ namespace old_stuff_exchange_v2
             services.AddSingleton<IAuthorizationHandler, WalletAuthorizationHandler>();
             /*services.AddSingleton<IAuthorizationHandler, AdminRequirement>();
             services.AddSingleton<IAuthorizationHandler, ResidentRequirement>();*/
+            services.AddHttpContextAccessor();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // redis cache
             var redisConfiguration = new RedisConfiguration();
@@ -122,13 +126,13 @@ namespace old_stuff_exchange_v2
                 });
             services.AddCors(options =>
             {
-                options.AddDefaultPolicy(builder =>
-                {
-                    builder.WithOrigins("http://localhost:3000", "http://localhost:3001","https://old-stuff-exchange2.vercel.app", "https://old-stuff-exchange.azurewebsites.net","https://old-stuff-exchange2.vercel.app" ,"http://127.0.0.1:5500")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
-                });
+                options.AddPolicy("AllowAllHeaders",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                         .AllowAnyHeader()
+                        .AllowAnyMethod();
+                    });
             });
         
 
@@ -200,7 +204,7 @@ namespace old_stuff_exchange_v2
 
             app.UseAuthorization();
 
-            app.UseCors();
+            app.UseCors("AllowAllHeaders");
 
             app.UseEndpoints(endpoints =>
             {

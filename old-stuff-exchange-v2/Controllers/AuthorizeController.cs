@@ -18,11 +18,13 @@ namespace old_stuff_exchange_v2.Controllers
     {
         private readonly UserService _userService;
         private readonly IJwtHelper _jwtHelper;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public AuthorizeController(UserService userService, IJwtHelper jwtHelper)
+        public AuthorizeController(UserService userService, IJwtHelper jwtHelper, IHttpContextAccessor contextAccessor)
         {
             _userService = userService;
             _jwtHelper = jwtHelper;
+            _contextAccessor = contextAccessor;
         }
 
         [HttpPost]
@@ -81,6 +83,7 @@ namespace old_stuff_exchange_v2.Controllers
                 });
             }
         }
+
     }
 
     
