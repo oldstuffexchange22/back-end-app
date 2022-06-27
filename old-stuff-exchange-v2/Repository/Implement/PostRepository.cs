@@ -81,8 +81,10 @@ namespace Old_stuff_exchange.Repository.Implement
             #endregion
             #region Sorting
             if (!string.IsNullOrEmpty(model.FilterWith) && !string.IsNullOrEmpty(model.FilterValue)) {
+                model.FilterWith = model.FilterWith.ToUpper();
                 switch (model.FilterWith) {
                     case "TITLE": allPost = allPost.Where(p => p.Title.ToUpper().Contains(model.FilterValue.ToUpper())); break;
+                    case "DESCRPTION": allPost = allPost.Where(p => p.Description.ToUpper().Contains(model.FilterValue.ToUpper())); break;
                 }
             }
             if (!string.IsNullOrEmpty(model.SortBy) && !string.IsNullOrEmpty(model.SortType))

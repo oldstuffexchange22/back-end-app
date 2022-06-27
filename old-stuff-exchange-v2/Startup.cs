@@ -1,3 +1,4 @@
+using CorePush.Google;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -101,6 +102,10 @@ namespace old_stuff_exchange_v2
                 services.AddStackExchangeRedisCache(option => option.Configuration = redisConfiguration.ConnectionString);
                 services.AddSingleton<CacheService>();
             }
+            services.AddTransient<INotificationService, NotificationService>();
+            services.AddHttpClient<FcmSender>();
+            var appSettingsSection = Configuration.GetSection("FCM");
+            services.Configure<FcmNotificationSetting>(appSettingsSection);
 
             // remove when finish app
             services.AddTransient<DatabaseService>();
