@@ -54,13 +54,15 @@ namespace Old_stuff_exchange.Service
             _context.AddRange(roles);
 
             // Generate user
+            Faker fkUser = new Faker();
             User userAdmin = new User
             {
                 UserName = "nvtan.a5@gmail.com",
                 Email = "nvtan.a5@gmail.com",
                 Status = UserStatus.ACTIVE,
-                Role = roleAdmin,
+                Role = roleResident,
                 FullName = "nvtan.a5@gmail.com",
+                Building = fkUser.PickRandom(buildings)
             };
             User userAdmin2 = new User
             {
