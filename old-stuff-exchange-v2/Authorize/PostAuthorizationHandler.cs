@@ -20,11 +20,11 @@ namespace old_stuff_exchange_v2.Authorize
                 context.Succeed(requirement);
                 return Task.FromResult(0);
             }
-            if (context.User.HasClaim("Id", Convert.ToString(resource.AuthorId)))
+            if (context.User.HasClaim("id", Convert.ToString(resource.AuthorId)))
             {
                 permissions.Add(UserPermissionType.Owner);
             }
-            if (context.User.HasClaim("Id", Convert.ToString(resource.UserBought))) {
+            if (context.User.HasClaim("id", Convert.ToString(resource.UserBought))) {
                 permissions.Add(UserPermissionType.Buyer);
             }
             if (ValidateUserPermissions[requirement](permissions))

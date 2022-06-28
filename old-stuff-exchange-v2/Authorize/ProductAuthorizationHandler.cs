@@ -20,7 +20,7 @@ namespace old_stuff_exchange_v2.Authorize
                 context.Succeed(requirement);
                 return Task.FromResult(0);
             }
-            if (context.User.HasClaim("Id", Convert.ToString(resource.Post.AuthorId)))
+            if (context.User.HasClaim("id", Convert.ToString(resource.Post.AuthorId)))
             {
                 permissions.Add(UserPermissionType.Owner);
             }
