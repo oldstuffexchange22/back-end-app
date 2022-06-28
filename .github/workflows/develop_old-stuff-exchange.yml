@@ -6,7 +6,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - old-stuff-exchange
 on:
   push:
     branches:
-      - develop
+      - authorize
   workflow_dispatch:
 
 jobs:
