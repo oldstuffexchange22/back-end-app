@@ -58,7 +58,7 @@ namespace old_stuff_exchange_v2
             });
 
             #region Dependency injection
-            services.AddTransient<IUserRepository<UserResponseModel>, UserRepository>();
+            services.AddTransient<IUserRepository<User>, UserRepository>();
             services.AddTransient<UserService>();
             services.AddTransient<IRoleRepository<Role>, RoleRepository>();
             services.AddTransient<RoleService>();

@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace old_stuff_exchange_v2.Authorize
 {
-    public class UserAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, UserResponseModel>
+    public class UserAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, User>
     {
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, UserResponseModel resource)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, User resource)
         {
             var permissions = new List<UserPermissionType>();
             if (context.User.HasClaim(ClaimTypes.Role, RoleNames.ADMIN))

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Old_stuff_exchange.Repository.Implement
 {
-    public class UserRepository : IUserRepository<UserResponseModel>
+    public class UserRepository : IUserRepository<User>
     {
         private readonly AppDbContext _context;
         private readonly IJwtHelper _jwtHelper;
@@ -21,9 +21,9 @@ namespace Old_stuff_exchange.Repository.Implement
             _context = context;
             _jwtHelper = jwtHelper;
         }
-        public async Task<UserResponseModel> Create(UserResponseModel user)
+        public async Task<User> Create(User user)
         {
-            UserResponseModel tempUser = _context.Users.FirstOrDefault(u => u.Email == user.Email);
+            User tempUser = _context.Users.FirstOrDefault(u => u.Email == user.Email);
             if (tempUser == null)
             {
                 Role role = _context.Roles.FirstOrDefault(r => r.Name == RoleNames.ADMIN);
@@ -34,9 +34,9 @@ namespace Old_stuff_exchange.Repository.Implement
             }
             return null;
         }
-        public async Task<UserResponseModel> GetByEmail(string email)
+        public async Task<User> GetByEmail(string email)
         {
-            UserResponseModel user = _context.Users.FirstOrDefault(u => u.Email == email);
+            User user = _context.Users.FirstOrDefault(u => u.Email == email);
             if (user == null)
             {
                 return null;
@@ -47,12 +47,12 @@ namespace Old_stuff_exchange.Repository.Implement
         public string Login(string email)
         {
             if(string.IsNullOrEmpty(email)) return null;
-            UserResponseModel user = _context.Users.Include(user => user.Role).Include(user => user.Building)
+            User user = _context.Users.Include(user => user.Role).Include(user => user.Building)
                 .FirstOrDefault(u => u.Email == email);
             if (user == null) {
                 // if (user.Status == UserStatus.INACTIVE) return UserStatus.INACTIVE;
                 Role residentRole = _context.Roles.FirstOrDefault(role => role.Name == RoleNames.RESIDENT);
-                UserResponseModel newUser = new UserResponseModel
+                User newUser = new User
                 {
                     UserName = email,
                     Email = email,
@@ -69,14 +69,14 @@ namespace Old_stuff_exchange.Repository.Implement
         }
         public async Task<bool> Delete(Guid id)
           {
-            UserResponseModel user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             user.Status = UserStatus.INACTIVE;
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<bool> Update(UserResponseModel newUser)
+        public async Task<bool> Update(User newUser)
         {
-            UserResponseModel user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == newUser.Id);
+            User user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == newUser.Id);
             if (user == null)
             {
                 return false;
@@ -87,7 +87,7 @@ namespace Old_stuff_exchange.Repository.Implement
             return true;
         }
 
-        public async Task<List<UserResponseModel>> GetList(string email,Guid? roleId, int pageNumber, int pageSize)
+        public async Task<List<User>> GetList(string email,Guid? roleId, int pageNumber, int pageSize)
         {
             var allUser = _context.Users.Include(u => u.Role).Include(u => u.Building)
                           .AsQueryable();
@@ -97,15 +97,15 @@ namespace Old_stuff_exchange.Repository.Implement
             #endregion
 
             #region Paging
-            var result = PaginatedList<UserResponseModel>.Create(allUser, pageNumber, pageSize);
+            var result = PaginatedList<User>.Create(allUser, pageNumber, pageSize);
             #endregion
             return await Task.FromResult(result.ToList());
         }
 
-        public async Task<UserResponseModel> UpdateUserAddress(Guid UserId, Guid BuildingId)
+        public async Task<User> UpdateUserAddress(Guid UserId, Guid BuildingId)
         {
             Building building =await _context.Buildings.FindAsync(BuildingId);
-            UserResponseModel user = await _context.Users.FindAsync(UserId);
+            User user = await _context.Users.FindAsync(UserId);
             if (building == null || user == null) return null;
             user.Building = building;
             user.Status = UserStatus.ACTIVE;
@@ -114,14 +114,14 @@ namespace Old_stuff_exchange.Repository.Implement
             return user;
         }
 
-        public async Task<UserResponseModel> GetById(Guid id)
+        public async Task<User> GetById(Guid id)
         {
             return await Task.FromResult(_context.Users.Find(id));
         }
 
-        public async Task<UserResponseModel> Login(string userName, string password)
+        public async Task<User> Login(string userName, string password)
         {
-            UserResponseModel user = _context.Users.Include(u => u.Role).Where(u => u.UserName.ToLower().Equals(userName.ToLower()) && u.Password == password).SingleOrDefault();
+            User user = _context.Users.Include(u => u.Role).Where(u => u.UserName.ToLower().Equals(userName.ToLower()) && u.Password == password).SingleOrDefault();
             return await Task.FromResult(user);
         }
     }

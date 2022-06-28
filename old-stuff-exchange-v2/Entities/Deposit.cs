@@ -11,14 +11,14 @@ namespace old_stuff_exchange_v2.Entities
         [Key]
         public Guid Id { get; set; }
         public string WalletElectricName { get; set; }
-        public string Descripion { get; set; }
+        public string Description { get; set; }
         public decimal Amount { get; set; }
         public DateTime CreatedAt { get; set; }
 
         #region Relationship
         public Guid UserId { get; set; }
         [ForeignKey("UserId")]
-        public UserResponseModel User { get; set; }
+        public User User { get; set; }
 
         public ICollection<Transaction> Transactions { get; set; }
         #endregion

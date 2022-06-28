@@ -19,7 +19,7 @@ namespace old_stuff_exchange_v2.Entities
         public DbSet<Apartment> Apartments { get; set; }
         public DbSet<Building> Buildings { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<UserResponseModel> Users { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Wallet> Wallets { get; set; }
         public DbSet<Deposit> Deposits { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
@@ -48,7 +48,7 @@ namespace old_stuff_exchange_v2.Entities
             {
                 entity.HasIndex(e => e.Name).IsUnique();
             });
-            modelBuilder.Entity<UserResponseModel>(entity =>
+            modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("getdate()");
             });

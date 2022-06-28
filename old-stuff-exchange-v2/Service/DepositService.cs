@@ -15,10 +15,10 @@ namespace old_stuff_exchange_v2.Service
     {
         private readonly AppDbContext _context;
         private readonly IDepositRepository<Deposit> _repoDeposit;
-        private readonly IUserRepository<UserResponseModel> _repoUser;
+        private readonly IUserRepository<User> _repoUser;
         private readonly ITransactionRepository<Transaction> _repoTransaction;
         private readonly IWalletRepository<Wallet> _repoWallet;
-        public DepositService(IDepositRepository<Deposit> repoDeposit, IUserRepository<UserResponseModel> repoUser, 
+        public DepositService(IDepositRepository<Deposit> repoDeposit, IUserRepository<User> repoUser, 
             ITransactionRepository<Transaction> repoTransaction, IWalletRepository<Wallet> repoWallet,
             AppDbContext context)
         {
@@ -32,7 +32,7 @@ namespace old_stuff_exchange_v2.Service
             Deposit deposit = await _repoDeposit.Create(new Deposit
             {
                 WalletElectricName = model.WalletElectricName,
-                Descripion = model.Descripion,
+                Description = model.Descripion,
                 Amount = model.Amount,
                 UserId = model.UserId,
             }) ;
