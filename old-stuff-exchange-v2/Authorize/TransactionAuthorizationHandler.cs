@@ -19,7 +19,7 @@ namespace old_stuff_exchange_v2.Authorize
                 context.Succeed(requirement);
                 return Task.FromResult(0);
             }
-            if (context.User.HasClaim("Id", Convert.ToString(resource.Wallet.UserId)))
+            if (context.User.HasClaim("id", Convert.ToString(resource.Wallet.UserId)))
             {
                 permissions.Add(UserPermissionType.Owner);
             }
