@@ -20,7 +20,7 @@ namespace old_stuff_exchange_v2.Entities
 
         #region Rellationship
         public Guid? UserId { get; set; }
-        public UserResponseModel User { get; set; }
+        public User User { get; set; }
 
         public ICollection<Transaction> Transactions { get; set; }
         #endregion

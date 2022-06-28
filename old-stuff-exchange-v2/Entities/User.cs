@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace old_stuff_exchange_v2.Entities
 {
     [Table("User")]
-    public class UserResponseModel
+    public class User
     {
         [Key]
         public Guid Id { get; set; }
@@ -37,7 +37,7 @@ namespace old_stuff_exchange_v2.Entities
         public ICollection<Wallet> Wallets { get; set; }
         public ICollection<Deposit> Deposits { get; set; }
         #endregion
-        public UserResponseModel() {
+        public User() {
             Wallets = new List<Wallet>();
             Posts = new List<Post>();
             Deposits = new List<Deposit>();

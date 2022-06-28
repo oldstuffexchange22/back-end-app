@@ -12,6 +12,7 @@ namespace old_stuff_exchange_v2.Model.Building
         public int? NumberFloor { get; set; }
         public int? NumberRoom { get; set; }
         public string Description { get; set; }
+        public Guid AparmentId { get; set; }
         public ResponseApartmentModel Apartment { get; set; }
     }
 }

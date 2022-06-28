@@ -128,7 +128,7 @@ namespace Old_stuff_exchange.Repository.Implement
 
         public async Task<List<Post>> GetListByUserId(Guid userId, string status, int page, int pageSize)
         {
-            UserResponseModel user = await _context.Users.FindAsync(userId);
+            User user = await _context.Users.FindAsync(userId);
             if (user == null) return null;
             IQueryable<Post> allPost = _context.Posts.Where(p => p.AuthorId == userId).Include(p => p.Author).AsQueryable();
             #region Filtering

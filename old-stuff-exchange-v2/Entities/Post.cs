@@ -23,7 +23,7 @@ namespace old_stuff_exchange_v2.Entities
 
         #region Relationship
         public Guid AuthorId { get; set; }
-        public UserResponseModel Author { get; set; }
+        public User Author { get; set; }
 
         public ICollection<Product> Products { get; set; }
         public ICollection<Transaction> Transactions { get; set; }

@@ -13,11 +13,11 @@ namespace old_stuff_exchange_v2.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         #region Relationship
-        public ICollection<UserResponseModel> Users { get; set; }
+        public ICollection<User> Users { get; set; }
         #endregion
         public Role()
         {
-            Users = new List<UserResponseModel>();
+            Users = new List<User>();
         }
     }
 }

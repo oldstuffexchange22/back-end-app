@@ -54,7 +54,7 @@ namespace Old_stuff_exchange.Service
             _context.AddRange(roles);
 
             // Generate user
-            UserResponseModel userAdmin = new UserResponseModel
+            User userAdmin = new User
             {
                 UserName = "nvtan.a5@gmail.com",
                 Email = "nvtan.a5@gmail.com",
@@ -62,7 +62,7 @@ namespace Old_stuff_exchange.Service
                 Role = roleAdmin,
                 FullName = "nvtan.a5@gmail.com",
             };
-            UserResponseModel userAdmin2 = new UserResponseModel
+            User userAdmin2 = new User
             {
                 UserName = "admin",
                 Email = "ADMIN@gmail.com",
@@ -71,7 +71,7 @@ namespace Old_stuff_exchange.Service
                 FullName = "admin",
                 Password = "admin"
             };
-            Faker<UserResponseModel> FakerUser = new Faker<UserResponseModel>()
+            Faker<User> FakerUser = new Faker<User>()
                 .RuleFor(u => u.UserName, faker => faker.Person.UserName)
                 .RuleFor(u => u.Email, faker => faker.Person.Email)
                 .RuleFor(u => u.Status, UserStatus.ACTIVE)
@@ -82,7 +82,7 @@ namespace Old_stuff_exchange.Service
                 .RuleFor(u => u.Phone, faker => faker.Person.Phone);
             _context.Add(userAdmin);
             _context.Add(userAdmin2);
-            List<UserResponseModel> users = FakerUser.Generate(40);
+            List<User> users = FakerUser.Generate(40);
             users.Add(userAdmin);
             _context.AddRange(users);
 
@@ -198,7 +198,7 @@ namespace Old_stuff_exchange.Service
             // Generate deposit
             Faker<Deposit> FakerDeposit = new Faker<Deposit>()
                 .RuleFor(d => d.WalletElectricName, faker => faker.PickRandom(WalletElectricName.GetWalletNames()))
-                .RuleFor(d => d.Descripion, faker => faker.Lorem.Sentence(6))
+                .RuleFor(d => d.Description, faker => faker.Lorem.Sentence(6))
                 .RuleFor(d => d.Amount, faker => faker.Random.Int(500, 3000) * 1000)
                 .RuleFor(d => d.User, faker => faker.PickRandom(users.Where(u => u.Role != roleAdmin)));
             List<Deposit> deposits = FakerDeposit.Generate(500);

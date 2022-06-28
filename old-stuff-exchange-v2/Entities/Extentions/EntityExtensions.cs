@@ -13,7 +13,7 @@ namespace old_stuff_exchange_v2.Entities.Extentions
 {
     public static class EntityExtensions
     {
-        public static ResponseUserModel ToResponseModel(this UserResponseModel user) { 
+        public static ResponseUserModel ToResponseModel(this User user) { 
             ResponseUserModel model = new ResponseUserModel();
             model.Id = user.Id;
             model.UserName = user.UserName;
@@ -44,6 +44,7 @@ namespace old_stuff_exchange_v2.Entities.Extentions
             model.NumberFloor = building.NumberFloor;
             model.NumberRoom = building.NumberRoom;
             model.Description = building.Description;
+            model.AparmentId = building.ApartmentId;
             model.Apartment = building.Apartment?.ToResponseModel();
             return model;
         }
@@ -60,7 +61,7 @@ namespace old_stuff_exchange_v2.Entities.Extentions
             ResponseDepositModel model = new ResponseDepositModel();
             model.Id = deposit.Id;
             model.WalletElectricName = deposit.WalletElectricName;
-            model.Descripion = deposit.Descripion;
+            model.Description = deposit.Description;
             model.Amount = deposit.Amount;
             model.CreatedAt = deposit.CreatedAt;
             model.User = deposit.User?.ToResponseModel();

@@ -10,7 +10,7 @@ namespace Old_stuff_exchange.Helper
 {
     public interface IJwtHelper
     {
-        string generateJwtToken(UserResponseModel user);
+        string generateJwtToken(User user);
     }
     public class JwtHelper : IJwtHelper
     {
@@ -21,7 +21,7 @@ namespace Old_stuff_exchange.Helper
             _config = config;
         }
 
-        public string generateJwtToken(UserResponseModel user)
+        public string generateJwtToken(User user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var secretKeyBytes = Encoding.UTF8.GetBytes(_config["JWT:Key"]);

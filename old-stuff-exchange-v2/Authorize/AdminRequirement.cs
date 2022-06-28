@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿ using Microsoft.AspNetCore.Authorization;
 using old_stuff_exchange_v2.Enum.Role;
 using System.Security.Claims;
 using System.Threading.Tasks;

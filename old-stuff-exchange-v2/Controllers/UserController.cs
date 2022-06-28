@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using old_stuff_exchange_v2.Enum.Authorize;
 using old_stuff_exchange_v2.Service;
 using old_stuff_exchange_v2.Attributes;
+using old_stuff_exchange_v2.Entities.Extentions;
 
 namespace Old_stuff_exchange.Controllers
 {
@@ -37,7 +38,7 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
-                UserResponseModel user = await _userService.GetById(id);
+                User user = await _userService.GetById(id);
                 if (!(await _authorizationService.AuthorizeAsync(User, user, Operations.Read)).Succeeded)
                 {
                     return StatusCode(StatusCodes.Status403Forbidden);
@@ -45,7 +46,7 @@ namespace Old_stuff_exchange.Controllers
                 return Ok(new ApiResponse
                 {
                     Success = true,
-                    Data = user
+                    Data = user.ToResponseModel()
                 });
             }
             catch (Exception ex)
@@ -64,7 +65,7 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
-                UserResponseModel user = await _userService.GetByEmail(email);
+                User user = await _userService.GetByEmail(email);
                 if (!(await _authorizationService.AuthorizeAsync(User, user, Operations.Read)).Succeeded)
                 {
                     return StatusCode(StatusCodes.Status403Forbidden);
@@ -116,7 +117,7 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
-                UserResponseModel user = new UserResponseModel
+                User user = new User
                 {
                     FullName = newUser.FullName,
                     Email = newUser.Email,
@@ -151,13 +152,13 @@ namespace Old_stuff_exchange.Controllers
 
         
 
-        [HttpPost("update-address")]
+        [HttpPut("address")]
         [SwaggerOperation(Summary = "Update address user")]
         public async Task<ActionResult> Update(Guid userId, Guid buildingId)
         {
             try
             {
-                UserResponseModel userAuthorize = await _userService.GetById(userId);
+                User userAuthorize = await _userService.GetById(userId);
                 if (userAuthorize == null)
                 {
                     return BadRequest();
@@ -166,7 +167,7 @@ namespace Old_stuff_exchange.Controllers
                     bool verifyAuth = (await _authorizationService.AuthorizeAsync(User, userAuthorize, Operations.Update)).Succeeded;
                     if (verifyAuth == false) return StatusCode(StatusCodes.Status403Forbidden);
                 }
-                UserResponseModel user = await _userService.UpdateUserAddress(userId, buildingId);
+                User user = await _userService.UpdateUserAddress(userId, buildingId);
                 if (user == null) return BadRequest();
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
                 await _cacheService.RemoveCacheResponseAsync(controllerName);
@@ -193,7 +194,7 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
-                UserResponseModel user = new UserResponseModel
+                User user = new User
                 {
                     Id = updateUser.Id,
                     FullName = updateUser.Name,
@@ -237,7 +238,7 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
-                UserResponseModel userAuthorize = await _userService.GetById(id);
+                User userAuthorize = await _userService.GetById(id);
                 if (userAuthorize == null)
                 {
                     return BadRequest();
