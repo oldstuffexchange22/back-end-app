@@ -116,7 +116,8 @@ namespace Old_stuff_exchange.Repository.Implement
 
         public async Task<User> GetById(Guid id)
         {
-            return await Task.FromResult(_context.Users.Find(id));
+            User user = await _context.Users.AsNoTracking().Include(u => u.Role).Include(u => u.Building).SingleOrDefaultAsync(u => u.Id == id);
+            return user;
         }
 
         public async Task<User> Login(string userName, string password)

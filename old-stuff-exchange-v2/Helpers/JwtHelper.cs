@@ -31,8 +31,6 @@ namespace Old_stuff_exchange.Helper
                 Subject = new ClaimsIdentity(new[] {
                     new Claim(ClaimTypes.Name, user.FullName),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim("userName", user.UserName),
                     new Claim("id", user.Id.ToString()),
 
