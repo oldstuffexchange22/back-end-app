@@ -21,7 +21,7 @@ namespace old_stuff_exchange_v2.Authorize
                 return Task.FromResult(0);
             }
 
-            if (context.User.HasClaim("id", Convert.ToString(resource.Id)))
+            if (context.User.HasClaim("Id", Convert.ToString(resource.Id)))
             {
                 permissions.Add(UserPermissionType.Owner);
             }
