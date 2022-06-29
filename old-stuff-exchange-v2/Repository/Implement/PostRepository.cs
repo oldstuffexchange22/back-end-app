@@ -67,8 +67,8 @@ namespace Old_stuff_exchange.Repository.Implement
                 listCategoriesId.Clear();
                 GetListCatChildId(category);
             }
-            model.FilterValue = model.FilterValue.ToUpper();
-            model.FilterWith = model.FilterWith.ToUpper();
+            model.FilterValue = model.FilterValue?.ToUpper();
+            model.FilterWith = model.FilterWith?.ToUpper();
             #region Filtering
             if (apartmentId != null)
             {
