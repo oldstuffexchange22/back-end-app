@@ -50,7 +50,8 @@ namespace Old_stuff_exchange.Service
                 Expired = model.Expired,
                 Status = model.Status,
                 LastUpdatedAt = DateTime.Now,
-                ImageUrl = model.ImageUrl
+                ImageUrl = model.ImageUrl,
+                Price = model.Price
             };
             return await _postRepository.Update(post);
         }

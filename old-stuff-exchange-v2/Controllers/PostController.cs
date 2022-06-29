@@ -32,7 +32,7 @@ namespace Old_stuff_exchange.Controllers
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get post by id")]
-        [Cache(100)]
+        [Cache(1)]
         public async Task<IActionResult> GetById(Guid id)
         {
             try
@@ -57,7 +57,7 @@ namespace Old_stuff_exchange.Controllers
 
         [HttpGet()]
         [SwaggerOperation(Summary = "Get list post")]
-        [Cache(100)]
+        [Cache(1)]
         public async Task<IActionResult> GetList(Guid? apartmentId, Guid? categoryId, string filterWith, string filterValue, string sortBy, string sortType, int page = 1, int pageSize = 10)
         {
             try
@@ -91,7 +91,7 @@ namespace Old_stuff_exchange.Controllers
 
         [HttpGet("user/{userId}")]
         [SwaggerOperation(Summary = "Get list post by user id")]
-        [Cache(100)]
+        [Cache(1)]
         public async Task<IActionResult> GetListByUserId(Guid userId, string status, int page = 1, int pageSize = 10)
         {
             try
