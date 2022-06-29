@@ -28,7 +28,7 @@ namespace Old_stuff_exchange.Controllers
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get role by Id")]
-        [Cache(100)]
+        [Cache(1)]
         public async Task<IActionResult> GetById(Guid id)
         {
             Role role = await _roleService.GetById(id);
@@ -43,7 +43,7 @@ namespace Old_stuff_exchange.Controllers
         }
         [HttpGet()]
         [SwaggerOperation(Summary = "Get list role")]
-        [Cache(100)]
+        [Cache(1)]
         public async Task<IActionResult> GetList()
         {
             List<Role> listRoles = await _roleService.GetList();

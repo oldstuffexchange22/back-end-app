@@ -10,5 +10,6 @@ namespace Old_stuff_exchange.Model.Post
         public DateTime Expired { get; set; }
         public string Status { get; set; }
         public string ImageUrl { get; set; }
+        public decimal Price { get; set; }
     }
 }

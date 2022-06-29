@@ -30,7 +30,7 @@ namespace old_stuff_exchange_v2.Controllers
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Find by id")]
         [AllowAnonymous]
-        [Cache(100)]
+        [Cache(1)]
         public async Task<ActionResult> GetById(Guid id)
         {
             try

@@ -33,7 +33,7 @@ namespace Old_stuff_exchange.Controllers
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get information user by id")]
-        [Cache(100)]
+        [Cache(1)]
         public async Task<ActionResult> GetById(Guid id)
         {
             try
@@ -89,7 +89,7 @@ namespace Old_stuff_exchange.Controllers
         [HttpGet()]
         [SwaggerOperation(Summary = "Get information user by email, by roleId and pagination")]
         [Authorize(Policy = PolicyName.ADMIN)]
-        [Cache(100)]
+        [Cache(1)]
         public async Task<ActionResult> GetList(string email, Guid? roleId, int pageNumber = 1, int pageSize = 10)
         {
             try

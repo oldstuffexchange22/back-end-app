@@ -66,7 +66,9 @@ namespace Old_stuff_exchange.Repository.Implement
             if (category != null) {
                 listCategoriesId.Clear();
                 GetListCatChildId(category);
-            } 
+            }
+            model.FilterValue = model.FilterValue.ToUpper();
+            model.FilterWith = model.FilterWith.ToUpper();
             #region Filtering
             if (apartmentId != null)
             {
@@ -75,18 +77,20 @@ namespace Old_stuff_exchange.Repository.Implement
             if (categoryId != null)
             {
                 listCategoriesId.Add(categoryId);
-                // allPost = allPost.Where(post => post.Products.Any(pro => pro.CategoryId == categoryId));
                 allPost = allPost.Where(post => post.Products.Any(pro => listCategoriesId.Contains(pro.CategoryId)));
+            }
+            if (!string.IsNullOrEmpty(model.FilterWith) && !string.IsNullOrEmpty(model.FilterValue))
+            {
+                model.FilterWith = model.FilterWith.ToUpper();
+                switch (model.FilterWith)
+                {
+                    case "TITLE": allPost = allPost.Where(p => p.Title.ToUpper().Contains(model.FilterValue.ToUpper())); break;
+                    case "DESCRPTION": allPost = allPost.Where(p => p.Description.ToUpper().Contains(model.FilterValue.ToUpper())); break;
+                    case "STATUS": allPost = allPost.Where(p => p.Status.ToUpper().Equals(model.FilterValue)); break;
+                }
             }
             #endregion
             #region Sorting
-            if (!string.IsNullOrEmpty(model.FilterWith) && !string.IsNullOrEmpty(model.FilterValue)) {
-                model.FilterWith = model.FilterWith.ToUpper();
-                switch (model.FilterWith) {
-                    case "TITLE": allPost = allPost.Where(p => p.Title.ToUpper().Contains(model.FilterValue.ToUpper())); break;
-                    case "DESCRPTION": allPost = allPost.Where(p => p.Description.ToUpper().Contains(model.FilterValue.ToUpper())); break;
-                }
-            }
             if (!string.IsNullOrEmpty(model.SortBy) && !string.IsNullOrEmpty(model.SortType))
             {
                 switch (model.SortBy)

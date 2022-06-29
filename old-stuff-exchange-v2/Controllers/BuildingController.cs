@@ -29,7 +29,7 @@ namespace Old_stuff_exchange.Controllers
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get building with ID")]
-        [Cache(100)]
+        [Cache(1)]
         public async Task<IActionResult> GetBuildingById(Guid id)
         {
             try
@@ -55,7 +55,7 @@ namespace Old_stuff_exchange.Controllers
         [HttpGet()]
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Get list of building")]
-        [Cache(100)]
+        [Cache(1)]
         public async Task<IActionResult> GetList(Guid? apartmentId,string name, int page = 1, int pageSize = 10 )
         {
             try
