@@ -33,9 +33,8 @@ namespace Old_stuff_exchange.Helper
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim("userName", user.UserName),
                     new Claim("id", user.Id.ToString()),
-
+                    new Claim("apartmentId", user.Building != null ? user.Building.ApartmentId.ToString() : ""),
                     //roles
-
                     new Claim(ClaimTypes.Role, user.Role.Name)
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
