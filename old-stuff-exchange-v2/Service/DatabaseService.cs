@@ -174,7 +174,7 @@ namespace Old_stuff_exchange.Service
                 .RuleFor(p => p.Author, faker => faker.PickRandom(users.Take(20)))
                 .RuleFor(p => p.UserBought, faker => faker.PickRandom(listUserId))
                 .RuleFor(p => p.CreatedAt, faker => faker.Date.Between(new DateTime(2020,1,1), DateTime.Now));
-            List<Post> posts = FakerPost.Generate(400);
+            List<Post> posts = FakerPost.Generate(2000);
             _context.Posts.AddRange(posts);
 
             // Generate product
