@@ -158,7 +158,7 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
-                User userAuthorize = await _userService.GetById(userId);
+               /* User userAuthorize = await _userService.GetById(userId);
                 if (userAuthorize == null)
                 {
                     return BadRequest();
@@ -166,7 +166,7 @@ namespace Old_stuff_exchange.Controllers
                 else {
                     bool verifyAuth = (await _authorizationService.AuthorizeAsync(User, userAuthorize, Operations.Update)).Succeeded;
                     if (verifyAuth == false) return StatusCode(StatusCodes.Status403Forbidden);
-                }
+                }*/
                 User user = await _userService.UpdateUserAddress(userId, buildingId);
                 if (user == null) return BadRequest();
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
