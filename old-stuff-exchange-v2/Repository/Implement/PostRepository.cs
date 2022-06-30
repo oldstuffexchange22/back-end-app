@@ -69,6 +69,7 @@ namespace Old_stuff_exchange.Repository.Implement
             }
             model.FilterValue = model.FilterValue?.ToUpper();
             model.FilterWith = model.FilterWith?.ToUpper();
+            model.Status = model.Status?.ToUpper();
             #region Filtering
             if (apartmentId != null)
             {
@@ -86,7 +87,9 @@ namespace Old_stuff_exchange.Repository.Implement
                 {
                     case "TITLE": allPost = allPost.Where(p => p.Title.ToUpper().Contains(model.FilterValue.ToUpper())); break;
                     case "DESCRPTION": allPost = allPost.Where(p => p.Description.ToUpper().Contains(model.FilterValue.ToUpper())); break;
-                    case "STATUS": allPost = allPost.Where(p => p.Status.ToUpper().Equals(model.FilterValue)); break;
+                }
+                if (!string.IsNullOrEmpty(model.Status)) {
+                    allPost = allPost.Where(p => p.Status.Equals(model.Status));
                 }
             }
             #endregion
