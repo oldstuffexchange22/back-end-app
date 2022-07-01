@@ -105,7 +105,7 @@ namespace Old_stuff_exchange.Repository.Implement
         public async Task<User> UpdateUserAddress(Guid UserId, Guid BuildingId)
         {
             Building building =await _context.Buildings.FindAsync(BuildingId);
-            User user = await _context.Users.FindAsync(UserId);
+            User user = await _context.Users.Include(u => u.Role).SingleOrDefaultAsync(u => u.Id == UserId);
             if (building == null || user == null) return null;
             user.Building = building;
             user.Status = UserStatus.ACTIVE;
