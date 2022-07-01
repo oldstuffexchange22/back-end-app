@@ -88,10 +88,10 @@ namespace Old_stuff_exchange.Repository.Implement
                     case "TITLE": allPost = allPost.Where(p => p.Title.ToUpper().Contains(model.FilterValue.ToUpper())); break;
                     case "DESCRPTION": allPost = allPost.Where(p => p.Description.ToUpper().Contains(model.FilterValue.ToUpper())); break;
                 }
-                if (!string.IsNullOrEmpty(model.Status)) {
+            }
+            if (!string.IsNullOrEmpty(model.Status)) {
                     allPost = allPost.Where(p => p.Status.Equals(model.Status));
                 }
-            }
             #endregion
             #region Sorting
             if (!string.IsNullOrEmpty(model.SortBy) && !string.IsNullOrEmpty(model.SortType))
