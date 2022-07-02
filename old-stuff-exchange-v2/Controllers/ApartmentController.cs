@@ -54,11 +54,11 @@ namespace old_stuff_exchange_v2.Controllers
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Getlist apartment")]
         [Cache(1)]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(bool isBuildingsNull = true)
         {
             try
             {
-                List<ResponseApartmentModel> apartments = await _service.GetList();
+                List<ResponseApartmentModel> apartments = await _service.GetList(isBuildingsNull);
                 if (apartments.Count == 0) return BadRequest("Can't find any apartment");
                 return Ok(new ApiResponse
                 {

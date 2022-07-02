@@ -10,7 +10,7 @@ namespace old_stuff_exchange_v2.Repository.Interface
         Task<Apartment> Create(Apartment apartment);
         Task<Apartment> Update(Apartment apartment);
         Task<bool> Delete(Guid Id);
-        Task<List<Apartment>> GetList();
+        Task<List<Apartment>> GetList(bool isBuildingsNull);
         Task<Apartment> GetById(Guid Id);
     }
 }

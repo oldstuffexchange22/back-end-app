@@ -24,7 +24,7 @@ namespace Old_stuff_exchange.Service
         public void GenerateDataWithBogus() {
             // Generate apartment
             Faker<Apartment> FakerAparment = new Faker<Apartment>()
-                .RuleFor(a => a.Name, faker => faker.Lorem.Sentence(4))
+                .RuleFor(a => a.Name, faker => faker.Lorem.Sentence(2))
                 .RuleFor(a => a.Address, faker => faker.Lorem.Sentence(10));
             List<Apartment> apartments = FakerAparment.Generate(5);
             _context.Apartments.AddRange(FakerAparment);
