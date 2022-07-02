@@ -40,8 +40,8 @@ namespace old_stuff_exchange_v2.Service
             return await _repo.Delete(id);
         }
 
-        public async Task<List<ResponseApartmentModel>> GetList() {
-            List<ResponseApartmentModel> response = (await _repo.GetList()).ConvertAll(apartment => apartment.ToResponseModel());
+        public async Task<List<ResponseApartmentModel>> GetList(bool isBuildingsNull) {
+            List<ResponseApartmentModel> response = (await _repo.GetList(isBuildingsNull)).ConvertAll(apartment => apartment.ToResponseModel());
             return response;
         }
 

@@ -42,9 +42,16 @@ namespace old_stuff_exchange_v2.Repository.Implement
             return result > 0;
         }
 
-        public async Task<List<Apartment>> GetList()
+        public async Task<List<Apartment>> GetList(bool isBuildingsNull)
         {
-            var apartments = _context.Apartments.Include(a => a.Buildings).Where(a => a.Buildings.Count > 0).ToList();
+            var apartments = new List<Apartment>();
+            if (!isBuildingsNull)
+            {
+                apartments = _context.Apartments.Include(a => a.Buildings).Where(a => a.Buildings.Count > 0).ToList();
+            }
+            else {
+                _context.Apartments.ToList();
+            }
             return await Task.FromResult(apartments);
         }
 
