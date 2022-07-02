@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using old_stuff_exchange_v2.Enum.Transaction;
 using old_stuff_exchange_v2.Enum.Wallet;
+using Old_stuff_exchange.Model.Product;
 
 namespace Old_stuff_exchange.Service
 {
@@ -31,13 +32,17 @@ namespace Old_stuff_exchange.Service
 
         public async Task<Post> Create(CreatePostModel model) {
             Post post = new Post
-            {
+            { 
+                Id = string.IsNullOrEmpty(model.Id) ? Guid.NewGuid() : Guid.Parse(model.Id),
                 Title = model.Title,
                 Description = model.Description,
                 AuthorId = model.AuthorId,
                 Status = PostStatus.WAITING,
                 ImageUrl = model.ImageUrl,
             };
+            List<Product> products = model.Products.ConvertAll(p => new Product { 
+            Name = p.Name, Description = p.Description, CategoryId = p.CategoryId, Price = p.Price, PostId = post.Id });
+            post.Products = products;
             return await _postRepository.Create(post);
         }
 
