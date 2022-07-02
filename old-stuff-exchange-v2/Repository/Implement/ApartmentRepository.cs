@@ -44,7 +44,8 @@ namespace old_stuff_exchange_v2.Repository.Implement
 
         public async Task<List<Apartment>> GetList()
         {
-            return await Task.FromResult(_context.Apartments.ToList());
+            var apartments = _context.Apartments.Include(a => a.Buildings).Where(a => a.Buildings.Count > 0).ToList();
+            return await Task.FromResult(apartments);
         }
 
         public async Task<Apartment> GetById(Guid Id)
