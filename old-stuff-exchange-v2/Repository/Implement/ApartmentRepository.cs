@@ -50,7 +50,7 @@ namespace old_stuff_exchange_v2.Repository.Implement
                 apartments = _context.Apartments.Include(a => a.Buildings).Where(a => a.Buildings.Count > 0).ToList();
             }
             else {
-                _context.Apartments.ToList();
+                apartments = _context.Apartments.ToList();
             }
             return await Task.FromResult(apartments);
         }
