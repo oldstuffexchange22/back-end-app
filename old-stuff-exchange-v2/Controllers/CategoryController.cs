@@ -53,6 +53,7 @@ namespace Old_stuff_exchange.Controllers
 
         [HttpGet()]
         [SwaggerOperation(Summary = "Get list categories")]
+        [AllowAnonymous]
         [Cache(1)]
         public async Task<IActionResult> GetList(string name, int page = 1, int pageSize = 10) {
             try
