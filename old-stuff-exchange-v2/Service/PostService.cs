@@ -41,7 +41,7 @@ namespace Old_stuff_exchange.Service
                 ImageUrl = model.ImageUrl,
             };
             List<Product> products = model.Products.ConvertAll(p => new Product { 
-            Name = p.Name, Description = p.Description, CategoryId = p.CategoryId, Price = p.Price, PostId = post.Id });
+            Name = p.Name, Description = p.Description, CategoryId = p.CategoryId, Price = p.Price, PostId = post.Id , Status = p.Status});
             post.Products = products;
             return await _postRepository.Create(post);
         }
