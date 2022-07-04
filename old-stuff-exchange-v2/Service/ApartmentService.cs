@@ -20,7 +20,8 @@ namespace old_stuff_exchange_v2.Service
             Apartment apartment = new Apartment { 
                 Name =  model.Name,
                 Description = model.Description,
-                Address = model.Address
+                Address = model.Address,
+                ImageUrl = model.ImageUrl,
             };
             return await _repo.Create(apartment);
         }
@@ -31,7 +32,8 @@ namespace old_stuff_exchange_v2.Service
                 Id = model.Id,
                 Name = model.Name,
                 Description = model.Description,
-                Address = model.Address
+                Address = model.Address,
+                ImageUrl = model.ImageUrl
             };
             return await _repo.Update(apartment);
         }
