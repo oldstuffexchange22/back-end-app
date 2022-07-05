@@ -25,6 +25,10 @@ namespace old_stuff_exchange_v2.Authorize
             {
                 permissions.Add(UserPermissionType.Owner);
             }
+            if (ValidateUserPermissions[requirement](permissions))
+            {
+                context.Succeed(requirement);
+            }
             return Task.FromResult(0);
         }
 

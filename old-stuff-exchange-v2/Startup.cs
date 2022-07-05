@@ -85,8 +85,6 @@ namespace old_stuff_exchange_v2
             services.AddSingleton<IAuthorizationHandler, ProductAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, TransactionAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, WalletAuthorizationHandler>();
-            /*services.AddSingleton<IAuthorizationHandler, AdminRequirement>();
-            services.AddSingleton<IAuthorizationHandler, ResidentRequirement>();*/
             services.AddHttpContextAccessor();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

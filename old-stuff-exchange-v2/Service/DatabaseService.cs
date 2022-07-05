@@ -26,7 +26,7 @@ namespace Old_stuff_exchange.Service
             Faker<Apartment> FakerAparment = new Faker<Apartment>()
                 .RuleFor(a => a.Name, faker => faker.Lorem.Sentence(2))
                 .RuleFor(a => a.Address, faker => faker.Lorem.Sentence(10));
-            List<Apartment> apartments = FakerAparment.Generate(5);
+            List<Apartment> apartments = FakerAparment.Generate(2);
             _context.Apartments.AddRange(FakerAparment);
 
             // Generate building
@@ -36,7 +36,7 @@ namespace Old_stuff_exchange.Service
                 .RuleFor(b => b.NumberFloor, faker => faker.Random.Int(3, 10))
                 .RuleFor(b => b.NumberRoom, faker => faker.Random.Int(30, 100))
                 .RuleFor(b => b.Description, faker => faker.Lorem.Sentence(6));
-            List<Building> buildings = FakerBuilding.Generate(100);
+            List<Building> buildings = FakerBuilding.Generate(20);
             _context.Buildings.AddRange(buildings);
 
             // Generate role
@@ -84,7 +84,7 @@ namespace Old_stuff_exchange.Service
                 .RuleFor(u => u.Phone, faker => faker.Person.Phone);
             _context.Add(userAdmin);
             _context.Add(userAdmin2);
-            List<User> users = FakerUser.Generate(40);
+            List<User> users = FakerUser.Generate(10);
             users.Add(userAdmin);
             _context.AddRange(users);
 
@@ -174,7 +174,7 @@ namespace Old_stuff_exchange.Service
                 .RuleFor(p => p.Author, faker => faker.PickRandom(users.Take(20)))
                 .RuleFor(p => p.UserBought, faker => faker.PickRandom(listUserId))
                 .RuleFor(p => p.CreatedAt, faker => faker.Date.Between(new DateTime(2020,1,1), DateTime.Now));
-            List<Post> posts = FakerPost.Generate(2000);
+            List<Post> posts = FakerPost.Generate(1000);
             _context.Posts.AddRange(posts);
 
             // Generate product
@@ -203,7 +203,7 @@ namespace Old_stuff_exchange.Service
                 .RuleFor(d => d.Description, faker => faker.Lorem.Sentence(6))
                 .RuleFor(d => d.Amount, faker => faker.Random.Int(500, 3000) * 1000)
                 .RuleFor(d => d.User, faker => faker.PickRandom(users.Where(u => u.Role != roleAdmin)));
-            List<Deposit> deposits = FakerDeposit.Generate(500);
+            List<Deposit> deposits = FakerDeposit.Generate(300);
             _context.AddRange(deposits);
 
             // Generate transaction
