@@ -55,7 +55,7 @@ namespace Old_stuff_exchange.Repository.Implement
             return result > 0;
         }
 
-        public async Task<List<Post>> GetList(Guid? apartmentId, Guid? categoryId, PagingModel model)
+        public async Task<List<Post>> GetList(Guid? exceptUserId,Guid? apartmentId, Guid? categoryId, PagingModel model)
         {
             var allPost = _context.Posts.Include(p => p.Author).ThenInclude(u => u.Building)
                                         .Include(p => p.Products).AsQueryable();
@@ -71,6 +71,9 @@ namespace Old_stuff_exchange.Repository.Implement
             model.FilterWith = model.FilterWith?.ToUpper();
             model.Status = model.Status?.ToUpper();
             #region Filtering
+            if (exceptUserId != null) {
+                allPost = allPost.Where(post => post.AuthorId != exceptUserId);
+            }
             if (apartmentId != null)
             {
                 allPost = allPost.Where(post => post.Author.Building.ApartmentId == apartmentId);

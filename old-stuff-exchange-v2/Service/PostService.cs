@@ -65,8 +65,8 @@ namespace Old_stuff_exchange.Service
             return await _postRepository.Delete(id);
         }
 
-        public async Task<List<Post>> GetList(Guid? apartmentId, Guid? categoryId,PagingModel model) {
-            return await _postRepository.GetList(apartmentId, categoryId, model);
+        public async Task<List<Post>> GetList(Guid? exceptUserId,Guid? apartmentId, Guid? categoryId,PagingModel model) {
+            return await _postRepository.GetList(exceptUserId,apartmentId, categoryId, model);
         }
 
         public async Task<Post> GetById(Guid id) {

@@ -14,7 +14,7 @@ namespace Old_stuff_exchange.Repository.Interface
         Task<Post> NotAcceptPost(Guid id);
         Task<bool> Delete(Guid id);
         Task<Post> GetPostById(Guid id);
-        Task<List<Post>> GetList(Guid? apartmentId, Guid? categoriesId, PagingModel model);
+        Task<List<Post>> GetList(Guid? exceptUserId,Guid? apartmentId, Guid? categoriesId, PagingModel model);
         Task<List<Post>> GetListByUserId(Guid userId, string status, int page, int pageSize);
     }
 }

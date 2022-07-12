@@ -58,7 +58,7 @@ namespace Old_stuff_exchange.Controllers
         [HttpGet()]
         [SwaggerOperation(Summary = "Get list post")]
         [Cache(1)]
-        public async Task<IActionResult> GetList(Guid? apartmentId, Guid? categoryId,string status, string filterWith, string filterValue, string sortBy, string sortType, int page = 1, int pageSize = 10)
+        public async Task<IActionResult> GetList(Guid? exceptAuthorId,Guid? apartmentId, Guid? categoryId,string status, string filterWith, string filterValue, string sortBy, string sortType, int page = 1, int pageSize = 10)
         {
             try
             {
@@ -72,7 +72,8 @@ namespace Old_stuff_exchange.Controllers
                     PageSize = pageSize,
                     Status = status
                 };
-                List<Post> posts = await _postService.GetList(apartmentId, categoryId, pagingModel);
+                List<Post> posts = await _postService.GetList(exceptAuthorId,apartmentId, categoryId, pagingModel);
+                
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -143,133 +144,6 @@ namespace Old_stuff_exchange.Controllers
             }
         }
 
-        /*[HttpPut("exchange/buy")]
-        [SwaggerOperation(Summary = "Buy post")]
-        public async Task<IActionResult> BuyPost(BuyPostModel model)
-        {
-            try
-            {
-                bool result = await _postService.BuyPost(model.UserId, model.PostId, model.WalletType);
-                if (result == false) return BadRequest();
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Data = _postService.GetById(model.PostId)
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    code = StatusCode(StatusCodes.Status500InternalServerError),
-                    exception = ex
-                });
-            }
-        }
-
-        [HttpPut("exchange/dilivered")]
-        [SwaggerOperation(Summary = "Dilivered post")]
-        public async Task<IActionResult> DeliveredPost(IdPostModel model)
-        {
-            try
-            {
-                Post postAuthorize = await _postService.GetById(model.PostId);
-                if (postAuthorize == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    bool verifyAuth = (await _authorizeService.AuthorizeAsync(User, postAuthorize, Operations.Update)).Succeeded;
-                    if (verifyAuth == false) return StatusCode(StatusCodes.Status403Forbidden);
-                }
-                Post result = await _postService.DeliveredPost(model.PostId);
-                if (result == null) return BadRequest();
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Data = result
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    code = StatusCode(StatusCodes.Status500InternalServerError),
-                    exception = ex
-                });
-            }
-        }
-
-        [HttpPut("exchange/accomplished")]
-        [SwaggerOperation(Summary = "Accomplished post")]
-        public async Task<IActionResult> AccomplishedPost(IdPostModel model)
-        {
-            try
-            {
-                Post postAuthorize = await _postService.GetById(model.PostId);
-                if (postAuthorize == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    bool verifyAuth = (await _authorizeService.AuthorizeAsync(User, postAuthorize, Operations.Dilivered)).Succeeded;
-                    if (verifyAuth == false) return StatusCode(StatusCodes.Status403Forbidden);
-                }
-                Post result = await _postService.AccomplishedPost(model.PostId);
-                if (result == null) return BadRequest();
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Data = result
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    code = StatusCode(StatusCodes.Status500InternalServerError),
-                    exception = ex
-                });
-            }
-        }
-
-        [HttpPut("exchange/failure")]
-        [SwaggerOperation(Summary = "Failure post")]
-        public async Task<IActionResult> FailurePost(IdPostModel model)
-        {
-            try
-            {
-                Post postAuthorize = await _postService.GetById(model.PostId);
-                if (postAuthorize == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    bool verifyAuth = (await _authorizeService.AuthorizeAsync(User, postAuthorize, Operations.Dilivered)).Succeeded;
-                    if (verifyAuth == false) return StatusCode(StatusCodes.Status403Forbidden);
-                }
-                Post result = await _postService.FailurePost(model.PostId);
-                if (result == null) return BadRequest();
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Data = result
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    code = StatusCode(StatusCodes.Status500InternalServerError),
-                    exception = ex
-                });
-            }
-        }
-*/
-
         [HttpPut()]
         [SwaggerOperation(Summary = "Update post")]
         public async Task<IActionResult> Update(UpdatePostModel model)
@@ -304,71 +178,6 @@ namespace Old_stuff_exchange.Controllers
                 });
             }
         }
-
-        /*[HttpPut("accept-post")]
-        [SwaggerOperation(Summary = "Accept post by id")]
-        [Authorize(Policy = PolicyName.ADMIN)]
-        public async Task<IActionResult> AcceptPost(IdPostModel model)
-        {
-            try
-            {
-                Post post = await _postService.AccepPost(model.PostId);
-                if (post == null)
-                {
-                    return BadRequest(new ApiResponse
-                    {
-                        Success = false,
-                        Message = "Post status not waiting to accept"
-                    });
-                }
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Data = post
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    code = StatusCode(StatusCodes.Status500InternalServerError),
-                    exception = ex
-                });
-            }
-        }
-
-        [HttpPut("not-accept-post")]
-        [SwaggerOperation(Summary = "Accept post by id")]
-        [Authorize(Policy = PolicyName.ADMIN)]
-        public async Task<IActionResult> NotAcceptPost(IdPostModel model)
-        {
-            try
-            {
-                Post post = await _postService.NotAccepPost(model.PostId);
-                if (post == null)
-                {
-                    return BadRequest(new ApiResponse
-                    {
-                        Success = false,
-                        Message = "Post status not waiting to inactive"
-                    });
-                }
-                return Ok(new ApiResponse
-                {
-                    Success = true,
-                    Data = post
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    code = StatusCode(StatusCodes.Status500InternalServerError),
-                    exception = ex
-                });
-            }
-        }
-*/
         [HttpPut("status")]
         [SwaggerOperation(Summary = "Action to change status post")]
         public async Task<IActionResult> ChangeStatus(PostStatusModel model)
