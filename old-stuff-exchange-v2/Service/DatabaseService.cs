@@ -197,6 +197,7 @@ namespace Old_stuff_exchange.Service
                 products.Add(product1);
                 products.Add(product2);
                 products.Add(product3);
+
             }
          
             _context.Products.AddRange(products);
