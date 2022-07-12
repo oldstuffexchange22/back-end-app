@@ -175,7 +175,7 @@ namespace Old_stuff_exchange.Service
                 .RuleFor(p => p.UserBought, faker => faker.PickRandom(listUserId))
                 .RuleFor(p => p.CreatedAt, faker => faker.Date.Between(new DateTime(2020,1,1), DateTime.Now));
             List<Post> posts = FakerPost.Generate(1000);
-
+            _context.Posts.AddRange(posts);
             // Generate product
             List<Product> products = new List<Product>();
             Faker<Product> FakerProduct = new Faker<Product>()
@@ -196,8 +196,9 @@ namespace Old_stuff_exchange.Service
                 posts[i].Price = product1.Price + product2.Price + product3.Price;
                 products.Add(product1);
                 products.Add(product2);
+                products.Add(product3);
             }
-            _context.Posts.AddRange(posts);
+         
             _context.Products.AddRange(products);
 
             // Generate deposit
