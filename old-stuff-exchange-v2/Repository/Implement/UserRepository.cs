@@ -3,8 +3,10 @@ using Old_stuff_exchange.Helper;
 using Old_stuff_exchange.Model;
 using Old_stuff_exchange.Repository.Interface;
 using old_stuff_exchange_v2.Entities;
+using old_stuff_exchange_v2.Enum.Currency;
 using old_stuff_exchange_v2.Enum.Role;
 using old_stuff_exchange_v2.Enum.User;
+using old_stuff_exchange_v2.Enum.Wallet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,7 +62,25 @@ namespace Old_stuff_exchange.Repository.Implement
                     Role = residentRole,
                     FullName = email,
                 };
+                Wallet defaultWallet = new Wallet
+                {
+                    Balance = 0,
+                    Type = WalletType.DEFAULT,
+                    Currency = Currency.XU,
+                    Status = WalletStatus.ACTIVE,
+                    User = newUser,
+                };
+                Wallet promotionWallet = new Wallet
+                {
+                    Balance = 0,
+                    Type = WalletType.PROMOTION,
+                    Currency = Currency.XU,
+                    Status = WalletStatus.ACTIVE,
+                    User = newUser,
+                };
                 _context.Users.Add(newUser);
+                _context.Wallets.Add(defaultWallet);
+                _context.Wallets.Add(promotionWallet);
                 _context.SaveChanges();
                 return _jwtHelper.generateJwtToken(newUser);
             }
