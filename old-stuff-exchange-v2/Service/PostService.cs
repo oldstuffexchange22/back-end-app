@@ -43,6 +43,11 @@ namespace Old_stuff_exchange.Service
             List<Product> products = model.Products.ConvertAll(p => new Product { 
             Name = p.Name, Description = p.Description, CategoryId = p.CategoryId, Price = p.Price, PostId = post.Id , Status = p.Status});
             post.Products = products;
+            decimal postPrice = 0;
+            foreach (Product product in products) {
+                postPrice += product.Price;
+            }
+            post.Price = postPrice;
             return await _postRepository.Create(post);
         }
 

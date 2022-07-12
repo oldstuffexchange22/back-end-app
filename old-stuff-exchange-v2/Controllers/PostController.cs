@@ -195,6 +195,7 @@ namespace Old_stuff_exchange.Controllers
                     if (verifyAuth == false) return StatusCode(StatusCodes.Status403Forbidden);
                 }
                 string statusUpdate = model.Status.ToUpper();
+                Guid userId = Guid.Parse(User.FindFirst("id").ToString());
                 switch (statusUpdate)
                 {
                     case PostStatus.ACTIVE:
@@ -207,7 +208,7 @@ namespace Old_stuff_exchange.Controllers
                         break;
                     case PostStatus.DELIVERY:
                         if (!statusUpdate.Equals(PostStatus.ACTIVE)) return BadRequest("Post is not active to buy");
-                        await _postService.BuyPost(model.UserId, model.PostId, model.WalletType);
+                        await _postService.BuyPost(userId, model.PostId, model.WalletType);
                         break;
                     case PostStatus.DELIVERED:
                         if (!statusUpdate.Equals(PostStatus.DELIVERY)) return BadRequest("Post is not delivery to change delivered");
