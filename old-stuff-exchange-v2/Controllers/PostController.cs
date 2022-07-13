@@ -192,7 +192,7 @@ namespace Old_stuff_exchange.Controllers
                 else
                 {
                     bool verifyAuth = (await _authorizeService.AuthorizeAsync(User, postAuthorize, Operations.Update)).Succeeded;
-                    if (verifyAuth == false && model.Status.ToUpper().Equals(PostStatus.DELIVERY)) return StatusCode(StatusCodes.Status403Forbidden);
+                    if (verifyAuth == false && !model.Status.ToUpper().Equals(PostStatus.DELIVERY)) return StatusCode(StatusCodes.Status403Forbidden);
                 }
                 string statusUpdate = model.Status.ToUpper();
                 Guid userId = Guid.Parse(User.FindFirst("id").ToString());
