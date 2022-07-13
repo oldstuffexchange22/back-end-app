@@ -166,6 +166,23 @@ namespace Old_stuff_exchange.Service
             {
                 if (users[i].Role != roleAdmin) listUserId.Add(users[i].Id);
             }
+            List<string> imageLink = new List<string>();
+            imageLink.Add("https://dogomynghehaiminh.vn/wp-content/uploads/2018/10/bo-ban-ghe-minh-nghe-huong-da-1--scaled.jpg");
+            imageLink.Add("https://noithathoangchi.com/upload/images/pham-thuy/thang-11/bo-ban-ghe-go-hien-dai/bo-ban-ghe-go-hien-dai-1-.jpg");
+            imageLink.Add("https://lavaco.vn/wp-content/uploads/2018/07/b%E1%BB%99-b%C3%A0n-gh%E1%BA%BF-cafe-ti%E1%BA%BFp-kh%C3%A1ch-hi%E1%BB%87n-%C4%91%E1%BA%A1i-v%E1%BB%9Bi-gh%E1%BA%BF-eames-trong-su%E1%BB%91t.jpg");
+            imageLink.Add("https://www.gothongphutrang.com/wp-content/uploads/2014/08/ban-ghe-go.jpg");
+            imageLink.Add("https://casper-electric.com/uploads/avatar_website_-_caspervietnam-03.png");
+            imageLink.Add("https://cdn.mediamart.vn/images/product/t-lnh-panasonic-inverter-234l-nr-bl263ppvn_6dde60dd.jpg");
+            imageLink.Add("https://cdn.nguyenkimmall.com/images/detailed/736/10049622-may-giat-casper-inverter-8-5-kg-wf-85i140bgb_gajl-te.jpg");
+            imageLink.Add("https://cdn01.dienmaycholon.vn/filewebdmclnew/DMCL21/Picture//Apro/Apro_product_25209/smart-tivi-32-i_main_946_1020.png.webp");
+            imageLink.Add("https://cellphones.com.vn/media/catalog/product/1/_/1_74_38_1.jpg");
+            imageLink.Add("https://suadieuhoa.edu.vn/wp-content/uploads/bat-dieu-hoa-lien-tuc.jpg");
+            imageLink.Add("https://daikin.vn/upload_images/images/2018/04/09/1.jpg");
+            imageLink.Add("https://maytinhanphat.vn/img/image/tin/840/nhung-dieu-can-biet-khi-mua-may-tinh-de-ban-nguyen-bo-1.png");
+            imageLink.Add("https://maytinhanphat.vn/img/image/tin/834/tam-quan-trong-cua-may-tinh-trong-thoi-dai-4-0-1.jpg");
+            imageLink.Add("https://fptshop.com.vn/Uploads/Originals/2022/4/12/637853607482187518_realme-c35-xanh-dd.jpg");
+            imageLink.Add("https://cdn.tgdd.vn/Products/Images/42/230529/iphone-13-pro-max-xanh-1.jpg");
+            
             Faker<Post> FakerPost = new Faker<Post>()
                 .RuleFor(p => p.Title, faker => faker.Lorem.Sentence(10))
                 .RuleFor(p => p.Description, faker => faker.Lorem.Sentences(2))
@@ -173,6 +190,7 @@ namespace Old_stuff_exchange.Service
                 .RuleFor(p => p.Status, faker => faker.PickRandom(PostStatus.ListPostSatus()))
                 .RuleFor(p => p.Author, faker => faker.PickRandom(users.Take(20)))
                 .RuleFor(p => p.UserBought, faker => faker.PickRandom(listUserId))
+                .RuleFor(p => p.ImageUrl, faker => faker.PickRandom(imageLink))
                 .RuleFor(p => p.CreatedAt, faker => faker.Date.Between(new DateTime(2020,1,1), DateTime.Now));
             List<Post> posts = FakerPost.Generate(1000);
             _context.Posts.AddRange(posts);
