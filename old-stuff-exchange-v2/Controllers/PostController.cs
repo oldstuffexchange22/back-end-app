@@ -195,31 +195,31 @@ namespace Old_stuff_exchange.Controllers
                     if (verifyAuth == false && !model.Status.ToUpper().Equals(PostStatus.DELIVERY)) return StatusCode(StatusCodes.Status403Forbidden);
                 }
                 string statusUpdate = model.Status.ToUpper();
-                Guid userId = Guid.Parse(User.FindFirst("id").ToString());
+                Guid userId = Guid.Parse(User.FindFirst("id").ToString().Replace("id: ", ""));
                 switch (statusUpdate)
                 {
                     case PostStatus.ACTIVE:
-                        if (!statusUpdate.Equals(PostStatus.WAITING)) return BadRequest("Post is not waiting to active");
+                        if (!postAuthorize.Status.Equals(PostStatus.WAITING)) return BadRequest("Post is not waiting to active");
                         await _postService.AccepPost(model.PostId);
                         break;
                     case PostStatus.INACTIVE:
-                        if (!statusUpdate.Equals(PostStatus.WAITING)) return BadRequest("Post is not waiting to inactive");
+                        if (!postAuthorize.Status.Equals(PostStatus.WAITING)) return BadRequest("Post is not waiting to inactive");
                         await _postService.NotAccepPost(model.PostId);
                         break;
                     case PostStatus.DELIVERY:
-                        if (!statusUpdate.Equals(PostStatus.ACTIVE)) return BadRequest("Post is not active to buy");
+                        if (!postAuthorize.Status.Equals(PostStatus.ACTIVE)) return BadRequest("Post is not active to buy");
                         await _postService.BuyPost(userId, model.PostId, model.WalletType);
                         break;
                     case PostStatus.DELIVERED:
-                        if (!statusUpdate.Equals(PostStatus.DELIVERY)) return BadRequest("Post is not delivery to change delivered");
+                        if (!postAuthorize.Status.Equals(PostStatus.DELIVERY)) return BadRequest("Post is not delivery to change delivered");
                         await _postService.DeliveredPost(model.PostId);
                         break;
                     case PostStatus.ACCOMPLISHED:
-                        if (!statusUpdate.Equals(PostStatus.DELIVERED)) return BadRequest("Post is not delivered to accomplished");
+                        if (!postAuthorize.Status.Equals(PostStatus.DELIVERED)) return BadRequest("Post is not delivered to accomplished");
                         await _postService.AccomplishedPost(model.PostId);
                         break;
                     case PostStatus.FAILURE:
-                        if (!statusUpdate.Equals(PostStatus.DELIVERED)) return BadRequest("Post is not delivered to failure");
+                        if (!postAuthorize.Status.Equals(PostStatus.DELIVERED)) return BadRequest("Post is not delivered to failure");
                         await _postService.FailurePost(model.PostId);
                         break;
                     default: return StatusCode(StatusCodes.Status400BadRequest);
