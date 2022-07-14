@@ -120,7 +120,6 @@ namespace Old_stuff_exchange.Controllers
         }
         [HttpGet("userBought/{userId}")]
         [SwaggerOperation(Summary = "Get list post by user bought")]
-        [Cache(1)]
         public async Task<IActionResult> GetListByUserBought(Guid userId, string status, int page = 1, int pageSize = 10)
         {
             try
