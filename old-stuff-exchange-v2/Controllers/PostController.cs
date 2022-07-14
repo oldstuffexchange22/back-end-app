@@ -230,7 +230,7 @@ namespace Old_stuff_exchange.Controllers
                         await _postService.AccepPost(model.PostId);
                         break;
                     case PostStatus.INACTIVE:
-                        if (!postAuthorize.Status.Equals(PostStatus.WAITING)) return BadRequest("Post is not waiting to inactive");
+                        if (!postAuthorize.Status.Equals(PostStatus.WAITING) && !postAuthorize.Status.Equals(PostStatus.ACTIVE)) return BadRequest("Post is not waiting to inactive");
                         await _postService.NotAccepPost(model.PostId);
                         break;
                     case PostStatus.DELIVERY:
