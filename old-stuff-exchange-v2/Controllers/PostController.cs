@@ -118,6 +118,34 @@ namespace Old_stuff_exchange.Controllers
                 });
             }
         }
+        [HttpGet("userBought/{userId}")]
+        [SwaggerOperation(Summary = "Get list post by user bought")]
+        [Cache(1)]
+        public async Task<IActionResult> GetListByUserBought(Guid userId, string status, int page = 1, int pageSize = 10)
+        {
+            try
+            {
+                List<Post> posts = await _postService.GetListByUserBought(userId, status, page, pageSize);
+                /*if (posts.Count > 0)
+                {
+                    bool verifyAuth = (await _authorizeService.AuthorizeAsync(User, posts[0], Operations.Read)).Succeeded;
+                    if (!verifyAuth) return StatusCode(StatusCodes.Status403Forbidden);
+                }*/
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Data = posts
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    code = StatusCode(StatusCodes.Status500InternalServerError),
+                    exception = ex
+                });
+            }
+        }
 
         [HttpPost]
         [SwaggerOperation(Summary = "Create new post")]

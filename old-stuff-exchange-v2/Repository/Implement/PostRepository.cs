@@ -168,5 +168,20 @@ namespace Old_stuff_exchange.Repository.Implement
             int result = await _context.SaveChangesAsync();
             return result > 0 ? post : null;
         }
+
+        public async Task<List<Post>> GetPostByUserBought(Guid userId, string status, int page, int pageSize)
+        {
+            User user = await _context.Users.FindAsync(userId);
+            if (user == null) return null;
+            IQueryable<Post> allPost = _context.Posts.Where(p => p.UserBought == userId).Include(p => p.Author).AsQueryable();
+            #region Filtering
+            if (!string.IsNullOrEmpty(status)) allPost = allPost.Where(p => p.Status.ToUpper().Equals(status.ToUpper()));
+            #endregion
+            #region Sorting and Paging
+            allPost = allPost.OrderByDescending(p => p.CreatedAt);
+            var result = PaginatedList<Post>.Create(allPost, page, pageSize);
+            #endregion
+            return await Task.FromResult(result.ToList());
+        }
     }
 }

@@ -81,6 +81,10 @@ namespace Old_stuff_exchange.Service
         public async Task<List<Post>> GetListByUserId(Guid userId, string status, int page, int pageSize) { 
             return await _postRepository.GetListByUserId(userId, status, page, pageSize);
         }
+        public async Task<List<Post>> GetListByUserBought(Guid userId, string status, int page, int pageSize)
+        {
+            return await _postRepository.GetPostByUserBought(userId, status, page, pageSize);
+        }
 
         public async Task<Post> AccepPost(Guid id) {
             return await _postRepository.AcceptPost(id);

@@ -16,5 +16,6 @@ namespace Old_stuff_exchange.Repository.Interface
         Task<Post> GetPostById(Guid id);
         Task<List<Post>> GetList(Guid? exceptUserId,Guid? apartmentId, Guid? categoriesId, PagingModel model);
         Task<List<Post>> GetListByUserId(Guid userId, string status, int page, int pageSize);
+        Task<List<Post>> GetPostByUserBought(Guid userId, string status, int page, int pageSize);
     }
 }
