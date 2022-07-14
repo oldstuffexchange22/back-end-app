@@ -185,7 +185,7 @@ namespace Old_stuff_exchange.Repository.Implement
             if (!string.IsNullOrEmpty(status)) allPost = allPost.Where(p => p.Status.ToUpper().Equals(status.ToUpper()));
             #endregion
             #region Sorting and Paging
-            allPost = allPost.OrderByDescending(p => p.CreatedAt);
+            allPost = allPost.OrderByDescending(p => p.LastUpdatedAt);
             var result = PaginatedList<Post>.Create(allPost, page, pageSize);
             #endregion
             return await Task.FromResult(result.ToList());
