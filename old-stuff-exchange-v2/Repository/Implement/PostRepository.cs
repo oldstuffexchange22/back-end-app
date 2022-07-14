@@ -136,7 +136,7 @@ namespace Old_stuff_exchange.Repository.Implement
             }
         }
 
-        public async Task<List<Post>> GetListByUserId(Guid userId, string status, int page, int pageSize)
+        public async Task<List<Post>> GetListByUserId(Guid userId, string status, int page, int pageSize, bool isOrderLastUpdate)
         {
             User user = await _context.Users.FindAsync(userId);
             if (user == null) return null;
@@ -145,7 +145,13 @@ namespace Old_stuff_exchange.Repository.Implement
             if (!string.IsNullOrEmpty(status)) allPost = allPost.Where(p => p.Status.ToUpper().Equals(status.ToUpper()));
             #endregion
             #region Sorting and Paging
-            allPost = allPost.OrderByDescending(p => p.CreatedAt);
+            if (isOrderLastUpdate)
+            {
+                allPost = allPost.OrderByDescending(p => p.LastUpdatedAt);
+            }
+            else {
+                allPost = allPost.OrderByDescending(p => p.CreatedAt);
+            }
             var result = PaginatedList<Post>.Create(allPost, page, pageSize);
             #endregion
             return await Task.FromResult(result.ToList());
@@ -163,6 +169,7 @@ namespace Old_stuff_exchange.Repository.Implement
             if (postDb != null) {
                 post.CreatedAt = postDb.CreatedAt;
                 post.AuthorId = postDb.AuthorId;
+                post.LastUpdatedAt = DateTime.UtcNow;
             }
             _context.Posts.Update(post);
             int result = await _context.SaveChangesAsync();

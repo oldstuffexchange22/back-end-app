@@ -15,7 +15,7 @@ namespace Old_stuff_exchange.Repository.Interface
         Task<bool> Delete(Guid id);
         Task<Post> GetPostById(Guid id);
         Task<List<Post>> GetList(Guid? exceptUserId,Guid? apartmentId, Guid? categoriesId, PagingModel model);
-        Task<List<Post>> GetListByUserId(Guid userId, string status, int page, int pageSize);
+        Task<List<Post>> GetListByUserId(Guid userId, string status, int page, int pageSize, bool isOrderLastUpdate);
         Task<List<Post>> GetPostByUserBought(Guid userId, string status, int page, int pageSize);
     }
 }
