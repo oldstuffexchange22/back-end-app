@@ -31,7 +31,7 @@ namespace Old_stuff_exchange.Repository.Implement
         public async Task<Post> NotAcceptPost(Guid id)
         {
             Post post = await _context.Posts.FindAsync(id);
-            if (post == null || post.Status != PostStatus.WAITING) return null;
+            if (post == null || (post.Status != PostStatus.WAITING && post.Status != PostStatus.ACTIVE)) return null;
             post.Status = PostStatus.INACTIVE;
             int result = await _context.SaveChangesAsync();
             return result > 0 ? post : null;
