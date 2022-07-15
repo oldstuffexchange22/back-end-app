@@ -55,7 +55,7 @@ namespace Old_stuff_exchange.Service
 
             // Generate user
             Faker fkUser = new Faker();
-            User userAdmin = new User
+           /* User userAdmin = new User
             {
                 UserName = "nvtan.a5@gmail.com",
                 Email = "nvtan.a5@gmail.com",
@@ -63,7 +63,7 @@ namespace Old_stuff_exchange.Service
                 Role = roleResident,
                 FullName = "nvtan.a5@gmail.com",
                 Building = fkUser.PickRandom(buildings)
-            };
+            };*/
             User userAdmin2 = new User
             {
                 UserName = "admin",
@@ -82,10 +82,10 @@ namespace Old_stuff_exchange.Service
                 .RuleFor(u => u.Gender, faker => faker.PickRandom(UserGender.GetGenders()))
                 .RuleFor(u => u.Building, faker => faker.PickRandom(buildings))
                 .RuleFor(u => u.Phone, faker => faker.Person.Phone);
-            _context.Add(userAdmin);
+            // _context.Add(userAdmin);
             _context.Add(userAdmin2);
             List<User> users = FakerUser.Generate(10);
-            users.Add(userAdmin);
+            // users.Add(userAdmin);
             _context.AddRange(users);
 
             // Generate wallet
