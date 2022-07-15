@@ -22,7 +22,7 @@ namespace Old_stuff_exchange.Service
         }
         public string Login(string email, UserRecord user)
         {
-            return _repo.Login(email);
+            return _repo.Login(email, user);
         }
         public async Task<User> GetById(Guid id) {
             return await _repo.GetById(id);

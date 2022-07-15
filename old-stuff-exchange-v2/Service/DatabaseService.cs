@@ -31,7 +31,7 @@ namespace Old_stuff_exchange.Service
 
             // Generate building
             Faker<Building> FakerBuilding = new Faker<Building>()
-                .RuleFor(b => b.Name, faker => faker.Lorem.Sentence(3))
+                .RuleFor(b => b.Name, faker => faker.Lorem.Sentence(2))
                 .RuleFor(b => b.Apartment, faker => faker.PickRandom(apartments))
                 .RuleFor(b => b.NumberFloor, faker => faker.Random.Int(3, 10))
                 .RuleFor(b => b.NumberRoom, faker => faker.Random.Int(30, 100))
@@ -193,6 +193,9 @@ namespace Old_stuff_exchange.Service
                 .RuleFor(p => p.ImageUrl, faker => faker.PickRandom(imageLink))
                 .RuleFor(p => p.CreatedAt, faker => faker.Date.Between(new DateTime(2020,1,1), DateTime.Now));
             List<Post> posts = FakerPost.Generate(1000);
+            for (int i = 0; i < 600; i++) {
+                posts[i].Status = PostStatus.ACTIVE;
+            }
             _context.Posts.AddRange(posts);
             // Generate product
             List<Product> products = new List<Product>();
