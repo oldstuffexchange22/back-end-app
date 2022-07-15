@@ -62,8 +62,7 @@ namespace old_stuff_exchange_v2.Controllers
                 FirebaseToken decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(loginModel.Token);
                 string uid = decodedToken.Uid;
                 UserRecord user = await FirebaseAuth.DefaultInstance.GetUserAsync(uid);
-
-                string response = _userService.Login(user.Email);
+                string response = _userService.Login(user.Email,user);
                 if (response == null || response == UserStatus.INACTIVE)
                 {
                     return BadRequest(new { message = "Token is invalid or account is blocked" });

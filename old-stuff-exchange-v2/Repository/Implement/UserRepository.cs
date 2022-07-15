@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FirebaseAdmin.Auth;
+using Microsoft.EntityFrameworkCore;
 using Old_stuff_exchange.Helper;
 using Old_stuff_exchange.Model;
 using Old_stuff_exchange.Repository.Interface;
@@ -46,7 +47,7 @@ namespace Old_stuff_exchange.Repository.Implement
             return await Task.FromResult(user);
         }
 
-        public string Login(string email)
+        public string Login(string email, UserRecord userFirebase)
         {
             if(string.IsNullOrEmpty(email)) return null;
             User user = _context.Users.Include(user => user.Role).Include(user => user.Building)
@@ -60,7 +61,9 @@ namespace Old_stuff_exchange.Repository.Implement
                     Email = email,
                     Status = UserStatus.INACTIVE,
                     Role = residentRole,
-                    FullName = email,
+                    FullName = userFirebase.DisplayName,
+                    Phone = userFirebase.PhoneNumber,
+                    ImagesUrl = userFirebase.PhotoUrl
                 };
                 Wallet defaultWallet = new Wallet
                 {

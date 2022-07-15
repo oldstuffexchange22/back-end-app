@@ -1,4 +1,5 @@
-﻿using Old_stuff_exchange.Model.User;
+﻿using FirebaseAdmin.Auth;
+using Old_stuff_exchange.Model.User;
 using Old_stuff_exchange.Repository.Interface;
 using old_stuff_exchange_v2.Entities;
 using old_stuff_exchange_v2.Entities.Extentions;
@@ -19,7 +20,7 @@ namespace Old_stuff_exchange.Service
         {
             return await _repo.Create(user);
         }
-        public string Login(string email)
+        public string Login(string email, UserRecord user)
         {
             return _repo.Login(email);
         }
