@@ -119,7 +119,7 @@ namespace Old_stuff_exchange.Service
             // transaction for user bought wallet
             Transaction userTransaction = new Transaction
             {
-                Description = user.Email + " buy the post id : " + post.Id,
+                Description = "Mua bài đăng : " + post.Title,
                 Status = TransactionStatus.SUCCESS,
                 Type = TransactionType.BOUGHT,
                 CoinExchange = post.Price,
@@ -168,7 +168,7 @@ namespace Old_stuff_exchange.Service
             // transaction for system wallet
             Transaction systemTransaction = new Transaction
             {
-                Description = userMakePost.Email + " sell the post id : " + post.Id,
+                Description = userMakePost.Email + " sell the post : " + post.Title,
                 Status = TransactionStatus.SUCCESS,
                 Type = TransactionType.SELL,
                 CoinExchange = post.Price,
@@ -180,7 +180,7 @@ namespace Old_stuff_exchange.Service
             // transaction for user sell wallet
             Transaction userTransaction = new Transaction
             {
-                Description = userMakePost.Email + " sell the post id : " + post.Id,
+                Description = "Bán bài đăng : " + post.Title,
                 Status = TransactionStatus.SUCCESS,
                 Type = TransactionType.SELL,
                 CoinExchange = post.Price,
@@ -233,7 +233,7 @@ namespace Old_stuff_exchange.Service
             // transaction for user bought wallet
             Transaction userTransaction = new Transaction
             {
-                Description = userBought.Email + " sell the post id : " + post.Id,
+                Description ="Hoàn tiền cho bài đăng : " + post.Title,
                 Status = TransactionStatus.SUCCESS,
                 Type = TransactionType.REFUND,
                 CoinExchange = post.Price,

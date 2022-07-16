@@ -32,7 +32,7 @@ namespace old_stuff_exchange_v2.Service
             Deposit deposit = await _repoDeposit.Create(new Deposit
             {
                 WalletElectricName = model.WalletElectricName,
-                Description = model.Description,
+                Description = model.Description,  
                 Amount = model.Amount,
                 UserId = model.UserId,
             }) ;
@@ -47,7 +47,7 @@ namespace old_stuff_exchange_v2.Service
             defaultWallet.Balance = defaultWallet.Balance + (coinExchange * 9) / 10;  // 90% 
             Transaction defaultTransaction = new Transaction
             {
-                Description = "RECHARGE FROM : " + model.WalletElectricName + " DEFAULT WALLET",
+                Description = "Nạp tiền từ : " + model.WalletElectricName + " (Ví chính)",
                 Status = TransactionStatus.SUCCESS,
                 Type = TransactionType.RECHARGE,
                 CoinExchange = (coinExchange * 9) / 10,
@@ -59,7 +59,7 @@ namespace old_stuff_exchange_v2.Service
             promotionWallet.Balance = promotionWallet.Balance + coinExchange / 10;
             Transaction promotionTransaction = new Transaction
             {
-                Description = "RECHARGE FROM : " + model.WalletElectricName + " PROMOTION WALLET",
+                Description = "Khuyến mãi từ : " + model.WalletElectricName + " (Ví khuyến mãi)",
                 Status = TransactionStatus.SUCCESS,
                 Type = TransactionType.RECHARGE,
                 CoinExchange = coinExchange / 10,
