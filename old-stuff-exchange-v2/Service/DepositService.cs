@@ -47,7 +47,7 @@ namespace old_stuff_exchange_v2.Service
             defaultWallet.Balance = defaultWallet.Balance + (coinExchange * 9) / 10;  // 90% 
             Transaction defaultTransaction = new Transaction
             {
-                Description = "RECHARGE FROM : " + model.WalletElectricName,
+                Description = "RECHARGE FROM : " + model.WalletElectricName + " DEFAULT WALLET",
                 Status = TransactionStatus.SUCCESS,
                 Type = TransactionType.RECHARGE,
                 CoinExchange = (coinExchange * 9) / 10,

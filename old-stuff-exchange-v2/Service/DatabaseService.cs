@@ -137,7 +137,7 @@ namespace Old_stuff_exchange.Service
 
             // Generate category
             Faker<Category> FakerCategory = new Faker<Category>()
-                .RuleFor(c => c.Name, faker => faker.Lorem.Sentence(3, 4))
+                .RuleFor(c => c.Name, faker => faker.Lorem.Sentence(2))
                 .RuleFor(c => c.Description, faker => faker.Lorem.Sentence(20));
             List<Category> categories = FakerCategory.Generate(4);
             _context.AddRange(categories);
@@ -145,7 +145,7 @@ namespace Old_stuff_exchange.Service
 
             List<Category> parentCategories = _context.Categories.ToList();
             Faker<Category> FakerChilrenCategory = new Faker<Category>()
-                .RuleFor(c => c.Name, faker => faker.Lorem.Sentence(3, 4))
+                .RuleFor(c => c.Name, faker => faker.Lorem.Sentence(2))
                 .RuleFor(c => c.Description, faker => faker.Lorem.Sentence(6))
                 .RuleFor(c => c.Parent, faker => faker.PickRandom(parentCategories));
             List<Category> chilrenCategories = FakerChilrenCategory.Generate(10);
@@ -153,7 +153,7 @@ namespace Old_stuff_exchange.Service
             _context.SaveChanges();
 
             Faker<Category> FakerChilrenOfChilrenCategory = new Faker<Category>()
-                .RuleFor(c => c.Name, faker => faker.Lorem.Sentence(3, 4))
+                .RuleFor(c => c.Name, faker => faker.Lorem.Sentence(2))
                 .RuleFor(c => c.Description, faker => faker.Lorem.Sentence(6))
                 .RuleFor(c => c.Parent, faker => faker.PickRandom(chilrenCategories));
             List<Category> chilrenOfChilrenCategories = FakerChilrenCategory.Generate(10);
