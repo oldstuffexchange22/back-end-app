@@ -36,7 +36,7 @@ namespace old_stuff_exchange_v2.Service
                 Amount = model.Amount,
                 UserId = model.UserId,
             }) ;
-            int coinExchange = Convert.ToInt32(model.Amount / 1000);
+            int coinExchange = Convert.ToInt32(model.Amount);
             List<Wallet> userWallets = await _repoWallet.FindByUserId(model.UserId);
             Wallet defaultWallet = userWallets.SingleOrDefault(w => w.Type == WalletType.DEFAULT);
             Wallet promotionWallet = userWallets.SingleOrDefault(w => w.Type == WalletType.PROMOTION);
@@ -47,7 +47,7 @@ namespace old_stuff_exchange_v2.Service
             defaultWallet.Balance = defaultWallet.Balance + (coinExchange * 9) / 10;  // 90% 
             Transaction defaultTransaction = new Transaction
             {
-                Description = "RECHARGE from " + model.WalletElectricName,
+                Description = "RECHARGE FROM : " + model.WalletElectricName,
                 Status = TransactionStatus.SUCCESS,
                 Type = TransactionType.RECHARGE,
                 CoinExchange = (coinExchange * 9) / 10,
@@ -59,7 +59,7 @@ namespace old_stuff_exchange_v2.Service
             promotionWallet.Balance = promotionWallet.Balance + coinExchange / 10;
             Transaction promotionTransaction = new Transaction
             {
-                Description = "RECHARGE from " + model.WalletElectricName + " promotion",
+                Description = "RECHARGE FROM : " + model.WalletElectricName + " PROMOTION WALLET",
                 Status = TransactionStatus.SUCCESS,
                 Type = TransactionType.RECHARGE,
                 CoinExchange = coinExchange / 10,
@@ -71,7 +71,7 @@ namespace old_stuff_exchange_v2.Service
             chairityWallet.Balance = chairityWallet.Balance + coinExchange / 10;
             Transaction chairityTransaction = new Transaction
             {
-                Description = "RECHARGE from " + model.WalletElectricName + " chairity",
+                Description = "RECHARGE FROM " + model.WalletElectricName + " CHAIRITY",
                 Status = TransactionStatus.SUCCESS,
                 Type = TransactionType.RECHARGE,
                 CoinExchange = coinExchange / 10,
