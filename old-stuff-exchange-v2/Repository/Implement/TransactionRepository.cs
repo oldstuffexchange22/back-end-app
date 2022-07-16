@@ -65,5 +65,23 @@ namespace old_stuff_exchange_v2.Repository.Implement
             return await Task.FromResult(result.ToList());
         }
 
+        public async Task<List<Transaction>> GetByWalletId(Guid WalletId, int page, int pageSize)
+        {
+            IQueryable<Transaction> allTransactions = _context.Transactions.Include(t => t.Wallet).AsQueryable();
+
+            #region Filtering
+            allTransactions = allTransactions.Where(t => t.WalletId == WalletId);
+            #endregion
+
+            #region Sorting
+            allTransactions = allTransactions.OrderByDescending(t => t.CreatedAt);
+            #endregion
+
+            #region Paging
+            var result = PaginatedList<Transaction>.Create(allTransactions, page, pageSize);
+            #endregion
+            return await Task.FromResult(result.ToList());
+        }
+
     }
 }

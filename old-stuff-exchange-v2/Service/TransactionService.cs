@@ -21,5 +21,10 @@ namespace old_stuff_exchange_v2.Service
         public async Task<List<Transaction>> GetByUserId(Guid userId, int page, int pageSize) { 
             return await _repo.GetByUserId(userId, page, pageSize);
         }
+
+        public async Task<List<Transaction>> GetByWaleltId(Guid walletId, int page, int pageSize)
+        {
+            return await _repo.GetByWalletId(walletId, page, pageSize);
+        }
     }
 }

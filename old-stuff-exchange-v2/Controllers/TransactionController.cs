@@ -81,5 +81,33 @@ namespace old_stuff_exchange_v2.Controllers
                 return BadRequest(ex);
             }
         }
+
+        [HttpGet("wallet/{walletId}")]
+        [SwaggerOperation(Summary = "Get transaction by wallet id")]
+        public async Task<IActionResult> GetByWalletId(Guid walletId, int page = 1, int pageSize = 10)
+        {
+            try
+            {
+                List<Transaction> transactions = await _transactionService.GetByWaleltId(walletId, page, pageSize);
+                /*if (transactions == null || transactions.Count == 0)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    bool verifyAuth = (await _authorizationService.AuthorizeAsync(User, transactions[0], Operations.Read)).Succeeded;
+                    if (verifyAuth == false) return StatusCode(StatusCodes.Status403Forbidden);
+                }*/
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Data = transactions
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
     }
 }
