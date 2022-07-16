@@ -61,15 +61,8 @@ namespace old_stuff_exchange_v2.Controllers
             try
             {
                 List<Transaction> transactions = await _transactionService.GetByUserId(userId, page, pageSize);
-                if (transactions == null || transactions.Count == 0)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    bool verifyAuth = (await _authorizationService.AuthorizeAsync(User, transactions[0], Operations.Read)).Succeeded;
-                    if (verifyAuth == false) return StatusCode(StatusCodes.Status403Forbidden);
-                }
+                bool verifyAuth = (await _authorizationService.AuthorizeAsync(User, transactions[0], Operations.Read)).Succeeded;
+                if (verifyAuth == false) return StatusCode(StatusCodes.Status403Forbidden);
                 return Ok(new ApiResponse
                 {
                     Success = true,
