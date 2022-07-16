@@ -32,7 +32,7 @@ namespace old_stuff_exchange_v2.Service
             Deposit deposit = await _repoDeposit.Create(new Deposit
             {
                 WalletElectricName = model.WalletElectricName,
-                Description = model.Descripion,
+                Description = model.Description,
                 Amount = model.Amount,
                 UserId = model.UserId,
             }) ;
