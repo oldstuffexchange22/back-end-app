@@ -105,6 +105,7 @@ namespace Old_stuff_exchange.Repository.Implement
                 return false;
             }
             newUser.UserName = user.UserName;
+            newUser.CreatedAt = user.CreatedAt;
             _context.Users.Update(newUser);
             await _context.SaveChangesAsync();
             return true;

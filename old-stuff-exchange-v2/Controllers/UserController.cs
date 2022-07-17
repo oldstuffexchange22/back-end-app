@@ -220,7 +220,7 @@ namespace Old_stuff_exchange.Controllers
                 return Ok(new ApiResponse { 
                     Success = true,
                     Message = "Update user success",
-                    Data = user
+                    Data = await _userService.GetById(user.Id)
                 });
             }
             catch (Exception ex) {
