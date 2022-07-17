@@ -217,11 +217,12 @@ namespace Old_stuff_exchange.Controllers
                 }
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
                 await _cacheService.RemoveCacheResponseAsync(controllerName);
-                return Ok(new ApiResponse { 
+                return Ok(new ApiResponse
+                {
                     Success = true,
                     Message = "Update user success",
-                    Data = await _userService.GetById(user.Id)
-                });
+                    Data = (await _userService.GetById(user.Id)).ToResponseModel()
+                }); 
             }
             catch (Exception ex) {
                 return BadRequest(new
