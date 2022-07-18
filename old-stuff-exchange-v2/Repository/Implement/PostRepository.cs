@@ -3,9 +3,11 @@ using Microsoft.EntityFrameworkCore.Query;
 using Old_stuff_exchange.Model;
 using Old_stuff_exchange.Repository.Interface;
 using old_stuff_exchange_v2.Entities;
+using old_stuff_exchange_v2.Entities.Extentions;
 using old_stuff_exchange_v2.Enum.Post;
 using old_stuff_exchange_v2.Enum.Sort;
 using old_stuff_exchange_v2.Model;
+using old_stuff_exchange_v2.Model.Post;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,7 +58,7 @@ namespace Old_stuff_exchange.Repository.Implement
             return result > 0;
         }
 
-        public async Task<List<Post>> GetList(Guid? exceptUserId,Guid? apartmentId, Guid? categoryId, PagingModel model)
+        public async Task<List<ResponsePostModel>> GetList(Guid? exceptUserId,Guid? apartmentId, Guid? categoryId, PagingModel model)
         {
             var allPost = _context.Posts.Include(p => p.Author).ThenInclude(u => u.Building)
                                         .Include(p => p.Products).AsQueryable();
@@ -120,7 +122,15 @@ namespace Old_stuff_exchange.Repository.Implement
             #region Paging
             var result = PaginatedList<Post>.Create(allPost, model.Page, model.PageSize);
             #endregion
-            return await Task.FromResult(result.ToList());
+            List<ResponsePostModel> response = result.ToList().ConvertAll<ResponsePostModel>(post => post.ToResponseModel());
+            int size = response.Count;
+            for (int i = 0; i < size; i++)
+            {
+                if (response[i].UserBought != null) {
+                    response[i].UserBoughtObject = _context.Users.Find(response[i].UserBought).ToResponseModel();
+                }
+            }
+            return await Task.FromResult(response);
 
         }
 

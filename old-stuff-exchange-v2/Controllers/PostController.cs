@@ -72,7 +72,7 @@ namespace Old_stuff_exchange.Controllers
                     PageSize = pageSize,
                     Status = status
                 };
-                List<Post> posts = await _postService.GetList(exceptAuthorId,apartmentId, categoryId, pagingModel);
+                List<ResponsePostModel> posts = await _postService.GetList(exceptAuthorId,apartmentId, categoryId, pagingModel);
                 
                 return Ok(new ApiResponse
                 {

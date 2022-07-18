@@ -15,7 +15,9 @@ namespace old_stuff_exchange_v2.Model.Post
         public DateTime LastUpdatedAt { get; set; }
         public DateTime? PublishedAt { get; set; }
         public string Status { get; set; }
+        public Guid AuthorId { get; set; }
         public ResponseUserModel Author { get; set; }
         public Guid? UserBought { get; set; }
+        public ResponseUserModel UserBoughtObject { get; set; }
     }
 }

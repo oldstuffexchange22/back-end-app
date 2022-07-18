@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using old_stuff_exchange_v2.Enum.Transaction;
 using old_stuff_exchange_v2.Enum.Wallet;
 using Old_stuff_exchange.Model.Product;
+using old_stuff_exchange_v2.Model.Post;
 
 namespace Old_stuff_exchange.Service
 {
@@ -70,7 +71,7 @@ namespace Old_stuff_exchange.Service
             return await _postRepository.Delete(id);
         }
 
-        public async Task<List<Post>> GetList(Guid? exceptUserId,Guid? apartmentId, Guid? categoryId,PagingModel model) {
+        public async Task<List<ResponsePostModel>> GetList(Guid? exceptUserId,Guid? apartmentId, Guid? categoryId,PagingModel model) {
             return await _postRepository.GetList(exceptUserId,apartmentId, categoryId, model);
         }
 
