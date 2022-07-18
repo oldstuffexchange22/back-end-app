@@ -79,10 +79,10 @@ namespace Old_stuff_exchange.Service
             return await _postRepository.GetPostById(id);
         }
 
-        public async Task<List<Post>> GetListByUserId(Guid userId, string status, int page, int pageSize, bool isOrderLastUpdate) { 
+        public async Task<List<ResponsePostModel>> GetListByUserId(Guid userId, string status, int page, int pageSize, bool isOrderLastUpdate) { 
             return await _postRepository.GetListByUserId(userId, status, page, pageSize, isOrderLastUpdate);
         }
-        public async Task<List<Post>> GetListByUserBought(Guid userId, string status, int page, int pageSize)
+        public async Task<List<ResponsePostModel>> GetListByUserBought(Guid userId, string status, int page, int pageSize)
         {
             return await _postRepository.GetPostByUserBought(userId, status, page, pageSize);
         }

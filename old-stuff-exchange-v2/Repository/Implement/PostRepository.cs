@@ -122,6 +122,7 @@ namespace Old_stuff_exchange.Repository.Implement
             #region Paging
             var result = PaginatedList<Post>.Create(allPost, model.Page, model.PageSize);
             #endregion
+            #region convert response model
             List<ResponsePostModel> response = result.ToList().ConvertAll<ResponsePostModel>(post => post.ToResponseModel());
             int size = response.Count;
             for (int i = 0; i < size; i++)
@@ -130,6 +131,7 @@ namespace Old_stuff_exchange.Repository.Implement
                     response[i].UserBoughtObject = _context.Users.Find(response[i].UserBought).ToResponseModel();
                 }
             }
+            #endregion
             return await Task.FromResult(response);
 
         }
@@ -147,7 +149,7 @@ namespace Old_stuff_exchange.Repository.Implement
             }
         }
 
-        public async Task<List<Post>> GetListByUserId(Guid userId, string status, int page, int pageSize, bool isOrderLastUpdate)
+        public async Task<List<ResponsePostModel>> GetListByUserId(Guid userId, string status, int page, int pageSize, bool isOrderLastUpdate)
         {
             User user = await _context.Users.FindAsync(userId);
             if (user == null) return null;
@@ -165,7 +167,18 @@ namespace Old_stuff_exchange.Repository.Implement
             }
             var result = PaginatedList<Post>.Create(allPost, page, pageSize);
             #endregion
-            return await Task.FromResult(result.ToList());
+            #region convert response model
+            List<ResponsePostModel> response = result.ToList().ConvertAll<ResponsePostModel>(post => post.ToResponseModel());
+            int size = response.Count;
+            for (int i = 0; i < size; i++)
+            {
+                if (response[i].UserBought != null)
+                {
+                    response[i].UserBoughtObject = _context.Users.Find(response[i].UserBought).ToResponseModel();
+                }
+            }
+            #endregion
+            return await Task.FromResult(response);
         }
 
         public async Task<Post> GetPostById(Guid id)
@@ -187,7 +200,7 @@ namespace Old_stuff_exchange.Repository.Implement
             return result > 0 ? post : null;
         }
 
-        public async Task<List<Post>> GetPostByUserBought(Guid userId, string status, int page, int pageSize)
+        public async Task<List<ResponsePostModel>> GetPostByUserBought(Guid userId, string status, int page, int pageSize)
         {
             User user = await _context.Users.FindAsync(userId);
             if (user == null) return null;
@@ -199,7 +212,18 @@ namespace Old_stuff_exchange.Repository.Implement
             allPost = allPost.OrderByDescending(p => p.LastUpdatedAt);
             var result = PaginatedList<Post>.Create(allPost, page, pageSize);
             #endregion
-            return await Task.FromResult(result.ToList());
+            #region convert response model
+            List<ResponsePostModel> response = result.ToList().ConvertAll<ResponsePostModel>(post => post.ToResponseModel());
+            int size = response.Count;
+            for (int i = 0; i < size; i++)
+            {
+                if (response[i].UserBought != null)
+                {
+                    response[i].UserBoughtObject = _context.Users.Find(response[i].UserBought).ToResponseModel();
+                }
+            }
+            #endregion
+            return await Task.FromResult(response);
         }
     }
 }
