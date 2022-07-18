@@ -174,7 +174,7 @@ namespace Old_stuff_exchange.Repository.Implement
             {
                 if (response[i].UserBought != null)
                 {
-                    response[i].UserBoughtObject = _context.Users.Find(response[i].UserBought).ToResponseModel();
+                    response[i].UserBoughtObject = _context.Users.Include(u => u.Building).FirstOrDefault(u => u.Id == response[i].UserBought).ToResponseModel();
                 }
             }
             #endregion
