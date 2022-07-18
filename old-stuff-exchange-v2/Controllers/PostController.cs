@@ -99,10 +99,10 @@ namespace Old_stuff_exchange.Controllers
             try
             {
                 List<ResponsePostModel> posts = await _postService.GetListByUserId(userId, status, page, pageSize, isOrderLastUpdate);
-                if (posts.Count > 0) {
+                /*if (posts.Count > 0) {
                     bool verifyAuth = (await _authorizeService.AuthorizeAsync(User, posts[0], Operations.Read)).Succeeded;
                     if (!verifyAuth) return StatusCode(StatusCodes.Status403Forbidden);
-                }
+                }*/
                 return Ok(new ApiResponse
                 {
                     Success = true,
