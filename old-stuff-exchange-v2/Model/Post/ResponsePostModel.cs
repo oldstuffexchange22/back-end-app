@@ -1,5 +1,7 @@
 ﻿using Old_stuff_exchange.Model.User;
+using ProductEnitty = old_stuff_exchange_v2.Entities.Product;
 using System;
+using System.Collections.Generic;
 
 namespace old_stuff_exchange_v2.Model.Post
 {
@@ -19,5 +21,6 @@ namespace old_stuff_exchange_v2.Model.Post
         public ResponseUserModel Author { get; set; }
         public Guid? UserBought { get; set; }
         public ResponseUserModel UserBoughtObject { get; set; }
+        public List<ProductEnitty> Products { get; set; }
     }
 }

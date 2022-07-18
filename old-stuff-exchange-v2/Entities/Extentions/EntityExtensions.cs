@@ -8,6 +8,7 @@ using old_stuff_exchange_v2.Model.Product;
 using old_stuff_exchange_v2.Model.Role;
 using old_stuff_exchange_v2.Model.Transaction;
 using old_stuff_exchange_v2.Model.Wallet;
+using System.Linq;
 
 namespace old_stuff_exchange_v2.Entities.Extentions
 {
@@ -81,6 +82,7 @@ namespace old_stuff_exchange_v2.Entities.Extentions
             model.Status = post.Status;
             model.UserBought = post.UserBought;
             model.Author = post.Author?.ToResponseModel();
+            model.Products = post.Products.ToList();
             return model;
         }
         public static ResponseProductModel ToResponseModel(this Product product) { 
