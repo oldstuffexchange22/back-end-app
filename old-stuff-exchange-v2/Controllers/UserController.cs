@@ -217,6 +217,7 @@ namespace Old_stuff_exchange.Controllers
                 }
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
                 await _cacheService.RemoveCacheResponseAsync(controllerName);
+                await _cacheService.RemoveCacheResponseAsync("post");
                 return Ok(new ApiResponse
                 {
                     Success = true,
