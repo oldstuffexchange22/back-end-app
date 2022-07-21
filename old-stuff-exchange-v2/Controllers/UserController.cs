@@ -23,17 +23,17 @@ namespace Old_stuff_exchange.Controllers
     {
         private readonly UserService _userService;
         private readonly IAuthorizationService _authorizationService;
-        private readonly CacheService _cacheService;
-        public UserController(UserService service, IAuthorizationService authorizationService, CacheService cacheService)
+        // private readonly CacheService _cacheService;
+        public UserController(UserService service, IAuthorizationService authorizationService)
         {
             _userService = service;
             _authorizationService = authorizationService;
-            _cacheService = cacheService;
+            // _cacheService = cacheService;
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get information user by id")]
-        [Cache(1)]
+        // [Cache(1)]
         public async Task<ActionResult> GetById(Guid id)
         {
             try
@@ -89,7 +89,7 @@ namespace Old_stuff_exchange.Controllers
         [HttpGet()]
         [SwaggerOperation(Summary = "Get information user by email, by roleId and pagination")]
         [Authorize(Policy = PolicyName.ADMIN)]
-        [Cache(1)]
+        // [Cache(1)]
         public async Task<ActionResult> GetList(string email, Guid? roleId, int pageNumber = 1, int pageSize = 10)
         {
             try
@@ -133,7 +133,7 @@ namespace Old_stuff_exchange.Controllers
                     return BadRequest(new { message = "Email has exist" });
                 }
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                await _cacheService.RemoveCacheResponseAsync(controllerName);
+                // await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new
                 {
                     Success = true,
@@ -170,7 +170,7 @@ namespace Old_stuff_exchange.Controllers
                 User user = await _userService.UpdateUserAddress(userId, buildingId);
                 if (user == null) return BadRequest();
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                await _cacheService.RemoveCacheResponseAsync(controllerName);
+                // await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -216,8 +216,8 @@ namespace Old_stuff_exchange.Controllers
                     return BadRequest();
                 }
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                await _cacheService.RemoveCacheResponseAsync(controllerName);
-                await _cacheService.RemoveCacheResponseAsync("post");
+                // await _cacheService.RemoveCacheResponseAsync(controllerName);
+                // await _cacheService.RemoveCacheResponseAsync("post");
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -257,7 +257,7 @@ namespace Old_stuff_exchange.Controllers
                     return NotFound();
                 }
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                await _cacheService.RemoveCacheResponseAsync(controllerName);
+                // await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = check,

@@ -18,17 +18,17 @@ namespace old_stuff_exchange_v2.Controllers
     {
         private readonly TransactionService _transactionService;
         private readonly IAuthorizationService _authorizationService;
-        private readonly CacheService _cacheService;
-        public TransactionController(TransactionService service, IAuthorizationService authorizationService, CacheService cacheService)
+        // private readonly CacheService _cacheService;
+        public TransactionController(TransactionService service, IAuthorizationService authorizationService)
         {
             _transactionService = service;
             _authorizationService = authorizationService;
-            _cacheService = cacheService;
+            // _cacheService = cacheService;
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get transaction by Id")]
-        [Cache(1)]
+        // [Cache(1)]
         public async Task<IActionResult> GetById(Guid id)
         {
             try

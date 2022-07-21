@@ -19,16 +19,16 @@ namespace Old_stuff_exchange.Controllers
     public class RoleController : BaseApiController
     {
         private readonly RoleService _roleService;
-        private readonly CacheService _cacheService;
-        public RoleController(RoleService service, CacheService cacheService)
+        // private readonly CacheService _cacheService;
+        public RoleController(RoleService service)
         {
             _roleService = service;
-            _cacheService = cacheService;
+            // _cacheService = cacheService;
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get role by Id")]
-        [Cache(1)]
+        // [Cache(1)]
         public async Task<IActionResult> GetById(Guid id)
         {
             Role role = await _roleService.GetById(id);
@@ -43,7 +43,7 @@ namespace Old_stuff_exchange.Controllers
         }
         [HttpGet()]
         [SwaggerOperation(Summary = "Get list role")]
-        [Cache(1)]
+        // [Cache(1)]
         public async Task<IActionResult> GetList()
         {
             List<Role> listRoles = await _roleService.GetList();
@@ -67,7 +67,7 @@ namespace Old_stuff_exchange.Controllers
                 };
                 await _roleService.Create(role);
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                await _cacheService.RemoveCacheResponseAsync(controllerName);
+                // await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -100,7 +100,7 @@ namespace Old_stuff_exchange.Controllers
                     return NotFound();
                 }
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                await _cacheService.RemoveCacheResponseAsync(controllerName);
+                // await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -129,7 +129,7 @@ namespace Old_stuff_exchange.Controllers
                     return NotFound();
                 }
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                await _cacheService.RemoveCacheResponseAsync(controllerName);
+                // await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return NoContent();
             }
             catch (Exception ex) {

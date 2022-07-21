@@ -21,16 +21,16 @@ namespace Old_stuff_exchange.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly CategoryService _categoryService;
-        private readonly CacheService _cacheService;
-        public CategoryController(CategoryService service, CacheService cacheService)
+        // private readonly CacheService _cacheService;
+        public CategoryController(CategoryService service)
         {
             _categoryService = service;
-            _cacheService = cacheService;
+            // _cacheService = cacheService;
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get category with id")]
-        [Cache(1)]
+        // [Cache(1)]
         public async Task<IActionResult> GetById(Guid id)
         {
             try
@@ -54,7 +54,7 @@ namespace Old_stuff_exchange.Controllers
         [HttpGet()]
         [SwaggerOperation(Summary = "Get list categories")]
         [AllowAnonymous]
-        [Cache(1)]
+        // [Cache(1)]
         public async Task<IActionResult> GetList(string name, int page = 1, int pageSize = 10) {
             try
             {
@@ -81,7 +81,7 @@ namespace Old_stuff_exchange.Controllers
             {
                 Category result = await _categoryService.Update(category);
                 if (result == null) return BadRequest();;
-                await _cacheService.RemoveCacheResponseAsync("categories");
+                // await _cacheService.RemoveCacheResponseAsync("categories");
                 return Ok(new ApiResponse {
                     Success = true,
                     Data = result
@@ -106,7 +106,7 @@ namespace Old_stuff_exchange.Controllers
                 Category result = await _categoryService.Create(model);
                 if (result == null) return BadRequest();
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                await _cacheService.RemoveCacheResponseAsync("categories");
+                // await _cacheService.RemoveCacheResponseAsync("categories");
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -132,7 +132,7 @@ namespace Old_stuff_exchange.Controllers
                 bool result = await _categoryService.Delete(id);
                 if(!result) return BadRequest();
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                await _cacheService.RemoveCacheResponseAsync("categories");
+                // await _cacheService.RemoveCacheResponseAsync("categories");
                 return Ok(new ApiResponse
                 {
                     Success = result

@@ -19,18 +19,18 @@ namespace old_stuff_exchange_v2.Controllers
     {
         private readonly DepositService _depositService;
         private readonly IAuthorizationService _authorizationService;
-        private readonly CacheService _cacheService;
+        // private readonly CacheService _cacheService;
 
-        public DepositController(DepositService depositService, IAuthorizationService authorizationService, CacheService cacheService)
+        public DepositController(DepositService depositService, IAuthorizationService authorizationService)
         {
             _depositService = depositService;
             _authorizationService = authorizationService;
-            _cacheService = cacheService;
+        
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get deposit by Id")]
-        [Cache(1)]
+        // [Cache(1)]
         public async Task<IActionResult> GetById(Guid id)
         {
             try

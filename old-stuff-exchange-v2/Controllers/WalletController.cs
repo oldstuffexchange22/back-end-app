@@ -19,18 +19,18 @@ namespace old_stuff_exchange_v2.Controllers
     {
         private readonly WalletService _walletService;
         private readonly IAuthorizationService _authorizationService;
-        private readonly CacheService _cacheService;
-        public WalletController(WalletService service, IAuthorizationService authorizationService, CacheService cacheService)
+        // private readonly CacheService _cacheService;
+        public WalletController(WalletService service, IAuthorizationService authorizationService)
         {
             _walletService = service;
             _authorizationService = authorizationService;
-            _cacheService = cacheService;
+            // _cacheService = cacheService;
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Find by id")]
         [AllowAnonymous]
-        [Cache(1)]
+        // [Cache(1)]
         public async Task<ActionResult> GetById(Guid id)
         {
             try
@@ -124,7 +124,7 @@ namespace old_stuff_exchange_v2.Controllers
                 Wallet wallets = await _walletService.Create(model);
                 if (wallets == null) return BadRequest();
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                await _cacheService.RemoveCacheResponseAsync(controllerName);
+                // await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -150,7 +150,7 @@ namespace old_stuff_exchange_v2.Controllers
                 Wallet wallets = await _walletService.Update(model);
                 if (wallets == null) return BadRequest();
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                await _cacheService.RemoveCacheResponseAsync(controllerName);
+                // await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -176,7 +176,7 @@ namespace old_stuff_exchange_v2.Controllers
                 bool result = await _walletService.Delete(id);
                 if (!result) return BadRequest();
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                await _cacheService.RemoveCacheResponseAsync(controllerName);
+                // await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = true,

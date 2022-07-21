@@ -20,18 +20,18 @@ namespace old_stuff_exchange_v2.Controllers
     {
         private readonly ApartmentService _service;
         private readonly IAuthorizationService _authorizationService;
-        private readonly CacheService _cacheService;
-        public ApartmentController(ApartmentService service, IAuthorizationService authorizationService, CacheService cacheService)
+        // private readonly CacheService _cacheService;
+        public ApartmentController(ApartmentService service, IAuthorizationService authorizationService)
         {
             _service = service;
             _authorizationService = authorizationService;
-            _cacheService = cacheService;
+            // _cacheService = cacheService;
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get apartment by id")]
         [AllowAnonymous]
-        [Cache(1)]
+        // [Cache(1)]
         public async Task<IActionResult> GetById(Guid id)
         {
             try
@@ -54,7 +54,7 @@ namespace old_stuff_exchange_v2.Controllers
         [HttpGet()]
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Getlist apartment")]
-        [Cache(1)]
+         // [Cache(1)]
         public async Task<IActionResult> GetAll(bool isBuildingsNull = true)
         {
             try
@@ -85,7 +85,7 @@ namespace old_stuff_exchange_v2.Controllers
                 Apartment apartment = await _service.Create(model);
                 if (apartment == null) return BadRequest();
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                await _cacheService.RemoveCacheResponseAsync(controllerName);
+                // await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -111,7 +111,7 @@ namespace old_stuff_exchange_v2.Controllers
                 Apartment apartment = await _service.Update(model);
                 if (apartment == null) return BadRequest();
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                await _cacheService.RemoveCacheResponseAsync(controllerName);
+                // await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -137,7 +137,7 @@ namespace old_stuff_exchange_v2.Controllers
                 bool result = await _service.Delete(id);
                 if (!result) return BadRequest();
                 string controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                await _cacheService.RemoveCacheResponseAsync(controllerName);
+                // await _cacheService.RemoveCacheResponseAsync(controllerName);
                 return Ok(new ApiResponse
                 {
                     Success = true,
