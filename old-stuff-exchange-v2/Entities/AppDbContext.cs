@@ -31,12 +31,13 @@ namespace old_stuff_exchange_v2.Entities
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = _configuration.GetConnectionString("DevConnection");
+            string connectionString = _configuration.GetConnectionString("AzureConnection");
             if (connectionString == "Development")
             {
                 connectionString = _configuration.GetConnectionString("DevConnection");
             }
-            else {
+            else
+            {
                 connectionString = _configuration.GetConnectionString("AzureConnection");
             }
             if (!string.IsNullOrEmpty(connectionString)) optionsBuilder.UseSqlServer(connectionString);
