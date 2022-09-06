@@ -14,7 +14,9 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Old_stuff_exchange.Helper;
 using Old_stuff_exchange.Repository.Implement;
 using Old_stuff_exchange.Repository.Interface;
@@ -111,7 +113,7 @@ namespace old_stuff_exchange_v2
 
             var secretKey = Configuration["JWT:Key"];
             var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddCertificate()
                 .AddJwtBearer(opt =>
                 {
                     opt.TokenValidationParameters = new TokenValidationParameters
@@ -198,7 +200,7 @@ namespace old_stuff_exchange_v2
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "old_stuff_exchange_v2 v1"));
 
-
+       
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -211,7 +213,7 @@ namespace old_stuff_exchange_v2
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllers().AllowAnonymous();
             });
         }
     }

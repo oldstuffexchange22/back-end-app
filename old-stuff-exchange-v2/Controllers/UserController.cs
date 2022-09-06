@@ -90,11 +90,11 @@ namespace Old_stuff_exchange.Controllers
         [SwaggerOperation(Summary = "Get information user by email, by roleId and pagination")]
         [Authorize(Policy = PolicyName.ADMIN)]
         // [Cache(1)]
-        public async Task<ActionResult> GetList(string email, Guid? roleId, int pageNumber = 1, int pageSize = 10)
+        public async Task<ActionResult> GetList(string email, Guid? roleId,Guid? apartmentId, int pageNumber = 1, int pageSize = 10)
         {
             try
             {
-                List<ResponseUserModel> users = await _userService.GetList(email, roleId, pageNumber, pageSize);
+                List<ResponseUserModel> users = await _userService.GetList(email, roleId,apartmentId, pageNumber, pageSize);
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -175,8 +175,8 @@ namespace Old_stuff_exchange.Controllers
                 {
                     Success = true,
                     Message = "Update user success",
-                    Data = user
-                });
+                    Data = user.ToResponseModel()
+                }); ;
             }
             catch (Exception ex)
             {

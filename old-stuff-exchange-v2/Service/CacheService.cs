@@ -47,7 +47,8 @@ namespace old_stuff_exchange_v2.Service
                 var server = _connectionMultiplexer.GetServer(enPoint);
                 foreach (var key in server.Keys(pattern: pattern))
                 {
-                    yield return key.ToString();
+                    // yield return key.ToString();
+                    yield return await Task.FromResult(key.ToString());
                 }
             }
         }

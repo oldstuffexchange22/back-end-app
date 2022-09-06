@@ -13,7 +13,7 @@ namespace Old_stuff_exchange.Repository.Interface
         Task<User> Login(string userName, string password);
         Task<User> GetById(Guid id);
         Task<User> GetByEmail(string email);
-        Task<List<User>> GetList(string email,Guid? roleId, int pageNumber, int pageSize);
+        Task<List<User>> GetList(string email,Guid? roleId, Guid? apartmentId, int pageNumber, int pageSize);
         Task<bool> Delete(Guid id);
         Task<bool> Update(User newUser);
         Task<User> UpdateUserAddress(Guid UserId, Guid BuildingId);

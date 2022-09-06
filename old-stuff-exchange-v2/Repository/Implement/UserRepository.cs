@@ -111,13 +111,14 @@ namespace Old_stuff_exchange.Repository.Implement
             return true;
         }
 
-        public async Task<List<User>> GetList(string email,Guid? roleId, int pageNumber, int pageSize)
+        public async Task<List<User>> GetList(string email,Guid? roleId,Guid? apartmentId, int pageNumber, int pageSize)
         {
             var allUser = _context.Users.Include(u => u.Role).Include(u => u.Building)
                           .AsQueryable();
             #region Filtering
             if (!string.IsNullOrEmpty(email)) allUser = allUser.Where(u => u.Email.ToUpper().Contains(email.ToUpper()));
             if (roleId != null) allUser = allUser.Where(u => u.RoleId == roleId);
+            if (apartmentId != null) allUser = allUser.Where(u => u.Building.ApartmentId == apartmentId);
             #endregion
 
             #region Paging

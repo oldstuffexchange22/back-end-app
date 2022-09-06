@@ -45,7 +45,7 @@ namespace old_stuff_exchange_v2.Entities.Extentions
             model.NumberFloor = building.NumberFloor;
             model.NumberRoom = building.NumberRoom;
             model.Description = building.Description;
-            model.AparmentId = building.ApartmentId;
+            model.ApartmentId = building.ApartmentId;
             model.Apartment = building.Apartment?.ToResponseModel();
             return model;
         }

@@ -7,6 +7,7 @@ using Old_stuff_exchange.Model;
 using Old_stuff_exchange.Model.User;
 using Old_stuff_exchange.Service;
 using old_stuff_exchange_v2.Entities;
+using old_stuff_exchange_v2.Entities.Extentions;
 using old_stuff_exchange_v2.Enum.User;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
@@ -63,6 +64,7 @@ namespace old_stuff_exchange_v2.Controllers
                 string uid = decodedToken.Uid;
                 UserRecord user = await FirebaseAuth.DefaultInstance.GetUserAsync(uid);
                 string response = _userService.Login(user.Email,user);
+                ResponseUserModel userDb = (await _userService.GetByEmail(user.Email)).ToResponseModel();
                 if (response == null || response == UserStatus.INACTIVE)
                 {
                     return BadRequest(new { message = "Token is invalid or account is blocked" });
@@ -70,7 +72,7 @@ namespace old_stuff_exchange_v2.Controllers
                 return Ok(new ApiResponse
                 {
                     Success = true,
-                    Data = new { token = response }
+                    Data = new { token = response, user = userDb }
                 });
             }
             catch (Exception ex)

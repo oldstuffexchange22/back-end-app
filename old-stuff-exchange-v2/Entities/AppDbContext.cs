@@ -11,7 +11,8 @@ namespace old_stuff_exchange_v2.Entities
     public class AppDbContext : DbContext
     {
         private readonly IConfiguration _configuration;
-        public AppDbContext(DbContextOptions options, IConfiguration configuration) : base(options) {
+        public AppDbContext(DbContextOptions options, IConfiguration configuration) : base(options)
+        {
             _configuration = configuration;
         }
 
@@ -28,12 +29,21 @@ namespace old_stuff_exchange_v2.Entities
         public DbSet<Product> Products { get; set; }
         #endregion
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            string connectionString = _configuration.GetConnectionString("AzureConnection");
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            string connectionString = _configuration.GetConnectionString("DevConnection");
+            if (connectionString == "Development")
+            {
+                connectionString = _configuration.GetConnectionString("DevConnection");
+            }
+            else {
+                connectionString = _configuration.GetConnectionString("AzureConnection");
+            }
             if (!string.IsNullOrEmpty(connectionString)) optionsBuilder.UseSqlServer(connectionString);
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder) {
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
             base.OnModelCreating(modelBuilder);
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {

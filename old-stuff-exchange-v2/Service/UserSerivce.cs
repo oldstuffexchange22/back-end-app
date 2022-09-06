@@ -31,9 +31,9 @@ namespace Old_stuff_exchange.Service
         {
             return await _repo.GetByEmail(email);
         }
-        public async Task<List<ResponseUserModel>> GetList(string email,Guid? roleId, int pageNumber, int pageSize)
+        public async Task<List<ResponseUserModel>> GetList(string email,Guid? roleId,Guid? apartmentId, int pageNumber, int pageSize)
         {
-            List<User> users = await _repo.GetList(email, roleId, pageNumber, pageSize);
+            List<User> users = await _repo.GetList(email, roleId,apartmentId, pageNumber, pageSize);
             List<ResponseUserModel> result = users.ConvertAll<ResponseUserModel>(user => user.ToResponseModel());
             return result;
         }

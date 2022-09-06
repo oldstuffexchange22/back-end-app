@@ -73,6 +73,18 @@ namespace Old_stuff_exchange.Service
                 FullName = "admin",
                 Password = "admin"
             };
+
+            List<string> avatarsLink = new List<string>();
+            avatarsLink.Add("https://cdn-icons-png.flaticon.com/512/4333/4333609.png");
+            avatarsLink.Add("https://cdn-icons-png.flaticon.com/512/2202/2202112.png");
+            avatarsLink.Add("https://cdn-icons-png.flaticon.com/512/4140/4140047.png");
+            avatarsLink.Add("https://cdn-icons-png.flaticon.com/512/236/236832.png");
+            avatarsLink.Add("https://cdn-icons-png.flaticon.com/512/3006/3006876.png");
+            avatarsLink.Add("https://cdn-icons-png.flaticon.com/512/4333/4333609.png");
+            avatarsLink.Add("https://cdn-icons-png.flaticon.com/512/4140/4140048.png");
+            avatarsLink.Add("https://cdn-icons-png.flaticon.com/512/924/924874.png");
+            avatarsLink.Add("https://cdn-icons-png.flaticon.com/512/4202/4202831.png");
+            avatarsLink.Add("https://cdn-icons-png.flaticon.com/512/921/921071.png");
             Faker<User> FakerUser = new Faker<User>()
                 .RuleFor(u => u.UserName, faker => faker.Person.UserName)
                 .RuleFor(u => u.Email, faker => faker.Person.Email)
@@ -81,6 +93,7 @@ namespace Old_stuff_exchange.Service
                 .RuleFor(u => u.FullName, faker => faker.Person.FullName)
                 .RuleFor(u => u.Gender, faker => faker.PickRandom(UserGender.GetGenders()))
                 .RuleFor(u => u.Building, faker => faker.PickRandom(buildings))
+                .RuleFor(u => u.ImagesUrl, faker => faker.PickRandom(avatarsLink))
                 .RuleFor(u => u.Phone, faker => faker.Person.Phone);
             // _context.Add(userAdmin);
             _context.Add(userAdmin2);
