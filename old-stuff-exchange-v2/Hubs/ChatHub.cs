@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace old_stuff_exchange_v2.Hubs
@@ -38,8 +39,9 @@ namespace old_stuff_exchange_v2.Hubs
 
         public async Task SendMessage(string to, string message) {
             if (_connections.TryGetValue(to, out string connectionReceiverId)) {
-                Console.WriteLine($"Receiver: ${connectionReceiverId} \n Message: {message}");
-                await Clients.Client(connectionReceiverId).SendAsync("message-receive", message);
+                string senderId = _connections.FirstOrDefault(c => c.Value == Context.ConnectionId).Key;
+                Console.WriteLine($"Sender: {senderId} \n Receiver: ${connectionReceiverId} \n Message: {message}");
+                await Clients.Client(connectionReceiverId).SendAsync("message-receive", message, senderId);
             }
         }
 
