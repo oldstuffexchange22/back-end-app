@@ -27,12 +27,14 @@ namespace old_stuff_exchange_v2.Entities
         public DbSet<Category> Categories { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Product> Products { get; set; }
+
+        public DbSet<Message> Messages { get; set; }
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = _configuration.GetConnectionString("AzureConnection");
-            if (connectionString == "Development")
+            string connectionString = _configuration.GetConnectionString("DevConnection");
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
             {
                 connectionString = _configuration.GetConnectionString("DevConnection");
             }
@@ -104,6 +106,10 @@ namespace old_stuff_exchange_v2.Entities
             {
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("getdate()");
                 entity.Property(e => e.CoinExchange).HasColumnType("decimal(10,0)");
+            });
+            modelBuilder.Entity<Message>(entity =>
+            {
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("getdate()");
             });
         }
     }

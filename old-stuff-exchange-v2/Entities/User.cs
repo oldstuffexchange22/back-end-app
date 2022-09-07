@@ -36,11 +36,13 @@ namespace old_stuff_exchange_v2.Entities
         public ICollection<Post> Posts { get; set; }
         public ICollection<Wallet> Wallets { get; set; }
         public ICollection<Deposit> Deposits { get; set; }
+        public ICollection<Message> Messages { get; set; }
         #endregion
         public User() {
             Wallets = new List<Wallet>();
             Posts = new List<Post>();
             Deposits = new List<Deposit>();
+            Messages = new List<Message>();
         }
     }
 }

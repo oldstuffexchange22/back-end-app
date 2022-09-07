@@ -34,6 +34,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using old_stuff_exchange_v2.Hubs;
 
 namespace old_stuff_exchange_v2
 {
@@ -81,6 +82,8 @@ namespace old_stuff_exchange_v2
             services.AddTransient<WalletService>();
             services.AddTransient<IDepositRepository<Deposit>, DepositRepository>();
             services.AddTransient<DepositService>();
+            services.AddTransient<IMessageRepository, MessageRepository>();
+            services.AddTransient<MessageService>();
             services.AddSingleton<IAuthorizationHandler, UserAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, DepositAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, PostAuthorizationHandler>();
@@ -90,11 +93,15 @@ namespace old_stuff_exchange_v2
             services.AddHttpContextAccessor();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            services.AddSingleton<IDictionary<string, string>>(opts => new Dictionary<string, string>());
+
             // redis cache
             var redisConfiguration = new RedisConfiguration();
             Configuration.GetSection("RedisConfiguration").Bind(redisConfiguration);
 
             services.AddSingleton(redisConfiguration);
+
+            services.AddSignalR();
 
             if (redisConfiguration.Enabled)
             {
@@ -131,6 +138,13 @@ namespace old_stuff_exchange_v2
                 });
             services.AddCors(options =>
             {
+                options.AddDefaultPolicy(builer => {
+                    builer
+                         .WithOrigins("http://localhost:3000")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
                 options.AddPolicy("AllowAllHeaders",
                     builder =>
                     {
@@ -138,6 +152,7 @@ namespace old_stuff_exchange_v2
                          .AllowAnyHeader()
                         .AllowAnyMethod();
                     });
+
             });
         
 
@@ -201,7 +216,9 @@ namespace old_stuff_exchange_v2
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "old_stuff_exchange_v2 v1"));
 
        
-            app.UseHttpsRedirection();
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development") {
+                app.UseHttpsRedirection();
+            }
 
             app.UseRouting();
 
@@ -209,11 +226,12 @@ namespace old_stuff_exchange_v2
 
             app.UseAuthorization();
 
-            app.UseCors("AllowAllHeaders");
+            app.UseCors();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers().AllowAnonymous();
+                endpoints.MapHub<ChatHub>("/chat");
             });
         }
     }
