@@ -140,7 +140,8 @@ namespace old_stuff_exchange_v2
             {
                 options.AddDefaultPolicy(builer => {
                     builer
-                         .WithOrigins("http://localhost:3000;https://old-stuff-exchange-3d9f0.web.app;https://old-stuff-exchange-3d9f0.firebaseapp.com")
+                         .WithOrigins("http://localhost:3000","https://old-stuff-exchange-3d9f0.web.app",
+                         "https://old-stuff-exchange-3d9f0.firebaseapp.com")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
