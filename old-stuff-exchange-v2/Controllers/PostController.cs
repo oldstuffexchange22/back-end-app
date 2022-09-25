@@ -94,11 +94,11 @@ namespace Old_stuff_exchange.Controllers
         [HttpGet("user/{userId}")]
         [SwaggerOperation(Summary = "Get list post by user id")]
         // [Cache(1)]
-        public async Task<IActionResult> GetListByUserId(Guid userId, string status, int page = 1, int pageSize = 10, bool isOrderLastUpdate = false)
+        public async Task<IActionResult> GetListByUserId(Guid userId,string title, string status, int page = 1, int pageSize = 10, bool isOrderLastUpdate = false)
         {
             try
             {
-                List<ResponsePostModel> posts = await _postService.GetListByUserId(userId, status, page, pageSize, isOrderLastUpdate);
+                List<ResponsePostModel> posts = await _postService.GetListByUserId(userId,title, status, page, pageSize, isOrderLastUpdate);
                 /*if (posts.Count > 0) {
                     bool verifyAuth = (await _authorizeService.AuthorizeAsync(User, posts[0], Operations.Read)).Succeeded;
                     if (!verifyAuth) return StatusCode(StatusCodes.Status403Forbidden);

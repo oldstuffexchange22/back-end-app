@@ -149,13 +149,14 @@ namespace Old_stuff_exchange.Repository.Implement
             }
         }
 
-        public async Task<List<ResponsePostModel>> GetListByUserId(Guid userId, string status, int page, int pageSize, bool isOrderLastUpdate)
+        public async Task<List<ResponsePostModel>> GetListByUserId(Guid userId,string title, string status, int page, int pageSize, bool isOrderLastUpdate)
         {
             User user = await _context.Users.FindAsync(userId);
             if (user == null) return null;
             IQueryable<Post> allPost = _context.Posts.Where(p => p.AuthorId == userId).Include(p => p.Author).AsQueryable();
             #region Filtering
             if (!string.IsNullOrEmpty(status)) allPost = allPost.Where(p => p.Status.ToUpper().Equals(status.ToUpper()));
+            if (!string.IsNullOrEmpty(title)) allPost = allPost.Where(p => p.Title.ToUpper().Contains(title.ToUpper()));
             #endregion
             #region Sorting and Paging
             if (isOrderLastUpdate)
