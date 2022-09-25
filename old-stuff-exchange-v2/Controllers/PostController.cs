@@ -91,7 +91,7 @@ namespace Old_stuff_exchange.Controllers
         }
 
 
-        [HttpGet("user/{userId}")]
+        [HttpGet("user")]
         [SwaggerOperation(Summary = "Get list post by user id")]
         // [Cache(1)]
         public async Task<IActionResult> GetListByUserId(Guid userId,string title, string status, int page = 1, int pageSize = 10, bool isOrderLastUpdate = false)
