@@ -75,7 +75,7 @@ namespace Old_stuff_exchange.Service
             return await _postRepository.GetList(exceptUserId,apartmentId, categoryId, model);
         }
 
-        public async Task<Post> GetById(Guid id) {
+        public async Task<ResponsePostModel> GetById(Guid id) {
             return await _postRepository.GetPostById(id);
         }
 

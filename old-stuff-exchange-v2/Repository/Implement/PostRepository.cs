@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Old_stuff_exchange.Model;
+using Old_stuff_exchange.Model.User;
 using Old_stuff_exchange.Repository.Interface;
 using old_stuff_exchange_v2.Entities;
 using old_stuff_exchange_v2.Entities.Extentions;
@@ -182,10 +183,17 @@ namespace Old_stuff_exchange.Repository.Implement
             return await Task.FromResult(response);
         }
 
-        public async Task<Post> GetPostById(Guid id)
+        public async Task<ResponsePostModel> GetPostById(Guid id)
         {
-            Post post = _context.Posts.Include(p => p.Products).AsNoTracking().SingleOrDefault(p => p.Id == id);
-            return await Task.FromResult(post);
+            Post post = _context.Posts.Include(p => p.Products)
+                .Include(p => p.Author).AsNoTracking().SingleOrDefault(p => p.Id == id);
+            ResponsePostModel response = post.ToResponseModel();
+            if (post.UserBought != null) { 
+                ResponseUserModel user = _context.Users.Include(u => u.Building).FirstOrDefault(u => u.Id == post.UserBought).ToResponseModel();
+                response.UserBoughtObject = user;
+            }
+
+            return await Task.FromResult(response);
         }
 
         public async Task<Post> Update(Post post)
