@@ -199,7 +199,7 @@ namespace Old_stuff_exchange.Repository.Implement
         public async Task<ResponsePostModel> GetPostByIdResponseModel(Guid id)
         {
             Post post = _context.Posts.Include(p => p.Products)
-                .Include(p => p.Author).AsNoTracking().SingleOrDefault(p => p.Id == id);
+                .Include(p => p.Author).ThenInclude(u => u.Building).AsNoTracking().SingleOrDefault(p => p.Id == id);
             ResponsePostModel response = post.ToResponseModel();
             if (post.UserBought != null)
             {
