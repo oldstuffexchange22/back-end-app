@@ -37,7 +37,7 @@ namespace Old_stuff_exchange.Controllers
         {
             try
             {
-                Post post = await _postService.GetById(id);
+                ResponsePostModel post = await _postService.GetByIdResponseModel(id);
                 if (post == null) return BadRequest();
                 return Ok(new ApiResponse
                 {

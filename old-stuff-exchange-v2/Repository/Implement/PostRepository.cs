@@ -183,12 +183,26 @@ namespace Old_stuff_exchange.Repository.Implement
             return await Task.FromResult(response);
         }
 
-        public async Task<ResponsePostModel> GetPostById(Guid id)
+        public async Task<Post> GetPostById(Guid id)
+        {
+            Post post = _context.Posts.Include(p => p.Products)
+                .Include(p => p.Author).AsNoTracking().SingleOrDefault(p => p.Id == id);
+         /*   ResponsePostModel response = post.ToResponseModel();
+            if (post.UserBought != null) { 
+                ResponseUserModel user = _context.Users.Include(u => u.Building).FirstOrDefault(u => u.Id == post.UserBought).ToResponseModel();
+                response.UserBoughtObject = user;
+            }*/
+
+            return await Task.FromResult(post);
+        }
+
+        public async Task<ResponsePostModel> GetPostByIdResponseModel(Guid id)
         {
             Post post = _context.Posts.Include(p => p.Products)
                 .Include(p => p.Author).AsNoTracking().SingleOrDefault(p => p.Id == id);
             ResponsePostModel response = post.ToResponseModel();
-            if (post.UserBought != null) { 
+            if (post.UserBought != null)
+            {
                 ResponseUserModel user = _context.Users.Include(u => u.Building).FirstOrDefault(u => u.Id == post.UserBought).ToResponseModel();
                 response.UserBoughtObject = user;
             }
@@ -234,5 +248,7 @@ namespace Old_stuff_exchange.Repository.Implement
             #endregion
             return await Task.FromResult(response);
         }
+
+        
     }
 }
