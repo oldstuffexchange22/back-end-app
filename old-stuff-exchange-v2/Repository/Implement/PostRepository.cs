@@ -185,7 +185,7 @@ namespace Old_stuff_exchange.Repository.Implement
 
         public async Task<Post> GetPostById(Guid id)
         {
-            Post post = _context.Posts.Include(p => p.Products)
+            Post post = _context.Posts.Include(p => p.Products).ThenInclude(p => p.Category)
                 .Include(p => p.Author).AsNoTracking().SingleOrDefault(p => p.Id == id);
          /*   ResponsePostModel response = post.ToResponseModel();
             if (post.UserBought != null) { 
@@ -198,7 +198,7 @@ namespace Old_stuff_exchange.Repository.Implement
 
         public async Task<ResponsePostModel> GetPostByIdResponseModel(Guid id)
         {
-            Post post = _context.Posts.Include(p => p.Products)
+            Post post = _context.Posts.Include(p => p.Products).ThenInclude(p => p.Category)
                 .Include(p => p.Author).ThenInclude(u => u.Building).AsNoTracking().SingleOrDefault(p => p.Id == id);
             ResponsePostModel response = post.ToResponseModel();
             if (post.UserBought != null)
