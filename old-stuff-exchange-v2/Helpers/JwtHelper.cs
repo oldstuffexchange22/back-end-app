@@ -37,7 +37,7 @@ namespace Old_stuff_exchange.Helper
                     //roles
                     new Claim(ClaimTypes.Role, user.Role.Name)
                 }),
-                Expires = DateTime.UtcNow.AddHours(1),
+                Expires = DateTime.UtcNow.AddHours(24),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = jwtTokenHandler.CreateToken(tokenDescription);
