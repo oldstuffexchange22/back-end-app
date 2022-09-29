@@ -54,7 +54,7 @@ namespace old_stuff_exchange_v2.Controllers
             }
         }
 
-        [HttpGet("user/{userId}")]
+        [HttpGet("user")]
         [SwaggerOperation(Summary = "Get transaction by user id")]
         public async Task<IActionResult> GetByUserId(Guid userId,string type, int page = 1, int pageSize = 10)
         {
