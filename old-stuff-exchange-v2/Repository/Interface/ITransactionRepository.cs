@@ -11,7 +11,7 @@ namespace old_stuff_exchange_v2.Repository.Interface
         Task<List<Transaction>> CreateList(List<Transaction> transactions);
         Task<Transaction> GetById(Guid Id);
         Task<bool> Delete(Guid Id);
-        Task<List<Transaction>> GetByUserId(Guid UserId, int page, int pageSize);
+        Task<List<Transaction>> GetByUserId(Guid UserId,string type, int page, int pageSize);
         Task<List<Transaction>> GetByWalletId(Guid WalletId, int page, int pageSize);
     }
 }

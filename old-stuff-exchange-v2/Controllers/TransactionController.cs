@@ -56,11 +56,11 @@ namespace old_stuff_exchange_v2.Controllers
 
         [HttpGet("user/{userId}")]
         [SwaggerOperation(Summary = "Get transaction by user id")]
-        public async Task<IActionResult> GetByUserId(Guid userId, int page = 1, int pageSize = 10)
+        public async Task<IActionResult> GetByUserId(Guid userId,string type, int page = 1, int pageSize = 10)
         {
             try
             {
-                List<Transaction> transactions = await _transactionService.GetByUserId(userId, page, pageSize);
+                List<Transaction> transactions = await _transactionService.GetByUserId(userId,type, page, pageSize);
                 bool verifyAuth = (await _authorizationService.AuthorizeAsync(User, transactions[0], Operations.Read)).Succeeded;
                 if (verifyAuth == false) return StatusCode(StatusCodes.Status403Forbidden);
                 return Ok(new ApiResponse

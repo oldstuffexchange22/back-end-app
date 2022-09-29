@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Old_stuff_exchange.Model;
 using old_stuff_exchange_v2.Entities;
+using old_stuff_exchange_v2.Enum.Transaction;
 using old_stuff_exchange_v2.Repository.Interface;
 using System;
 using System.Collections.Generic;
@@ -47,12 +48,21 @@ namespace old_stuff_exchange_v2.Repository.Implement
             return await Task.FromResult(transaction);
         }
 
-        public async Task<List<Transaction>> GetByUserId(Guid UserId, int page, int pageSize)
+        public async Task<List<Transaction>> GetByUserId(Guid UserId,string type, int page, int pageSize)
         {
             IQueryable<Transaction> allTransactions = _context.Transactions.Include(t => t.Wallet).AsQueryable();
 
             #region Filtering
             allTransactions = allTransactions.Where(t => t.Wallet.UserId == UserId);
+            if (!string.IsNullOrEmpty(type)) {
+                if (type == "CASH_IN")
+                {
+                    allTransactions = allTransactions.Where(t => t.Type == TransactionType.SELL || t.Type == TransactionType.REFUND || t.Type == TransactionType.RECHARGE);
+                }
+                else if (type == "CASH_OUT") {
+                    allTransactions = allTransactions.Where(t => t.Type == TransactionType.BOUGHT);
+                }
+            }
             #endregion
 
             #region Sorting
